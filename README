@@ -1,0 +1,31 @@
+# These first notes document changes to the BOOST includes required
+# for the Bigmemory Project.
+
+1. Removed boost/interprocess/containers/detail since it was empty.
+2. os_file_functions.hpp: Changed line 125 from
+
+  if(size > filesize){
+
+  to 
+
+  if(size > static_cast<std::size_t>(filesize)){
+
+  to get rid of the compiler warning.
+
+3. seed_rng.hpp: Changed line 150 from
+
+  std::fread( buffer, 1, 20, random_ );
+ 
+  to 
+
+  size_t temp = std::fread( buffer, 1, 20, random_ );
+
+######################################################################
+# These second notes document a change required to get Sun Studio 12.1
+# working with C++.
+
+# See http://forums.sun.com/thread.jspa?threadID=5393796,
+# the comment by liboqun on Dec 10, 2009.  We followed the
+# instructions, replacing the 12.1 version of cdefs.h with
+# the recommended version from Sun Studio 12, resolving the
+# problem (errors relating to stdio.h).

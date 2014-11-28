@@ -1,0 +1,21 @@
+citHeader("To cite bigmemory in publications use:")
+
+citEntry(entry = "Article",
+  title        = "Scalable Strategies for Computing with Massive Data",
+  author       = personList(as.person("Michael J. Kane"),
+                   as.person("John Emerson"),
+                   as.person("Stephen Weston")),
+  journal      = "Journal of Statistical Software",
+  year         = "2013",
+  volume       = "55",
+  number       = "14",
+  pages        = "1--19",
+  url          = "http://www.jstatsoft.org/v55/i14/",
+
+  textVersion  =
+  paste("Michael J. Kane, John Emerson, Stephen Weston (2013).",
+        "Scalable Strategies for Computing with Massive Data.",
+        "Journal of Statistical Software, 55(14), 1-19.",
+        "URL http://www.jstatsoft.org/v55/i14/.")
+)
+

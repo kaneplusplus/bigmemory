@@ -1,0 +1,48 @@
+\name{sub.big.matrix, is.sub.big.matrix}
+\alias{sub.big.matrix}
+\alias{is.sub.big.matrix}
+\title{Submatrix support.}
+\description{
+This doesn't create a copy, it just provides a new version of the class
+which provides behavior for a contiguous submatrix of the big.matrix.
+Non-contiguous submatrices are not supported.
+}
+\usage{
+sub.big.matrix(x, firstRow = 1, lastRow = NULL,
+               firstCol = 1, lastCol = NULL, backingpath='' )
+is.sub.big.matrix(x)
+}
+\arguments{
+  \item{x}{either a \code{\link{big.matrix}} or a descriptor.}
+  \item{firstRow}{the first row of the submatrix.}
+  \item{lastRow}{the last row of the submatrix if not \code{NULL}.}
+  \item{firstCol}{the first column of the submatrix.}
+  \item{lastCol}{the last column of the submatrix if not \code{NULL}.}
+  \item{backingpath}{required path to the filebacked object, if applicable.}
+}
+\details{
+The \code{sub.big.matrix} function allows a user to create a \code{big.matrix}
+object that references a contiguous set of columns and rows of another
+\code{big.matrix} object.
+
+The \code{is.sub.big.matrix} function returns \code{TRUE} if the specified 
+argument is a \code{sub.big.matrix} object and return \code{FALSE} 
+otherwise.
+}
+\value{
+A \code{\link{big.matrix}} which is actually a submatrix of a larger \code{big.matrix}.
+It is not a physical copy.  Only contiguous blocks may form a submatrix.
+}
+%\author{John W. Emerson and Michael J. Kane}
+\seealso{\code{\link{big.matrix}}}
+\examples{
+
+x <- big.matrix(10, 5, init=0, type="double")
+x[,] <- 1:50
+y <- sub.big.matrix(x, 2, 9, 2, 3)
+y[,]
+y[1,1] <- -99
+x[,]
+
+}
+\keyword{methods}

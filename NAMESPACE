@@ -1,0 +1,33 @@
+import(methods, bigmemory.sri)
+importFrom(utils, head, tail)
+
+exportClasses(big.matrix, big.matrix.descriptor)
+
+export(big.matrix,
+       filebacked.big.matrix,
+       attach.big.matrix,
+       sub.big.matrix,
+       deepcopy, morder, mpermute, is.nil)
+
+exportMethods("[", "[<-",
+              dimnames,
+              length,
+              nrow, ncol,
+              print,
+              head, tail,
+              typeof,
+              dim,
+              is.big.matrix, as.big.matrix, as.matrix,
+              describe,
+              attach.resource,
+              mwhich,
+              read.big.matrix, write.big.matrix,
+              is.separated,
+              is.filebacked,
+              is.sub.big.matrix,
+              flush,
+              is.shared,
+              is.readonly)
+
+useDynLib(bigmemory)
+

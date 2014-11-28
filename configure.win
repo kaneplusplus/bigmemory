@@ -1,0 +1,8 @@
+####################################################################
+# configure for package bigmemory
+# John W. Emerson and Michael Kane
+#
+
+FLAGS="PKG_CPPFLAGS=-I../inst/include"
+echo "${FLAGS}" > src/Makevars
+

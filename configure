@@ -1,0 +1,39 @@
+####################################################################
+# configure for package bigmemory
+# John W. Emerson and Michael Kane
+#
+# Sun Studio toolchain not completely BOOST-compatible (the
+# fault of BOOST, not R-Project).  There will be no locking
+# of the shared counters, but the chance of a problem is very
+# small.  Hopefully BOOST will catch up, soon.
+
+FLAGS="PKG_CPPFLAGS=-I../inst/include"
+LIBS=""
+
+echo -n "  checking for Sun Studio compiler..."
+CC=`${R_HOME}/bin/R CMD config CC`
+cmd=`echo $CC | grep -E 'suncc'`
+if test -n "$cmd"; then
+  echo "yes"
+  FLAGS="${FLAGS} -DINTERLOCKED_EXCHANGE_HACK"
+else
+  echo "no"
+fi
+
+echo -n "  checking for OS..."
+if test `uname` = "Linux" ; then
+  echo "Linux"
+  FLAGS="${FLAGS} -DLINUX"
+  LIBS="PKG_LIBS=-lrt -lm"
+elif test `uname` = "SunOS" ; then
+  echo "Solaris"
+  LIBS="PKG_LIBS=-lrt -lm"
+elif test `uname` = "Darwin" ; then
+  echo "Darwin"
+  FLAGS="${FLAGS} -DDARWIN"
+else
+  echo "Other:" `uname`
+fi
+
+echo "${FLAGS}" > src/Makevars
+echo "${LIBS}" >> src/Makevars
