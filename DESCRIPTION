@@ -8,7 +8,8 @@ Contact: Mike and Jay <bigmemoryauthors@gmail.com>
 Depends: methods, utils, bigmemory.sri
 Enhances: biganalytics, bigtabulate, synchronicity
 LinkingTo: BH
-Suggests: RUnit
+Suggests: RUnit,
+    testthat
 Description: Create, store, access, and manipulate massive matrices.
   Matrices are allocated to shared memory and may use memory-mapped
   files.  Packages biganalytics, bigtabulate, synchronicity, and
