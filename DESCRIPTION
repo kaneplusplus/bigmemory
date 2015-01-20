@@ -6,8 +6,9 @@ Author: Michael J. Kane <kaneplusplus@gmail.com>, John W. Emerson <jayemerson@gm
 Maintainer: Michael J. Kane <bigmemoryauthors@gmail.com>
 Contact: Mike and Jay <bigmemoryauthors@gmail.com>
 Depends: methods, utils, bigmemory.sri
+Imports: Rcpp
 Enhances: biganalytics, bigtabulate, synchronicity
-LinkingTo: BH
+LinkingTo: BH, Rcpp
 Suggests: RUnit,
     testthat
 Description: Create, store, access, and manipulate massive matrices.

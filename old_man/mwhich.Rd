@@ -1,0 +1,84 @@
+\name{mwhich}
+\alias{mwhich}
+\title{Expanded ``which''-like functionality.}
+\description{
+Implements \code{\link{which}}-like functionality for a \code{\link{big.matrix}},
+with additional options for efficient comparisons (executed in \acronym{C++});
+also works for regular numeric matrices without the memory overhead.
+}
+\usage{
+mwhich(x, cols, vals, comps, op = 'AND')
+}
+\arguments{
+  \item{x}{a \code{\link{big.matrix}} (or a numeric matrix; see below).}
+  \item{cols}{a vector of column indices or names.}
+  \item{vals}{a list (one component for each of \code{cols}) of vectors of length 1 or 2; length 1 is used to test equality (or inequality), while vectors of length 2 are used for checking values in the range (\code{-Inf} and \code{Inf} are allowed). If a scalar or vector of length 2 is provided instead of a list, it will be replicated \code{length(cols)} times.}
+  \item{comps}{a list of operators (one component for each of \code{cols}), including \code{'eq'}, \code{'neq'}, \code{'le'}, \code{'lt'}, \code{'ge'} and \code{'gt'}.  If a single operator, it will be replicated \code{length(cols)} times.}
+  \item{op}{the comparison operator for combining the results of the individual tests, either \code{'AND'} or \code{'OR'}.}
+}
+\details{
+To improve performance and avoid the creation of massive temporary vectors in \R when
+doing comparisons, \code{mwhich()} efficiently executes column-by-column comparisons
+of values to the specified values or ranges, and then returns the row indices satisfying
+the comparison specified by the \code{op} operator.  More advanced comparisons
+are then possible (and memory-efficient) in \R by doing set operations
+(\code{\link{union}} and \code{\link{intersect}}, for example) on the
+results of multiple \code{mwhich()} calls.
+
+Note that \code{NA} is a valid argument in conjunction with \code{'eq'} or
+\code{'neq'}, replacing traditional \code{is.na()} calls.
+And both \code{-Inf} and \code{Inf} can be used for one-sided inequalities.
+
+If \code{mwhich()} is used with a regular numeric \R \code{matrix}, we access the
+data directly and thus incur no memory overhead.  Interested developers might want
+to look at our code for this case, which uses a handy pointer trick (accessor)
+in \acronym{C++}.
+}
+\value{
+a vector of row indices satisfying the criteria.
+}
+\author{John W. Emerson <bigmemoryauthors@gmail.com>}
+\seealso{\code{\link{big.matrix}}, \code{\link{which}}}
+\examples{
+
+x <- as.big.matrix(matrix(1:30, 10, 3))
+options(bigmemory.allow.dimnames=TRUE)
+colnames(x) <- c("A", "B", "C")
+x[,]
+x[mwhich(x, 1:2, list(c(2,3), c(11,17)),
+                   list(c('ge','le'), c('gt', 'lt')), 'OR'),]
+
+x[mwhich(x, c("A","B"), list(c(2,3), c(11,17)), 
+                   list(c('ge','le'), c('gt', 'lt')), 'AND'),]
+
+# These should produce the same answer with a regular matrix:
+y <- matrix(1:30, 10, 3)
+y[mwhich(y, 1:2, list(c(2,3), c(11,17)),
+                   list(c('ge','le'), c('gt', 'lt')), 'OR'),]
+
+y[mwhich(y, -3, list(c(2,3), c(11,17)),
+                   list(c('ge','le'), c('gt', 'lt')), 'AND'),]
+
+
+x[1,1] <- NA
+mwhich(x, 1:2, NA, 'eq', 'OR')
+mwhich(x, 1:2, NA, 'neq', 'AND')
+
+# Column 1 equal to 4 and/or column 2 less than or equal to 16:
+mwhich(x, 1:2, list(4, 16), list('eq', 'le'), 'OR')
+mwhich(x, 1:2, list(4, 16), list('eq', 'le'), 'AND')
+
+# Column 2 less than or equal to 15:
+mwhich(x, 2, 15, 'le')
+
+# No NAs in either column, and column 2 strictly less than 15:
+mwhich(x, c(1:2,2), list(NA, NA, 15), list('neq', 'neq', 'lt'), 'AND')
+
+x <- big.matrix(4, 2, init=1, type="double")
+x[1,1] <- Inf
+mwhich(x, 1, Inf, 'eq')
+mwhich(x, 1, 1, 'gt')
+mwhich(x, 1, 1, 'le')
+
+}
+\keyword{methods}
