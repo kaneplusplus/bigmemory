@@ -1,6 +1,8 @@
+library("bigmemory")
+context("read_only")
+
 rownames = letters[1:3]
 colnames = LETTERS[1:3]
-
 
 back.dir = tempdir()
 fbm.file = "fbm"

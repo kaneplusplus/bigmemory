@@ -1,3 +1,6 @@
+library("bigmemory")
+context("read")
+
 test_that("test_read", {
     mat = matrix(1:9, ncol = 3, nrow = 3, dimnames = list(letters[1:3], 
                                                           LETTERS[1:3]))
