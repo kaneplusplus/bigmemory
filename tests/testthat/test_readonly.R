@@ -51,8 +51,13 @@ test_that("test_readonly", {
     expect_true(is.readonly(fbm2), info = "fbm2 should be readonly")
     expect_false(is.readonly(fbm3), info = "fbm3 should not be readonly")
     Sys.chmod(fbm.data.path, "0444")
-    expect_true(is.readonly(attach.big.matrix(fbm.desc.path, 
-                                              readonly = FALSE)), info = "FBM should be readonly if readonly on FS, even if requested read/write")
+    expect_warning(attach.big.matrix(fbm.desc.path, 
+                                     readonly = FALSE),
+                   info = "big.matrix object could only be opened read-only.")
+    expect_true(suppressWarnings(
+        is.readonly(attach.big.matrix(fbm.desc.path, 
+                                      readonly = FALSE))), 
+        info = "FBM should be readonly if readonly on FS, even if requested read/write")
     Sys.chmod(fbm.data.path, "0644")
     expect_true(is.readonly(attach.big.matrix(fbm.desc.path, 
                                               readonly = TRUE)), info = "FBM should not be readonly if you ask for that.")
