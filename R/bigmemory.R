@@ -1362,10 +1362,10 @@ setMethod('sub.big.matrix', signature(x='big.matrix.descriptor'),
                  "with the specified parameters"))
     }
     SetRowOffsetInfo(rbm@address, 
-          as.double(rowOffset + .Call("GetRowOffset", rbm@address)), 
+          as.double(rowOffset + GetRowOffset(rbm@address)), 
           as.double(numRows) )
     SetColumnOffsetInfo(rbm@address, 
-          as.double(colOffset + .Call("GetColOffset", rbm@address)),
+          as.double(colOffset + GetColOffset(rbm@address)),
           as.double(numCols))
     return(rbm)
   })
@@ -1725,3 +1725,12 @@ getCType <- function(x) {
   }
   return(retList[[1]])
 }
+
+
+# setMethod('is.na', signature(x='big.matrix'),
+#           function(x){
+#               options(bigmemory.typecast.warning=FALSE)
+#               #idx <- bigsplit(x, 5)
+#               #na.chunks <- lapply(idx, function(y) any(is.na(x[idx[1]:tail(idx, n=1),])))
+#               return(as.big.matrix(is.na(x[,])*1, type="integer"))
+#           })
