@@ -19,3 +19,4 @@ License: LGPL-3 | Apache License 2.0
 Copyright: (C) 2014 John W. Emerson and Michael J. Kane
 URL: http://www.bigmemory.org
 LazyLoad: yes
+Biarch: yes
