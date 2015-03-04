@@ -240,11 +240,13 @@ SEXP GetMatrixElements( BigMatrix *pMat, double NA_C, double NA_R,
   double *pRows = NUMERIC_DATA(row);
   index_type numCols = GET_LENGTH(col);
   index_type numRows = GET_LENGTH(row);
+/*
   if (TooManyRIndices(numCols*numRows))
   {
     error("Too many indices (>2^31-1) for extraction.");
     return R_NilValue;
   }
+*/
   SEXP ret = PROTECT(NEW_LIST(3));
   int protectCount = 1;
   SET_VECTOR_ELT( ret, 1, NULL_USER_OBJECT );
@@ -375,11 +377,13 @@ SEXP GetMatrixRows( BigMatrix *pMat, double NA_C, double NA_R,
   double *pRows=NUMERIC_DATA(row);
   index_type numRows = GET_LENGTH(row);
   index_type numCols = pMat->ncol();
+/*
   if (TooManyRIndices(numCols*numRows))
   {
     error("Too many indices (>2^31-1) for extraction.");
     return R_NilValue;
   }
+*/
   SEXP ret = PROTECT(NEW_LIST(3));
   int protectCount = 1;
   SET_VECTOR_ELT( ret, 1, NULL_USER_OBJECT );
@@ -453,11 +457,13 @@ SEXP GetMatrixCols( BigMatrix *pMat, double NA_C, double NA_R,
   double *pCols=NUMERIC_DATA(col);
   index_type numCols = GET_LENGTH(col);
   index_type numRows = pMat->nrow();
+/*
   if (TooManyRIndices(numCols*numRows))
   {
     error("Too many indices (>2^31-1) for extraction.");
     return R_NilValue;
   }
+*/
   SEXP ret = PROTECT(NEW_LIST(3));
   int protectCount = 1;
   SET_VECTOR_ELT( ret, 1, NULL_USER_OBJECT );
@@ -531,11 +537,13 @@ SEXP GetMatrixAll( BigMatrix *pMat, double NA_C, double NA_R,
   BMAccessorType mat(*pMat);
   index_type numCols = pMat->ncol();
   index_type numRows = pMat->nrow();
+/*
   if (TooManyRIndices(numCols*numRows))
   {
     error("Too many indices (>2^31-1) for extraction.");
     return R_NilValue;
   }
+*/
   SEXP ret = PROTECT(NEW_LIST(3));
   int protectCount = 1;
   SET_VECTOR_ELT( ret, 1, NULL_USER_OBJECT );
@@ -1205,6 +1213,7 @@ SEXP CCleanIndices(SEXP indices, SEXP rc)
         ind.erase(it);
       }
     }
+/*
     if (TooManyRIndices(ind.size()))
     {
       SET_VECTOR_ELT(ret, 0, NULL_USER_OBJECT);
@@ -1212,6 +1221,7 @@ SEXP CCleanIndices(SEXP indices, SEXP rc)
       UNPROTECT(protectCount);
       return ret;
     }
+*/
     protectCount +=2;
     SEXP returnCond = PROTECT(NEW_LOGICAL(1));
     LOGICAL_DATA(returnCond)[0] = (Rboolean)1;
