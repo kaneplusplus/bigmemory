@@ -2,6 +2,10 @@
 #ifndef BIGMATRIX_H
 #define BIGMATRIX_H
 
+#ifdef INT
+#undef INT
+#endif
+
 #include <boost/interprocess/mapped_region.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/noncopyable.hpp>
