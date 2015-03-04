@@ -1,23 +1,12 @@
-#include <math.h>
 
-#include <string>
 #include <fstream>
-#include <sstream>
-#include <iostream>
-#include <algorithm>
 
 #include "bigmemory/BigMatrix.h"
 #include "bigmemory/MatrixAccessor.hpp"
 #include "bigmemory/util.h"
 #include "bigmemory/isna.hpp"
 
-#include <stdio.h>
-#include <R.h>
-#include <Rinternals.h>
-#include <Rdefines.h>
-#include <stdlib.h>
-#include <sys/types.h>
-
+#include <Rcpp.h>
 
 template<typename T>
 string ttos(T i)
@@ -221,12 +210,12 @@ void SetAllMatrixElements( BigMatrix *pMat, SEXP value,
   index_type ncol = pMat->ncol();
   index_type nrow = pMat->nrow();
 
-  bool outOfRange=false;
+  //bool outOfRange=false;
   if (val < C_MIN || val > C_MAX || isna(val))
   { 
     if (!isna(val))
     {
-      outOfRange=true;
+      //outOfRange=true;
       warning("The value given is out of range, elements will be set to NA.");
     }
     val = NA_C;
