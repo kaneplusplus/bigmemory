@@ -19,7 +19,7 @@ framework for the development of new tools that can work both with
 }
 \details{
 \tabular{ll}{ Package: \tab bigmemory\cr Type: \tab Package\cr Version: \tab
-4.4.14\cr Date: \tab 2014-09-04\cr License: \tab LGPL-3 | APv2\cr Copyright:
+4.5.0\cr Date: \tab 2015-03-30\cr License: \tab LGPL-3 | APv2\cr Copyright:
 \tab (C) 2014 Michael J. Kane and John W. Emerson\cr URL: \tab
 http://www.bigmemory.org\cr LazyLoad: \tab yes\cr }
 
@@ -89,12 +89,6 @@ example, the \code{apply()} method appears in \pkg{biganalytics}, supporting
 exploration and analysis, while \code{\link{mwhich}}, \code{\link{morder}}
 and \code{\link{mpermute}} appear in \pkg{bigmemory} as fundamental tools
 for data manipulation.
-
-Versions <4.0 supported a limited number of columns (due to mutex
-limitations): roughly 50,000 on a typical Linux system. This restriction has
-been removed in versions >=4.0.  There were row limitations (due to a bug
-that has now been fixed) in versions <=3.8 of roughly 1 billion, but this
-has been fixed in versions >=3.82.
 
 Note that you can't simply use a \code{big.matrix} with many (most) existing
 functions (e.g. \code{\link{lm}}, \code{\link{kmeans}}).  One nice exception
