@@ -1,23 +1,12 @@
-#include <math.h>
 
-#include <string>
 #include <fstream>
-#include <sstream>
-#include <iostream>
-#include <algorithm>
 
 #include "bigmemory/BigMatrix.h"
 #include "bigmemory/MatrixAccessor.hpp"
 #include "bigmemory/util.h"
 #include "bigmemory/isna.hpp"
 
-#include <stdio.h>
-#include <R.h>
-#include <Rinternals.h>
-#include <Rdefines.h>
-#include <stdlib.h>
-#include <sys/types.h>
-
+#include <Rcpp.h>
 
 template<typename T>
 string ttos(T i)
@@ -221,12 +210,12 @@ void SetAllMatrixElements( BigMatrix *pMat, SEXP value,
   index_type ncol = pMat->ncol();
   index_type nrow = pMat->nrow();
 
-  bool outOfRange=false;
+  //bool outOfRange=false;
   if (val < C_MIN || val > C_MAX || isna(val))
   { 
     if (!isna(val))
     {
-      outOfRange=true;
+      //outOfRange=true;
       warning("The value given is out of range, elements will be set to NA.");
     }
     val = NA_C;
@@ -991,9 +980,9 @@ SEXP get_order( MatrixAccessorType m, SEXP columns, SEXP naLast,
 }
 
 
-extern "C"
-{
+// Rcpp Functions
 
+// [[Rcpp::export]]
 void ReorderRIntMatrix( SEXP matrixVector, SEXP nrow, SEXP ncol, SEXP orderVec )
 {
   return reorder_matrix( 
@@ -1002,6 +991,7 @@ void ReorderRIntMatrix( SEXP matrixVector, SEXP nrow, SEXP ncol, SEXP orderVec )
       static_cast<index_type>(INTEGER_VALUE(ncol)), NULL );
 }
 
+// [[Rcpp::export]]
 void ReorderRNumericMatrix( SEXP matrixVector, SEXP nrow, SEXP ncol, 
   SEXP orderVec )
 {
@@ -1011,6 +1001,7 @@ void ReorderRNumericMatrix( SEXP matrixVector, SEXP nrow, SEXP ncol,
       static_cast<index_type>(INTEGER_VALUE(ncol)), NULL );
 }
 
+// [[Rcpp::export]]
 void ReorderBigMatrix( SEXP address, SEXP orderVec )
 {
   BigMatrix *pMat = reinterpret_cast<BigMatrix*>(R_ExternalPtrAddr(address));
@@ -1052,6 +1043,7 @@ void ReorderBigMatrix( SEXP address, SEXP orderVec )
   }
 }
 
+// [[Rcpp::export]]
 SEXP OrderRIntMatrix( SEXP matrixVector, SEXP nrow, SEXP columns,
   SEXP naLast, SEXP decreasing )
 {
@@ -1061,6 +1053,7 @@ SEXP OrderRIntMatrix( SEXP matrixVector, SEXP nrow, SEXP columns,
     columns, naLast, decreasing );
 }
 
+// [[Rcpp::export]]
 SEXP OrderRNumericMatrix( SEXP matrixVector, SEXP nrow, SEXP columns,
   SEXP naLast, SEXP decreasing )
 {
@@ -1070,6 +1063,7 @@ SEXP OrderRNumericMatrix( SEXP matrixVector, SEXP nrow, SEXP columns,
     columns, naLast, decreasing );
 }
 
+// [[Rcpp::export]]
 SEXP OrderBigMatrix(SEXP address, SEXP columns, SEXP naLast, SEXP decreasing)
 {
   BigMatrix *pMat = reinterpret_cast<BigMatrix*>(R_ExternalPtrAddr(address));
@@ -1112,6 +1106,7 @@ SEXP OrderBigMatrix(SEXP address, SEXP columns, SEXP naLast, SEXP decreasing)
   return R_NilValue;
 }
 
+// [[Rcpp::export]]
 SEXP CCleanIndices(SEXP indices, SEXP rc)
 {
   typedef std::vector<index_type> Indices;
@@ -1250,7 +1245,7 @@ SEXP CCleanIndices(SEXP indices, SEXP rc)
   return ret;
 }
 
-
+// [[Rcpp::export]]
 SEXP HasRowColNames(SEXP address)
 {
   BigMatrix *pMat = (BigMatrix*)R_ExternalPtrAddr(address);
@@ -1263,6 +1258,9 @@ SEXP HasRowColNames(SEXP address)
   return ret;
 }
 
+
+// Not currently used?!?!
+// [[Rcpp::export]]
 SEXP GetIndexRowNames(SEXP address, SEXP indices)
 {
   BigMatrix *pMat = (BigMatrix*)R_ExternalPtrAddr(address);
@@ -1270,6 +1268,8 @@ SEXP GetIndexRowNames(SEXP address, SEXP indices)
   return StringVec2RChar(rn, NUMERIC_DATA(indices), GET_LENGTH(indices));
 }
 
+// Not currently used?!?!
+// [[Rcpp::export]]
 SEXP GetIndexColNames(SEXP address, SEXP indices)
 {
   BigMatrix *pMat = (BigMatrix*)R_ExternalPtrAddr(address);
@@ -1277,6 +1277,7 @@ SEXP GetIndexColNames(SEXP address, SEXP indices)
   return StringVec2RChar(cn, NUMERIC_DATA(indices), GET_LENGTH(indices));
 }
 
+// [[Rcpp::export]]
 SEXP GetColumnNamesBM(SEXP address)
 {
   BigMatrix *pMat = (BigMatrix*)R_ExternalPtrAddr(address);
@@ -1284,6 +1285,7 @@ SEXP GetColumnNamesBM(SEXP address)
   return StringVec2RChar(cn);
 }
 
+// [[Rcpp::export]]
 SEXP GetRowNamesBM(SEXP address)
 {
   BigMatrix *pMat = (BigMatrix*)R_ExternalPtrAddr(address);
@@ -1291,6 +1293,7 @@ SEXP GetRowNamesBM(SEXP address)
   return StringVec2RChar(rn);
 }
 
+// [[Rcpp::export]]
 void SetColumnNames(SEXP address, SEXP columnNames)
 {
   BigMatrix *pMat = (BigMatrix*) R_ExternalPtrAddr(address);
@@ -1301,6 +1304,7 @@ void SetColumnNames(SEXP address, SEXP columnNames)
   pMat->column_names(cn);
 }
 
+// [[Rcpp::export]]
 void SetRowNames(SEXP address, SEXP rowNames)
 {
   BigMatrix *pMat = (BigMatrix*) R_ExternalPtrAddr(address);
@@ -1311,6 +1315,7 @@ void SetRowNames(SEXP address, SEXP rowNames)
   pMat->row_names(rn);
 }
 
+// [[Rcpp::export]]
 SEXP IsReadOnly(SEXP bigMatAddr)
 {
   BigMatrix *pMat = reinterpret_cast<BigMatrix*>(R_ExternalPtrAddr(bigMatAddr));
@@ -1320,6 +1325,7 @@ SEXP IsReadOnly(SEXP bigMatAddr)
   return ret;
 }
 
+// [[Rcpp::export]]
 SEXP CIsSubMatrix(SEXP bigMatAddr)
 {
   BigMatrix *pMat = reinterpret_cast<BigMatrix*>(R_ExternalPtrAddr(bigMatAddr));
@@ -1339,6 +1345,7 @@ SEXP CIsSubMatrix(SEXP bigMatAddr)
   return ret;
 }
 
+// [[Rcpp::export]]
 SEXP CGetNrow(SEXP bigMatAddr)
 {
   BigMatrix *pMat = (BigMatrix*)R_ExternalPtrAddr(bigMatAddr);
@@ -1348,6 +1355,7 @@ SEXP CGetNrow(SEXP bigMatAddr)
   return(ret);
 }
 
+// [[Rcpp::export]]
 SEXP CGetNcol(SEXP bigMatAddr)
 {
   BigMatrix *pMat = (BigMatrix*)R_ExternalPtrAddr(bigMatAddr);
@@ -1357,6 +1365,7 @@ SEXP CGetNcol(SEXP bigMatAddr)
   return(ret);
 }
 
+// [[Rcpp::export]]
 SEXP CGetType(SEXP bigMatAddr)
 {
   BigMatrix *pMat = (BigMatrix*)R_ExternalPtrAddr(bigMatAddr);
@@ -1366,6 +1375,8 @@ SEXP CGetType(SEXP bigMatAddr)
   return(ret);
 }
 
+// not currently used?!?!?!
+// [[Rcpp::export]]
 SEXP IsSharedMemoryBigMatrix(SEXP bigMatAddr)
 {
   BigMatrix *pMat = (BigMatrix*)R_ExternalPtrAddr(bigMatAddr);
@@ -1378,6 +1389,7 @@ SEXP IsSharedMemoryBigMatrix(SEXP bigMatAddr)
   return ret;
 }
 
+// [[Rcpp::export]]
 SEXP IsFileBackedBigMatrix(SEXP bigMatAddr)
 {
   BigMatrix *pMat = (BigMatrix*)R_ExternalPtrAddr(bigMatAddr);
@@ -1390,6 +1402,7 @@ SEXP IsFileBackedBigMatrix(SEXP bigMatAddr)
   return ret;
 }
 
+// [[Rcpp::export]]
 SEXP IsSeparated(SEXP bigMatAddr)
 {
   BigMatrix *pMat = (BigMatrix*)R_ExternalPtrAddr(bigMatAddr);
@@ -1399,6 +1412,11 @@ SEXP IsSeparated(SEXP bigMatAddr)
   return(ret);
 }
 
+// removed extern C because doesn't appear necessary
+// Rcpp attributes can be used for R calls and the others
+// are only used in the C code
+
+// only called in C code
 void CDestroyBigMatrix(SEXP bigMatrixAddr)
 {
   BigMatrix *pm=(BigMatrix*)(R_ExternalPtrAddr(bigMatrixAddr));
@@ -1406,6 +1424,7 @@ void CDestroyBigMatrix(SEXP bigMatrixAddr)
   R_ClearExternalPtr(bigMatrixAddr);
 }
 
+// only called in C code
 inline bool Lcomp(double a, double b, int op) {
   return(op==0 ? a<=b : a<b);
 }
@@ -1413,7 +1432,6 @@ inline bool Gcomp(double a, double b, int op) {
   return(op==0 ? a>=b : a>b);
 }
 
-} // close extern C, because the next function isn't an extern.
 
 template<typename T, typename MatrixType>
 SEXP MWhichMatrix( MatrixType mat, index_type nrow, SEXP selectColumn, 
@@ -1610,8 +1628,10 @@ SEXP CreateRAMMatrix(SEXP row, SEXP col, SEXP colnames, SEXP rownames,
   return(R_NilValue);
 }
 
-extern "C"{
 
+// Rcpp functions
+
+// [[Rcpp::export]]
 void SetRowOffsetInfo( SEXP bigMatAddr, SEXP rowOffset, SEXP numRows )
 {
   BigMatrix *pMat = 
@@ -1621,6 +1641,7 @@ void SetRowOffsetInfo( SEXP bigMatAddr, SEXP rowOffset, SEXP numRows )
   
 }
 
+// [[Rcpp::export]]
 void SetColumnOffsetInfo( SEXP bigMatAddr, SEXP colOffset, SEXP numCols )
 {
   BigMatrix *pMat = 
@@ -1629,6 +1650,7 @@ void SetColumnOffsetInfo( SEXP bigMatAddr, SEXP colOffset, SEXP numCols )
   pMat->ncol(static_cast<index_type>(NUMERIC_VALUE(numCols)));
 }
 
+// [[Rcpp::export]]
 SEXP GetRowOffset( SEXP bigMatAddr )
 {
   BigMatrix *pMat = 
@@ -1640,6 +1662,7 @@ SEXP GetRowOffset( SEXP bigMatAddr )
   return ret;
 }
 
+// [[Rcpp::export]]
 SEXP GetColOffset( SEXP bigMatAddr )
 {
   BigMatrix *pMat = 
@@ -1651,6 +1674,7 @@ SEXP GetColOffset( SEXP bigMatAddr )
   return ret;
 }
 
+// [[Rcpp::export]]
 SEXP GetTotalColumns( SEXP bigMatAddr )
 {
   BigMatrix *pMat = 
@@ -1661,6 +1685,7 @@ SEXP GetTotalColumns( SEXP bigMatAddr )
   return ret;
 }
 
+// [[Rcpp::export]]
 SEXP GetTotalRows( SEXP bigMatAddr )
 {
   BigMatrix *pMat = 
@@ -1671,6 +1696,7 @@ SEXP GetTotalRows( SEXP bigMatAddr )
   return ret;
 }
 
+// [[Rcpp::export]]
 SEXP GetTypeString( SEXP bigMatAddr )
 {
   BigMatrix *pMat = 
@@ -1694,6 +1720,7 @@ SEXP GetTypeString( SEXP bigMatAddr )
   return ret;
 }
 
+// [[Rcpp::export]]
 SEXP MWhichBigMatrix( SEXP bigMatAddr, SEXP selectColumn, SEXP minVal,
                      SEXP maxVal, SEXP chkMin, SEXP chkMax, SEXP opVal )
 {
@@ -1746,6 +1773,7 @@ SEXP MWhichBigMatrix( SEXP bigMatAddr, SEXP selectColumn, SEXP minVal,
   return R_NilValue;
 }
 
+// [[Rcpp::export]]
 SEXP MWhichRIntMatrix( SEXP matrixVector, SEXP nrow, SEXP selectColumn,
   SEXP minVal, SEXP maxVal, SEXP chkMin, SEXP chkMax, SEXP opVal )
 {
@@ -1755,6 +1783,7 @@ SEXP MWhichRIntMatrix( SEXP matrixVector, SEXP nrow, SEXP selectColumn,
     selectColumn, minVal, maxVal, chkMin, chkMax, opVal, NA_INTEGER);
 }
 
+// [[Rcpp::export]]
 SEXP MWhichRNumericMatrix( SEXP matrixVector, SEXP nrow, SEXP selectColumn,
   SEXP minVal, SEXP maxVal, SEXP chkMin, SEXP chkMax, SEXP opVal )
 {
@@ -1764,6 +1793,7 @@ SEXP MWhichRNumericMatrix( SEXP matrixVector, SEXP nrow, SEXP selectColumn,
     selectColumn, minVal, maxVal, chkMin, chkMax, opVal, NA_REAL);
 }
 
+// [[Rcpp::export]]
 SEXP CCountLines(SEXP fileName)
 { 
   FILE *FP;
@@ -1783,6 +1813,7 @@ SEXP CCountLines(SEXP fileName)
   return(ret);
 }
 
+// [[Rcpp::export]]
 SEXP ReadMatrix(SEXP fileName, SEXP bigMatAddr,
                 SEXP firstLine, SEXP numLines, SEXP numCols, SEXP separator,
                 SEXP hasRowNames, SEXP useRowNames)
@@ -1843,6 +1874,7 @@ SEXP ReadMatrix(SEXP fileName, SEXP bigMatAddr,
   return R_NilValue;
 }
 
+// [[Rcpp::export]]
 void WriteMatrix( SEXP bigMatAddr, SEXP fileName, SEXP rowNames,
   SEXP colNames, SEXP sep )
 {
@@ -1891,6 +1923,7 @@ void WriteMatrix( SEXP bigMatAddr, SEXP fileName, SEXP rowNames,
   }
 }
 
+// [[Rcpp::export]]
 SEXP GetMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row)
 {
   BigMatrix *pMat = 
@@ -1934,6 +1967,7 @@ SEXP GetMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row)
   return R_NilValue;
 }
 
+// [[Rcpp::export]]
 SEXP GetMatrixRows(SEXP bigMatAddr, SEXP row)
 {
   BigMatrix *pMat = 
@@ -1977,6 +2011,7 @@ SEXP GetMatrixRows(SEXP bigMatAddr, SEXP row)
   return R_NilValue;
 }
 
+// [[Rcpp::export]]
 SEXP GetMatrixCols(SEXP bigMatAddr, SEXP col)
 {
   BigMatrix *pMat = 
@@ -2020,7 +2055,9 @@ SEXP GetMatrixCols(SEXP bigMatAddr, SEXP col)
   return R_NilValue;
 }
 
-SEXP GetMatrixAll(SEXP bigMatAddr, SEXP col)
+// remove col because not used
+// [[Rcpp::export]]
+SEXP GetMatrixAll(SEXP bigMatAddr)
 {
   BigMatrix *pMat = 
     reinterpret_cast<BigMatrix*>(R_ExternalPtrAddr(bigMatAddr));
@@ -2063,6 +2100,7 @@ SEXP GetMatrixAll(SEXP bigMatAddr, SEXP col)
   return R_NilValue;
 }
 
+// [[Rcpp::export]]
 void SetMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row, SEXP values)
 {
   BigMatrix *pMat = reinterpret_cast<BigMatrix*>(R_ExternalPtrAddr(bigMatAddr));
@@ -2113,6 +2151,7 @@ void SetMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row, SEXP values)
 }
 
 // Function contributed by Peter Haverty at Genentech.
+// [[Rcpp::export]]
 void SetIndivMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row, SEXP values)
 {
   BigMatrix *pMat = reinterpret_cast<BigMatrix*>(R_ExternalPtrAddr(bigMatAddr));
@@ -2160,7 +2199,7 @@ void SetIndivMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row, SEXP values)
   }
 }
 
-
+// [[Rcpp::export]]
 void SetMatrixAll(SEXP bigMatAddr, SEXP values)
 {
   BigMatrix *pMat = reinterpret_cast<BigMatrix*>(R_ExternalPtrAddr(bigMatAddr));
@@ -2210,6 +2249,7 @@ void SetMatrixAll(SEXP bigMatAddr, SEXP values)
   }
 }
 
+// [[Rcpp::export]]
 void SetMatrixCols(SEXP bigMatAddr, SEXP col, SEXP values)
 {
   BigMatrix *pMat = reinterpret_cast<BigMatrix*>(R_ExternalPtrAddr(bigMatAddr));
@@ -2259,6 +2299,7 @@ void SetMatrixCols(SEXP bigMatAddr, SEXP col, SEXP values)
   }
 }
 
+// [[Rcpp::export]]
 void SetMatrixRows(SEXP bigMatAddr, SEXP row, SEXP values)
 {
   BigMatrix *pMat = reinterpret_cast<BigMatrix*>(R_ExternalPtrAddr(bigMatAddr));
@@ -2308,56 +2349,7 @@ void SetMatrixRows(SEXP bigMatAddr, SEXP row, SEXP values)
   }
 }
 
-// WHERE IS THIS CALLED FROM?  Maybe only from C, not from R?  
-// We might like to be able to do this recycling efficiently in other
-// cases?  I thought we did.
-void SetAllMatrixElements(SEXP bigMatAddr, SEXP value)
-{
-  BigMatrix *pMat = reinterpret_cast<BigMatrix*>(R_ExternalPtrAddr(bigMatAddr));
-  if (pMat->separated_columns())
-  {
-    switch (pMat->matrix_type())
-    {
-      case 1:
-        SetAllMatrixElements<char, SepMatrixAccessor<char> >( 
-          pMat, value, NA_CHAR, R_CHAR_MIN, R_CHAR_MAX, NA_REAL);
-        break;
-      case 2:
-        SetAllMatrixElements<short, SepMatrixAccessor<short> >( 
-          pMat, value, NA_SHORT, R_SHORT_MIN, R_SHORT_MAX, NA_REAL);
-        break;
-      case 4:
-        SetAllMatrixElements<int, SepMatrixAccessor<int> >( 
-          pMat, value, NA_INTEGER, R_INT_MIN, R_INT_MAX, NA_REAL);
-        break;
-      case 8:
-        SetAllMatrixElements<double, SepMatrixAccessor<double> >( 
-          pMat, value, NA_REAL, R_DOUBLE_MIN, R_DOUBLE_MAX, NA_REAL);
-    }
-  }
-  else
-  {
-    switch (pMat->matrix_type())
-    {
-      case 1:
-        SetAllMatrixElements<char, MatrixAccessor<char> >( 
-          pMat, value, NA_CHAR, R_CHAR_MIN, R_CHAR_MAX, NA_REAL);
-        break;
-      case 2:
-        SetAllMatrixElements<short, MatrixAccessor<short> >( 
-          pMat, value, NA_SHORT, R_SHORT_MIN, R_SHORT_MAX, NA_REAL);
-        break;
-      case 4:
-        SetAllMatrixElements<int, MatrixAccessor<int> >( 
-          pMat, value, NA_INTEGER, R_INT_MIN, R_INT_MAX, NA_REAL);
-        break;
-      case 8:
-        SetAllMatrixElements<double, MatrixAccessor<double> >( 
-          pMat, value, NA_REAL, R_DOUBLE_MIN, R_DOUBLE_MAX, NA_REAL);
-    }
-  }
-}
-
+// [[Rcpp::export]]
 SEXP CreateSharedMatrix(SEXP row, SEXP col, SEXP colnames, SEXP rownames,
   SEXP typeLength, SEXP ini, SEXP separated)
 {
@@ -2365,6 +2357,7 @@ SEXP CreateSharedMatrix(SEXP row, SEXP col, SEXP colnames, SEXP rownames,
     rownames, typeLength, ini, separated);
 }
 
+// [[Rcpp::export]]
 SEXP CreateLocalMatrix(SEXP row, SEXP col, SEXP colnames, SEXP rownames,
   SEXP typeLength, SEXP ini, SEXP separated)
 {
@@ -2372,13 +2365,7 @@ SEXP CreateLocalMatrix(SEXP row, SEXP col, SEXP colnames, SEXP rownames,
     rownames, typeLength, ini, separated);
 }
 
-void* GetDataPtr(SEXP address)
-{
-  SharedBigMatrix *pMat = 
-    reinterpret_cast<SharedBigMatrix*>(R_ExternalPtrAddr(address));
-  return pMat->data_ptr();
-}
-
+// [[Rcpp::export]]
 SEXP CreateFileBackedBigMatrix(SEXP fileName, SEXP filePath, SEXP row, 
   SEXP col, SEXP colnames, SEXP rownames, SEXP typeLength, SEXP ini, 
   SEXP separated)
@@ -2478,6 +2465,7 @@ SEXP CreateFileBackedBigMatrix(SEXP fileName, SEXP filePath, SEXP row,
   return R_NilValue;
 }
 
+// [[Rcpp::export]]
 SEXP CAttachSharedBigMatrix(SEXP sharedName, SEXP rows, SEXP cols, 
   SEXP rowNames, SEXP colNames, SEXP typeLength, SEXP separated,
   SEXP readOnly)
@@ -2510,6 +2498,7 @@ SEXP CAttachSharedBigMatrix(SEXP sharedName, SEXP rows, SEXP cols,
   return address;
 }
 
+// [[Rcpp::export]]
 SEXP CAttachFileBackedBigMatrix(SEXP fileName, 
   SEXP filePath, SEXP rows, SEXP cols, SEXP rowNames, SEXP colNames, 
   SEXP typeLength, SEXP separated, SEXP readOnly)
@@ -2543,6 +2532,7 @@ SEXP CAttachFileBackedBigMatrix(SEXP fileName,
   return address;
 }
 
+// [[Rcpp::export]]
 SEXP SharedName( SEXP address )
 {
   BigMatrix *pMat = (BigMatrix*)R_ExternalPtrAddr(address);
@@ -2553,6 +2543,7 @@ SEXP SharedName( SEXP address )
   
 }
 
+// [[Rcpp::export]]
 SEXP FileName( SEXP address )  
 {   
   BigMatrix *pMat = (BigMatrix*)R_ExternalPtrAddr(address);
@@ -2562,6 +2553,7 @@ SEXP FileName( SEXP address )
   return R_NilValue;
 }
 
+// [[Rcpp::export]]
 SEXP Flush( SEXP address )  
 {   
   FileBackedBigMatrix *pMat =   
@@ -2581,6 +2573,7 @@ SEXP Flush( SEXP address )
   return ret;
 }
 
+// [[Rcpp::export]]
 SEXP IsShared( SEXP address )
 {
   FileBackedBigMatrix *pMat =   
@@ -2591,6 +2584,7 @@ SEXP IsShared( SEXP address )
   return ret;
 }
 
+// [[Rcpp::export]]
 SEXP isnil(SEXP address)
 {
   void *ptr = R_ExternalPtrAddr(address);
@@ -2600,5 +2594,65 @@ SEXP isnil(SEXP address)
   return(ret);
 }
 
-} // extern "C"
+// removed extern C because doesn't appear necessary
+// Rcpp attributes can be used for R calls and the others
+// are only used in the C code
+
+// WHERE IS THIS CALLED FROM?  Maybe only from C, not from R?  
+// We might like to be able to do this recycling efficiently in other
+// cases?  I thought we did.
+void SetAllMatrixElements(SEXP bigMatAddr, SEXP value)
+{
+  BigMatrix *pMat = reinterpret_cast<BigMatrix*>(R_ExternalPtrAddr(bigMatAddr));
+  if (pMat->separated_columns())
+  {
+    switch (pMat->matrix_type())
+    {
+      case 1:
+        SetAllMatrixElements<char, SepMatrixAccessor<char> >( 
+          pMat, value, NA_CHAR, R_CHAR_MIN, R_CHAR_MAX, NA_REAL);
+        break;
+      case 2:
+        SetAllMatrixElements<short, SepMatrixAccessor<short> >( 
+          pMat, value, NA_SHORT, R_SHORT_MIN, R_SHORT_MAX, NA_REAL);
+        break;
+      case 4:
+        SetAllMatrixElements<int, SepMatrixAccessor<int> >( 
+          pMat, value, NA_INTEGER, R_INT_MIN, R_INT_MAX, NA_REAL);
+        break;
+      case 8:
+        SetAllMatrixElements<double, SepMatrixAccessor<double> >( 
+          pMat, value, NA_REAL, R_DOUBLE_MIN, R_DOUBLE_MAX, NA_REAL);
+    }
+  }
+  else
+  {
+    switch (pMat->matrix_type())
+    {
+      case 1:
+        SetAllMatrixElements<char, MatrixAccessor<char> >( 
+          pMat, value, NA_CHAR, R_CHAR_MIN, R_CHAR_MAX, NA_REAL);
+        break;
+      case 2:
+        SetAllMatrixElements<short, MatrixAccessor<short> >( 
+          pMat, value, NA_SHORT, R_SHORT_MIN, R_SHORT_MAX, NA_REAL);
+        break;
+      case 4:
+        SetAllMatrixElements<int, MatrixAccessor<int> >( 
+          pMat, value, NA_INTEGER, R_INT_MIN, R_INT_MAX, NA_REAL);
+        break;
+      case 8:
+        SetAllMatrixElements<double, MatrixAccessor<double> >( 
+          pMat, value, NA_REAL, R_DOUBLE_MIN, R_DOUBLE_MAX, NA_REAL);
+    }
+  }
+}
+
+// This doesn't appear to be used anywhere?!?!
+void* GetDataPtr(SEXP address)
+{
+  SharedBigMatrix *pMat = 
+    reinterpret_cast<SharedBigMatrix*>(R_ExternalPtrAddr(address));
+  return pMat->data_ptr();
+}
 

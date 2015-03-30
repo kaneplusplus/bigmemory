@@ -6,9 +6,11 @@ Author: Michael J. Kane <kaneplusplus@gmail.com>, John W. Emerson <jayemerson@gm
 Maintainer: Michael J. Kane <bigmemoryauthors@gmail.com>
 Contact: Mike and Jay <bigmemoryauthors@gmail.com>
 Depends: methods, utils, bigmemory.sri
+Imports: Rcpp
 Enhances: biganalytics, bigtabulate, synchronicity
-LinkingTo: BH
-Suggests: RUnit
+LinkingTo: BH, Rcpp
+Suggests: RUnit,
+    testthat
 Description: Create, store, access, and manipulate massive matrices.
   Matrices are allocated to shared memory and may use memory-mapped
   files.  Packages biganalytics, bigtabulate, synchronicity, and
@@ -17,3 +19,4 @@ License: LGPL-3 | Apache License 2.0
 Copyright: (C) 2014 John W. Emerson and Michael J. Kane
 URL: http://www.bigmemory.org
 LazyLoad: yes
+Biarch: yes

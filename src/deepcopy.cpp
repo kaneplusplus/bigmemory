@@ -53,9 +53,13 @@ void DeepCopy(BigMatrix *pInMat, BigMatrix *pOutMat, SEXP rowInds, SEXP colInds)
   return;
 }
 
-extern "C"
-{
-  #define CALL_DEEP_COPY_2(IN_CTYPE, IN_ACCESSOR, OUT_ACCESSOR) \
+
+// [[Rcpp::export]]
+SEXP CDeepCopy(SEXP inAddr, SEXP outAddr, SEXP rowInds, SEXP colInds, 
+    SEXP typecast_warning)
+  {
+      
+    #define CALL_DEEP_COPY_2(IN_CTYPE, IN_ACCESSOR, OUT_ACCESSOR) \
     switch(pOutMat->matrix_type()) \
     { \
       case 1: \
@@ -76,7 +80,7 @@ extern "C"
         break; \
     }
 
-  #define CALL_DEEP_COPY_1(IN_ACCESSOR, OUT_ACCESSOR) \
+    #define CALL_DEEP_COPY_1(IN_ACCESSOR, OUT_ACCESSOR) \
     switch(pInMat->matrix_type()) \
     { \
       case 1: \
@@ -93,9 +97,6 @@ extern "C"
         break; \
     }
       
-  SEXP CDeepCopy(SEXP inAddr, SEXP outAddr, SEXP rowInds, SEXP colInds, 
-    SEXP typecast_warning)
-  {
     BigMatrix *pInMat = reinterpret_cast<BigMatrix*>(
       R_ExternalPtrAddr(inAddr));
     BigMatrix *pOutMat = reinterpret_cast<BigMatrix*>(
@@ -134,4 +135,3 @@ extern "C"
 
     return R_NilValue;
   }
-}
