@@ -325,6 +325,7 @@ SEXP GetMatrixElements( BigMatrix *pMat, double NA_C, double NA_R,
 }
 
 // Function contributed by Peter Haverty at Genentech.
+// [[RcppExport]]
 SEXP GetIndivMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row)
 {
   BigMatrix *pMat =

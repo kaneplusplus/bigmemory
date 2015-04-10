@@ -411,7 +411,7 @@ GetIndivElements.bm <- function(x,i) {
   if (tempj[[1]]) i[,2] <- tempj[[2]]
 
   # Call .Call C++
-  return(.Call("GetIndivMatrixElements", x@address, as.double(i[,2]),
+  return(GetIndivMatrixElements(x@address, as.double(i[,2]),
     as.double(i[,1])))
 }
 
