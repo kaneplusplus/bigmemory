@@ -27,7 +27,7 @@ class BigMatrix : public boost::noncopyable
 {
   // Public types
   public:
-    enum MatrixType {CHAR=1, SHORT=2, INT=3, DOUBLE=4, COMPLEX=5};
+    enum MatrixType {CHAR=1, SHORT=2, INT=3, DOUBLE=4, COMPLEX=5, FLOAT=6};
 
   // Constructor and Destructor
   public:
@@ -169,7 +169,6 @@ class BigMatrix : public boost::noncopyable
     index_type _colOffset;
     index_type _rowOffset;
     index_type _nebytes;
-    index_type _allocationSize;
     int _matType;
     void* _pdata;
     bool _shared;
@@ -177,6 +176,7 @@ class BigMatrix : public boost::noncopyable
     Names _colNames;
     Names _rowNames;
     bool _readOnly;
+    index_type _allocationSize;
 };
 
 class LocalBigMatrix : public BigMatrix
