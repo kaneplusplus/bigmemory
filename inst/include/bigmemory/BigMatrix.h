@@ -33,7 +33,7 @@ class BigMatrix : public boost::noncopyable
   public:
     BigMatrix():_ncol(0),_nrow(0), _totalRows(0), _totalCols(0),
                 _colOffset(0), _rowOffset(0),_matType(0), _pdata(NULL),
-                _sepCols(false), _readOnly(false){}
+                _sepCols(false), _readOnly(false), _allocationSize(0){}
     virtual ~BigMatrix(){}
 
     // The next function returns the matrix data.  It will generally be passed
@@ -156,6 +156,8 @@ class BigMatrix : public boost::noncopyable
     }
   
     void* data_ptr() {return _pdata;}
+  
+    const index_type allocation_size() const {return _allocationSize;}
 
   // Data Members
 
@@ -167,6 +169,7 @@ class BigMatrix : public boost::noncopyable
     index_type _colOffset;
     index_type _rowOffset;
     index_type _nebytes;
+    index_type _allocationSize;
     int _matType;
     void* _pdata;
     bool _shared;

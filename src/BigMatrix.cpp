@@ -47,35 +47,49 @@ std::string ttos(T i)
 }
 
 template<typename T>
-void* CreateLocalMatrix( const index_type &nrow, const index_type &ncol )
+void CreateLocalMatrix( const index_type &nrow, const index_type &ncol, 
+                         void *p, index_type &allocationSize )
 {
-  return new char[nrow*ncol*sizeof(T)];
+  allocationSize = nrow*ncol*sizeof(T);
+  p = new char[allocationSize];
 }
 
 template<typename T>
-void* CreateLocalSepMatrix( const index_type &nrow, 
-  const index_type &ncol )
+void CreateLocalSepMatrix( const index_type &nrow, 
+  const index_type &ncol, void *p, index_type &allocationSize )
 {
-  char **pRet = new char*[ncol];
+  char** pt = new char*[ncol];
+  index_type vecAllocSize = nrow*sizeof(T);
+  allocationSize = ncol*vecAllocSize;
   index_type i;
+  bool fail=false;
   try
   {
     for (i=0; i < ncol; ++i)
     {
-      pRet[i] = new char[nrow*sizeof(T)];
+      pt[i] = new char[vecAllocSize];
     }
+    p = reinterpret_cast<void*>(pt);
   }
   catch(std::exception &e)
   {
     COND_EXCEPTION_PRINT(DEBUG);
     while(i > 1)
     {
-      delete [] pRet[--i];
+      delete [] pt[--i];
     }
-    delete [] pRet;
-    return NULL;
+    delete [] pt;
+    fail=true;
   }
-  return reinterpret_cast<void*>(pRet);
+  if (!fail)
+  {
+    p = reinterpret_cast<void*>(pt);
+  }
+  else
+  {
+    p = NULL;
+    allocationSize = 0;
+  }
 }
 
 bool LocalBigMatrix::create(const index_type numRow, 
@@ -95,19 +109,19 @@ bool LocalBigMatrix::create(const index_type numRow,
       switch(_matType)
       {
         case 1:
-          _pdata = CreateLocalSepMatrix<char>(_nrow, _ncol);
+          CreateLocalSepMatrix<char>(_nrow, _ncol, _pdata, _allocationSize);
           break;
         case 2:
-          _pdata = CreateLocalSepMatrix<short>(_nrow, _ncol);
+          CreateLocalSepMatrix<short>(_nrow, _ncol, _pdata, _allocationSize);
           break;
         case 4:
-          _pdata = CreateLocalSepMatrix<int>(_nrow, _ncol);
+          CreateLocalSepMatrix<int>(_nrow, _ncol, _pdata, _allocationSize);
           break;
         case 6:
           _pdata = CreateLocalSepMatrix<float>(_nrow, _ncol);
           break;
         case 8:
-          _pdata = CreateLocalSepMatrix<double>(_nrow, _ncol);
+          CreateLocalSepMatrix<double>(_nrow, _ncol, _pdata, _allocationSize);
       }
     }
     else
@@ -115,19 +129,19 @@ bool LocalBigMatrix::create(const index_type numRow,
       switch(_matType)
       {
         case 1:
-          _pdata = CreateLocalMatrix<char>(_nrow, _ncol);
+          CreateLocalMatrix<char>(_nrow, _ncol, _pdata, _allocationSize);
           break;
         case 2:
-          _pdata = CreateLocalMatrix<short>(_nrow, _ncol);
+          CreateLocalMatrix<short>(_nrow, _ncol, _pdata, _allocationSize);
           break;
         case 4:
-          _pdata = CreateLocalMatrix<int>(_nrow, _ncol);
+          CreateLocalMatrix<int>(_nrow, _ncol, _pdata, _allocationSize);
           break;
         case 6:
           _pdata = CreateLocalMatrix<float>(_nrow, _ncol);
           break;
         case 8:
-          _pdata = CreateLocalMatrix<double>(_nrow, _ncol);
+          CreateLocalMatrix<double>(_nrow, _ncol, _pdata, _allocationSize);
       }
     }
     if (_pdata == NULL)
@@ -193,13 +207,14 @@ bool SharedBigMatrix::create_uuid()
 }
 
 template<typename T>
-void* CreateSharedSepMatrix( const std::string &sharedName, 
+void CreateSharedSepMatrix( const std::string &sharedName, 
   MappedRegionPtrs &dataRegionPtrs, const index_type nrow, 
-  const index_type ncol)
+  const index_type ncol, void *p, index_type &allocationSize)
 {
   T** pMat = new T*[ncol];
   index_type i;
   dataRegionPtrs.resize(ncol);
+  bool fail = false;
   for (i=0; i < ncol; ++i)
   {
     try
@@ -221,17 +236,27 @@ void* CreateSharedSepMatrix( const std::string &sharedName,
         shared_memory_object::remove( (sharedName+"_column_"+ttos(j)).c_str());
       }
       delete pMat;
-      return NULL;
+      fail = true;
     }
   }
-  return reinterpret_cast<void*>(pMat);
+  if (!fail) 
+  {
+    allocationSize = ncol*nrow*sizeof(T);
+    p = reinterpret_cast<void*>(pMat);
+  }
+  else 
+  {
+    allocationSize = 0;
+    p = NULL;
+  }
 }
 
 template<typename T>
-void* CreateSharedMatrix( const std::string &sharedName, 
+void CreateSharedMatrix( const std::string &sharedName, 
   MappedRegionPtrs &dataRegionPtrs, const index_type nrow, 
-  const index_type ncol)
+  const index_type ncol, void *p, index_type &allocationSize)
 {
+  bool fail = false;
   try
   {
     // shared_memory_object::remove( (sharedName.c_str()) );
@@ -244,9 +269,18 @@ void* CreateSharedMatrix( const std::string &sharedName,
   {
     COND_EXCEPTION_PRINT(DEBUG);
     shared_memory_object::remove(sharedName.c_str());
-    return NULL;
+    fail=true;
   }
-  return dataRegionPtrs[0]->get_address();
+  if (!fail) 
+  {
+    allocationSize = nrow*ncol*sizeof(T);
+    p = dataRegionPtrs[0]->get_address();
+  }
+  else
+  {
+    allocationSize = 0;
+    p = NULL;
+  }
 }
 
 bool SharedMemoryBigMatrix::create(const index_type numRow, 
@@ -281,24 +315,24 @@ bool SharedMemoryBigMatrix::create(const index_type numRow,
       switch(_matType)
       {
         case 1:
-          _pdata = CreateSharedSepMatrix<char>(_sharedName, _dataRegionPtrs,
-            _nrow, _ncol);
+          CreateSharedSepMatrix<char>(_sharedName, _dataRegionPtrs, _nrow, 
+                                      _ncol, _pdata, _allocationSize);
           break;
         case 2:
-          _pdata = CreateSharedSepMatrix<short>(_sharedName, _dataRegionPtrs, 
-            _nrow, _ncol);
+          CreateSharedSepMatrix<short>(_sharedName, _dataRegionPtrs, _nrow, 
+                                       _ncol, _pdata, _allocationSize);
           break;
         case 4:
-          _pdata = CreateSharedSepMatrix<int>(_sharedName, _dataRegionPtrs, 
-            _nrow, _ncol);
+          CreateSharedSepMatrix<int>(_sharedName, _dataRegionPtrs, _nrow,
+                                       _ncol, _pdata, _allocationSize);
           break;
         case 6:
           _pdata = CreateSharedSepMatrix<float>(_sharedName, _dataRegionPtrs, 
             _nrow, _ncol);
           break;
         case 8:
-          _pdata = CreateSharedSepMatrix<double>(_sharedName, _dataRegionPtrs,
-            _nrow, _ncol);
+          CreateSharedSepMatrix<double>(_sharedName, _dataRegionPtrs, _nrow,
+                                       _ncol, _pdata, _allocationSize);
       }
     }
     else
@@ -306,24 +340,24 @@ bool SharedMemoryBigMatrix::create(const index_type numRow,
       switch(_matType)
       {
         case 1:
-          _pdata = CreateSharedMatrix<char>(_sharedName, _dataRegionPtrs, 
-            _nrow, _ncol);
+          CreateSharedMatrix<char>(_sharedName, _dataRegionPtrs,  _nrow,
+                                       _ncol, _pdata, _allocationSize);
           break;
         case 2:
-          _pdata = CreateSharedMatrix<short>(_sharedName, _dataRegionPtrs,
-            _nrow, _ncol);
+          CreateSharedMatrix<short>(_sharedName, _dataRegionPtrs, _nrow,
+                                       _ncol, _pdata, _allocationSize);
           break;
         case 4:
-          _pdata = CreateSharedMatrix<int>(_sharedName, _dataRegionPtrs,
-            _nrow, _ncol);
+          CreateSharedMatrix<int>(_sharedName, _dataRegionPtrs, _nrow,
+                                       _ncol, _pdata, _allocationSize);
           break;
         case 6:
           _pdata = CreateSharedMatrix<float>(_sharedName, _dataRegionPtrs,
             _nrow, _ncol);
           break;
         case 8:
-          _pdata = CreateSharedMatrix<double>(_sharedName, _dataRegionPtrs,
-            _nrow, _ncol);
+          CreateSharedMatrix<double>(_sharedName, _dataRegionPtrs, _nrow,
+                                       _ncol, _pdata, _allocationSize);
       }
     }
     if (_pdata == NULL)
@@ -408,6 +442,7 @@ bool SharedMemoryBigMatrix::connect( const std::string &uuid,
     _matType=matrixType;
     _sepCols=sepCols;
     _readOnly=readOnly;
+    _allocationSize=0;
 
 #ifndef INTERLOCKED_EXCHANGE_HACK
     // Attach to the associated mutex and counter;
@@ -427,6 +462,7 @@ bool SharedMemoryBigMatrix::connect( const std::string &uuid,
           {
             _pdata = ConnectSharedSepMatrix<char>(_sharedName, _dataRegionPtrs, 
               _ncol, _readOnly);
+            _allocationSize = _ncol*_nrow*sizeof(char);
           }
           catch(boost::interprocess::interprocess_exception &e)
           {
@@ -443,6 +479,7 @@ bool SharedMemoryBigMatrix::connect( const std::string &uuid,
           {
             _pdata = ConnectSharedSepMatrix<short>(_sharedName, 
               _dataRegionPtrs, _ncol, _readOnly);
+            _allocationSize = _ncol*_nrow*sizeof(short);
           }
           catch(boost::interprocess::interprocess_exception &e)
           {
@@ -459,6 +496,7 @@ bool SharedMemoryBigMatrix::connect( const std::string &uuid,
           {
             _pdata = ConnectSharedSepMatrix<int>(_sharedName, _dataRegionPtrs, 
               _ncol, _readOnly);
+            _allocationSize = _ncol*_nrow*sizeof(int);
           }
           catch(boost::interprocess::interprocess_exception &e)
           {
@@ -491,6 +529,7 @@ bool SharedMemoryBigMatrix::connect( const std::string &uuid,
           {
             _pdata = ConnectSharedSepMatrix<double>(_sharedName, 
               _dataRegionPtrs, _ncol, _readOnly);
+            _allocationSize = _ncol*_nrow*sizeof(double);
           }
           catch(boost::interprocess::interprocess_exception &e)
           {
@@ -512,6 +551,7 @@ bool SharedMemoryBigMatrix::connect( const std::string &uuid,
           {
             _pdata = ConnectSharedMatrix<char>(_sharedName, _dataRegionPtrs, 
               _counter, _readOnly);
+            _allocationSize = _ncol*_nrow*sizeof(char);
           }
           catch(boost::interprocess::interprocess_exception &e)
           {
@@ -528,6 +568,7 @@ bool SharedMemoryBigMatrix::connect( const std::string &uuid,
           {
             _pdata = ConnectSharedMatrix<short>(_sharedName, _dataRegionPtrs, 
               _counter, _readOnly);
+            _allocationSize = _ncol*_nrow*sizeof(short);
           }
           catch(boost::interprocess::interprocess_exception &e)
           {
@@ -544,6 +585,7 @@ bool SharedMemoryBigMatrix::connect( const std::string &uuid,
           {
             _pdata = ConnectSharedMatrix<int>(_sharedName, _dataRegionPtrs, 
               _counter, _readOnly);
+            _allocationSize = _ncol*_nrow*sizeof(short);
           }
           catch(boost::interprocess::interprocess_exception &e)
           {
@@ -576,6 +618,7 @@ bool SharedMemoryBigMatrix::connect( const std::string &uuid,
           {
             _pdata = ConnectSharedMatrix<double>(_sharedName, _dataRegionPtrs, 
               _counter, _readOnly);
+            _allocationSize = _ncol*_nrow*sizeof(short);
           }
           catch(boost::interprocess::interprocess_exception &e)
           {
