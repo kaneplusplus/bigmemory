@@ -1,5 +1,6 @@
 
 #include <fstream>
+//#include <typeinfo>
 
 #include "bigmemory/BigMatrix.h"
 #include "bigmemory/MatrixAccessor.hpp"
@@ -343,6 +344,9 @@ SEXP GetIndivMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row)
       case 4:
         return GetIndivMatrixElements<int, int, SepMatrixAccessor<int> >(
           pMat, NA_INTEGER, NA_INTEGER, col, row, INTSXP);
+      case 6:
+        return GetIndivMatrixElements<float, float, SepMatrixAccessor<float> >(
+          pMat, NA_FLOAT, NA_FLOAT, col, row, REALSXP);
       case 8:
         return GetIndivMatrixElements<double,double,SepMatrixAccessor<double> >(
           pMat, NA_REAL, NA_REAL, col, row, REALSXP);
@@ -361,6 +365,9 @@ SEXP GetIndivMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row)
       case 4:
         return GetIndivMatrixElements<int, int, MatrixAccessor<int> >(
           pMat, NA_INTEGER, NA_INTEGER, col, row, INTSXP);
+      case 6:
+        return GetIndivMatrixElements<float, float, MatrixAccessor<float> >(
+          pMat, NA_FLOAT, NA_FLOAT, col, row, REALSXP);
       case 8:
         return GetIndivMatrixElements<double, double, MatrixAccessor<double> >(
           pMat, NA_REAL, NA_REAL, col, row, REALSXP);
@@ -1019,6 +1026,9 @@ void ReorderBigMatrix( SEXP address, SEXP orderVec )
       case 4:
         return reorder_matrix( SepMatrixAccessor<int>(*pMat),orderVec,
           pMat->ncol(), dynamic_cast<FileBackedBigMatrix*>(pMat) );
+      case 6:
+        return reorder_matrix( SepMatrixAccessor<float>(*pMat),orderVec,
+          pMat->ncol(), dynamic_cast<FileBackedBigMatrix*>(pMat) );
       case 8:
         return reorder_matrix( SepMatrixAccessor<double>(*pMat),orderVec,
           pMat->ncol(), dynamic_cast<FileBackedBigMatrix*>(pMat) );
@@ -1036,6 +1046,9 @@ void ReorderBigMatrix( SEXP address, SEXP orderVec )
           pMat->ncol(), dynamic_cast<FileBackedBigMatrix*>(pMat) );
       case 4:
         return reorder_matrix( MatrixAccessor<int>(*pMat),orderVec,
+          pMat->ncol(), dynamic_cast<FileBackedBigMatrix*>(pMat) );
+      case 6:
+        return reorder_matrix( MatrixAccessor<float>(*pMat),orderVec,
           pMat->ncol(), dynamic_cast<FileBackedBigMatrix*>(pMat) );
       case 8:
         return reorder_matrix( MatrixAccessor<double>(*pMat),orderVec,
@@ -1081,6 +1094,9 @@ SEXP OrderBigMatrix(SEXP address, SEXP columns, SEXP naLast, SEXP decreasing)
       case 4:
         return get_order<int>( SepMatrixAccessor<int>(*pMat),
           columns, naLast, decreasing );
+      case 6:
+        return get_order<float>( SepMatrixAccessor<float>(*pMat),
+          columns, naLast, decreasing );
       case 8:
         return get_order<double>( SepMatrixAccessor<double>(*pMat),
           columns, naLast, decreasing );
@@ -1098,6 +1114,9 @@ SEXP OrderBigMatrix(SEXP address, SEXP columns, SEXP naLast, SEXP decreasing)
           columns, naLast, decreasing );
       case 4:
         return get_order<int>( MatrixAccessor<int>(*pMat),
+          columns, naLast, decreasing );
+      case 6:
+        return get_order<float>( MatrixAccessor<float>(*pMat),
           columns, naLast, decreasing );
       case 8:
         return get_order<double>( MatrixAccessor<double>(*pMat),
@@ -1549,6 +1568,7 @@ SEXP CreateRAMMatrix(SEXP row, SEXP col, SEXP colnames, SEXP rownames,
   try
   {
     pMat = new T();
+
     if (!pMat->create( static_cast<index_type>(NUMERIC_VALUE(row)),
       static_cast<index_type>(NUMERIC_VALUE(col)),
       INTEGER_VALUE(typeLength),
@@ -1557,6 +1577,7 @@ SEXP CreateRAMMatrix(SEXP row, SEXP col, SEXP colnames, SEXP rownames,
       delete pMat;
       return NULL_USER_OBJECT;
     }
+
     if (colnames != NULL_USER_OBJECT)
     {
       pMat->column_names(RChar2StringVec(colnames));
@@ -1583,6 +1604,10 @@ SEXP CreateRAMMatrix(SEXP row, SEXP col, SEXP colnames, SEXP rownames,
             SetAllMatrixElements<int, SepMatrixAccessor<int> >(
               pMat, ini, NA_INTEGER, R_INT_MIN, R_INT_MAX, NA_REAL);
             break;
+          case 6:
+            SetAllMatrixElements<float, SepMatrixAccessor<float> >(
+              pMat, ini, NA_FLOAT, R_FLT_MIN, R_FLT_MAX, NA_REAL);
+            break;
           case 8:
             SetAllMatrixElements<double, SepMatrixAccessor<double> >(
               pMat, ini, NA_REAL, R_DOUBLE_MIN, R_DOUBLE_MAX, NA_REAL);
@@ -1603,6 +1628,10 @@ SEXP CreateRAMMatrix(SEXP row, SEXP col, SEXP colnames, SEXP rownames,
           case 4:
             SetAllMatrixElements<int, MatrixAccessor<int> >(
               pMat, ini, NA_INTEGER, R_INT_MIN, R_INT_MAX, NA_REAL );
+            break;
+          case 6:
+            SetAllMatrixElements<float, MatrixAccessor<float> >(
+              pMat, ini, NA_FLOAT, R_FLT_MIN, R_FLT_MAX, NA_REAL );
             break;
           case 8:
             SetAllMatrixElements<double, MatrixAccessor<double> >(
@@ -1654,124 +1683,146 @@ void SetColumnOffsetInfo( SEXP bigMatAddr, SEXP colOffset, SEXP numCols )
 // [[Rcpp::export]]
 SEXP GetRowOffset( SEXP bigMatAddr )
 {
-  BigMatrix *pMat = 
-    reinterpret_cast<BigMatrix*>(R_ExternalPtrAddr(bigMatAddr));
-  SEXP ret = PROTECT(NEW_NUMERIC(2));
-  NUMERIC_DATA(ret)[0] = pMat->row_offset();
-  NUMERIC_DATA(ret)[1] = pMat->nrow();
-  UNPROTECT(1);
-  return ret;
+    Rcpp::XPtr<BigMatrix> pMat(bigMatAddr);
+    Rcpp::NumericVector ret(2);
+    ret[0] = pMat->row_offset();
+    ret[1] = pMat->nrow();
+    return ret;
 }
 
 // [[Rcpp::export]]
-SEXP GetColOffset( SEXP bigMatAddr )
+Rcpp::NumericVector GetColOffset( SEXP bigMatAddr )
 {
-  BigMatrix *pMat = 
-    reinterpret_cast<BigMatrix*>(R_ExternalPtrAddr(bigMatAddr));
-  SEXP ret = PROTECT(NEW_NUMERIC(2));
-  NUMERIC_DATA(ret)[0] = pMat->col_offset();
-  NUMERIC_DATA(ret)[1] = pMat->ncol();
-  UNPROTECT(1);
-  return ret;
+    Rcpp::XPtr<BigMatrix> pMat(bigMatAddr);
+    Rcpp::NumericVector ret(2);
+    ret[0] = pMat->col_offset();
+    ret[1] = pMat->ncol();
+    return ret;
 }
 
 // [[Rcpp::export]]
 SEXP GetTotalColumns( SEXP bigMatAddr )
 {
-  BigMatrix *pMat = 
-    reinterpret_cast<BigMatrix*>(R_ExternalPtrAddr(bigMatAddr));
-  SEXP ret = PROTECT(NEW_NUMERIC(1));
-  NUMERIC_DATA(ret)[0] = pMat->total_columns();
-  UNPROTECT(1);
-  return ret;
+    Rcpp::XPtr<BigMatrix> pMat(bigMatAddr);
+    int ret = pMat->total_columns();
+    return Rcpp::wrap(ret);
 }
 
 // [[Rcpp::export]]
 SEXP GetTotalRows( SEXP bigMatAddr )
 {
-  BigMatrix *pMat = 
-    reinterpret_cast<BigMatrix*>(R_ExternalPtrAddr(bigMatAddr));
-  SEXP ret = PROTECT(NEW_NUMERIC(1));
-  NUMERIC_DATA(ret)[0] = pMat->total_rows();
-  UNPROTECT(1);
-  return ret;
+    Rcpp::XPtr<BigMatrix> pMat(bigMatAddr);
+    int ret = pMat->total_rows();
+    return Rcpp::wrap(ret);
 }
 
+template <typename T> std::string type_name();
+
+// simplifed to use Rcpp tools 04/13/2015 -- Charles Determan Jr.
 // [[Rcpp::export]]
-SEXP GetTypeString( SEXP bigMatAddr )
+Rcpp::String GetTypeString( SEXP bigMatAddr )
 {
-  BigMatrix *pMat = 
-    reinterpret_cast<BigMatrix*>(R_ExternalPtrAddr(bigMatAddr));
-  SEXP ret = PROTECT(allocVector(STRSXP, 1));
-  switch (pMat->matrix_type())
-  {
-    case 1:
-      SET_STRING_ELT(ret, 0, mkChar("char"));
-      break;
-    case 2:
-      SET_STRING_ELT(ret, 0, mkChar("short"));
-      break;
-    case 4:
-      SET_STRING_ELT(ret, 0, mkChar("integer"));
-      break;
-    case 8:
-      SET_STRING_ELT(ret, 0, mkChar("double"));
-  }
-  UNPROTECT(1);
-  return ret;
+    Rcpp::XPtr<BigMatrix> pMat(bigMatAddr);
+    
+//    std::cout << type_name<decltype(pMat->matrix())>() << std::endl;
+    
+    switch(pMat->matrix_type())
+    {
+        case 1:
+            return "char";
+        case 2:
+            return "short";
+        case 4:
+            return "integer";
+        case 6:
+            return "float";
+        case 8:
+            return "double";
+        default:
+            std::cout << pMat->matrix_type() << std::endl;
+            throw Rcpp::exception("unknown type detected for big.matrix object!");
+    }
 }
+
+
+/* Added by Charles Determan Jr. 04/20/2015
+ * quick function to access big.matrix sizes
+ * possibly convert in to a method for object.size???
+ */
+//' @export
+// [[Rcpp::export]]
+SEXP GetMatrixSize( SEXP bigMat )
+{
+    // declare as S4 object
+    Rcpp::S4 As4(bigMat);
+    // pull address slot
+    SEXP BM_address = As4.slot("address");
+    // declare as external pointer
+    Rcpp::XPtr<BigMatrix> pMat(BM_address);
+    // return the matrix size (in bytes)
+    return Rcpp::wrap(pMat->allocation_size());
+}   
+
 
 // [[Rcpp::export]]
 SEXP MWhichBigMatrix( SEXP bigMatAddr, SEXP selectColumn, SEXP minVal,
                      SEXP maxVal, SEXP chkMin, SEXP chkMax, SEXP opVal )
 {
-  BigMatrix *pMat = 
-    reinterpret_cast<BigMatrix*>(R_ExternalPtrAddr(bigMatAddr));
-  if (pMat->separated_columns())
-  {
-    switch (pMat->matrix_type())
+    Rcpp::XPtr<BigMatrix> pMat(bigMatAddr);
+  
+    if (pMat->separated_columns())
     {
-      case 1:
-        return MWhichMatrix<char>( SepMatrixAccessor<char>(*pMat),
-          pMat->nrow(), selectColumn, minVal, maxVal, chkMin, chkMax, 
-          opVal, NA_CHAR);
-      case 2:
-        return MWhichMatrix<short>( SepMatrixAccessor<short>(*pMat),
-          pMat->nrow(), selectColumn, minVal, maxVal, chkMin, chkMax, 
-          opVal, NA_SHORT);
-      case 4:
-        return MWhichMatrix<int>( SepMatrixAccessor<int>(*pMat),
-          pMat->nrow(), selectColumn, minVal, maxVal, chkMin, chkMax, 
-          opVal, NA_INTEGER);
-      case 8:
-        return MWhichMatrix<double>( SepMatrixAccessor<double>(*pMat),
-          pMat->nrow(), selectColumn, minVal, maxVal, chkMin, chkMax, 
-          opVal, NA_REAL);
+        switch (pMat->matrix_type())
+        {
+          case 1:
+            return MWhichMatrix<char>( SepMatrixAccessor<char>(*pMat),
+              pMat->nrow(), selectColumn, minVal, maxVal, chkMin, chkMax, 
+              opVal, NA_CHAR);
+          case 2:
+            return MWhichMatrix<short>( SepMatrixAccessor<short>(*pMat),
+              pMat->nrow(), selectColumn, minVal, maxVal, chkMin, chkMax, 
+              opVal, NA_SHORT);
+          case 4:
+            return MWhichMatrix<int>( SepMatrixAccessor<int>(*pMat),
+              pMat->nrow(), selectColumn, minVal, maxVal, chkMin, chkMax, 
+              opVal, NA_INTEGER);
+          case 6:
+            return MWhichMatrix<float>( SepMatrixAccessor<float>(*pMat),
+              pMat->nrow(), selectColumn, minVal, maxVal, chkMin, chkMax, 
+              opVal, NA_FLOAT);
+          case 8:
+            return MWhichMatrix<double>( SepMatrixAccessor<double>(*pMat),
+              pMat->nrow(), selectColumn, minVal, maxVal, chkMin, chkMax, 
+              opVal, NA_REAL);
+        }
     }
-  }
-  else
-  {
-    switch (pMat->matrix_type())
+    else
     {
-      case 1:
-        return MWhichMatrix<char>( MatrixAccessor<char>(*pMat),
-          pMat->nrow(), selectColumn, minVal, maxVal, chkMin, chkMax, 
-          opVal, NA_CHAR);
-      case 2:
-        return MWhichMatrix<short>( MatrixAccessor<short>(*pMat),
-          pMat->nrow(), selectColumn, minVal, maxVal, chkMin, chkMax, 
-          opVal, NA_SHORT);
-      case 4:
-        return MWhichMatrix<int>( MatrixAccessor<int>(*pMat),
-          pMat->nrow(), selectColumn, minVal, maxVal, chkMin, chkMax, 
-          opVal, NA_INTEGER);
-      case 8:
-        return MWhichMatrix<double>( MatrixAccessor<double>(*pMat),
-          pMat->nrow(), selectColumn, minVal, maxVal, chkMin, chkMax, 
-          opVal, NA_REAL);
+        switch (pMat->matrix_type())
+        {
+          case 1:
+            return MWhichMatrix<char>( MatrixAccessor<char>(*pMat),
+              pMat->nrow(), selectColumn, minVal, maxVal, chkMin, chkMax, 
+              opVal, NA_CHAR);
+          case 2:
+            return MWhichMatrix<short>( MatrixAccessor<short>(*pMat),
+              pMat->nrow(), selectColumn, minVal, maxVal, chkMin, chkMax, 
+              opVal, NA_SHORT);
+          case 4:
+            return MWhichMatrix<int>( MatrixAccessor<int>(*pMat),
+              pMat->nrow(), selectColumn, minVal, maxVal, chkMin, chkMax, 
+              opVal, NA_INTEGER);
+          case 6:
+            return MWhichMatrix<float>( MatrixAccessor<float>(*pMat),
+              pMat->nrow(), selectColumn, minVal, maxVal, chkMin, chkMax, 
+              opVal, NA_FLOAT);
+          case 8:
+            return MWhichMatrix<double>( MatrixAccessor<double>(*pMat),
+              pMat->nrow(), selectColumn, minVal, maxVal, chkMin, chkMax, 
+              opVal, NA_REAL);
+        }
     }
-  }
-  return R_NilValue;
+    return R_NilValue;
 }
 
 // [[Rcpp::export]]
@@ -1819,116 +1870,133 @@ SEXP ReadMatrix(SEXP fileName, SEXP bigMatAddr,
                 SEXP firstLine, SEXP numLines, SEXP numCols, SEXP separator,
                 SEXP hasRowNames, SEXP useRowNames)
 {
-  BigMatrix *pMat = reinterpret_cast<BigMatrix*>(R_ExternalPtrAddr(bigMatAddr));
-  if (pMat->separated_columns())
-  {
-    switch (pMat->matrix_type())
+    Rcpp::XPtr<BigMatrix> pMat(bigMatAddr);
+    if (pMat->separated_columns())
     {
-      case 1:
-        return ReadMatrix<char, SepMatrixAccessor<char> >(
-          fileName, pMat, firstLine, numLines, numCols, 
-          separator, hasRowNames, useRowNames, NA_CHAR, NA_CHAR, NA_CHAR, 
-          NA_CHAR);
-      case 2:
-        return ReadMatrix<short, SepMatrixAccessor<short> >(
-          fileName, pMat, firstLine, numLines, numCols, 
-          separator, hasRowNames, useRowNames, NA_SHORT, NA_SHORT, NA_SHORT, 
-          NA_SHORT);
-      case 4:
-        return ReadMatrix<int, SepMatrixAccessor<int> >(
-          fileName, pMat, firstLine, numLines, numCols, 
-          separator, hasRowNames, useRowNames, NA_INTEGER, NA_INTEGER, 
-          NA_INTEGER, NA_INTEGER);
-      case 8:
-        return ReadMatrix<double, SepMatrixAccessor<double> >(
-          fileName, pMat, firstLine, numLines, numCols, 
-          separator, hasRowNames, useRowNames, NA_REAL, R_PosInf, R_NegInf, 
-          R_NaN);
+        switch (pMat->matrix_type())
+        {
+          case 1:
+            return ReadMatrix<char, SepMatrixAccessor<char> >(
+              fileName, pMat, firstLine, numLines, numCols, 
+              separator, hasRowNames, useRowNames, NA_CHAR, NA_CHAR, NA_CHAR, 
+              NA_CHAR);
+          case 2:
+            return ReadMatrix<short, SepMatrixAccessor<short> >(
+              fileName, pMat, firstLine, numLines, numCols, 
+              separator, hasRowNames, useRowNames, NA_SHORT, NA_SHORT, NA_SHORT, 
+              NA_SHORT);
+          case 4:
+            return ReadMatrix<int, SepMatrixAccessor<int> >(
+              fileName, pMat, firstLine, numLines, numCols, 
+              separator, hasRowNames, useRowNames, NA_INTEGER, NA_INTEGER, 
+              NA_INTEGER, NA_INTEGER);
+          case 6:
+            return ReadMatrix<float, SepMatrixAccessor<float> >(
+              fileName, pMat, firstLine, numLines, numCols, 
+              separator, hasRowNames, useRowNames, NA_FLOAT, NA_FLOAT, 
+              NA_FLOAT, NA_FLOAT);
+          case 8:
+            return ReadMatrix<double, SepMatrixAccessor<double> >(
+              fileName, pMat, firstLine, numLines, numCols, 
+              separator, hasRowNames, useRowNames, NA_REAL, R_PosInf, R_NegInf, 
+              R_NaN);
+        }
     }
-  }
-  else
-  {
-    switch (pMat->matrix_type())
+    else
     {
-      case 1:
-        return ReadMatrix<char, MatrixAccessor<char> >(
-          fileName, pMat, firstLine, numLines, numCols, 
-          separator, hasRowNames, useRowNames, NA_CHAR, NA_CHAR, NA_CHAR, 
-          NA_CHAR);
-      case 2:
-        return ReadMatrix<short, MatrixAccessor<short> >(
-          fileName, pMat, firstLine, numLines, numCols, 
-          separator, hasRowNames, useRowNames, NA_SHORT, NA_SHORT, NA_SHORT, 
-          NA_SHORT);
-      case 4:
-        return ReadMatrix<int, MatrixAccessor<int> >(
-          fileName, pMat, firstLine, numLines, numCols, 
-          separator, hasRowNames, useRowNames, NA_INTEGER, NA_INTEGER, 
-          NA_INTEGER, NA_INTEGER);
-      case 8:
-        return ReadMatrix<double, MatrixAccessor<double> >(
-          fileName, pMat, firstLine, numLines, numCols, 
-          separator, hasRowNames, useRowNames, NA_REAL, R_PosInf, R_NegInf, 
-          R_NaN);
+        switch (pMat->matrix_type())
+        {
+          case 1:
+            return ReadMatrix<char, MatrixAccessor<char> >(
+              fileName, pMat, firstLine, numLines, numCols, 
+              separator, hasRowNames, useRowNames, NA_CHAR, NA_CHAR, NA_CHAR, 
+              NA_CHAR);
+          case 2:
+            return ReadMatrix<short, MatrixAccessor<short> >(
+              fileName, pMat, firstLine, numLines, numCols, 
+              separator, hasRowNames, useRowNames, NA_SHORT, NA_SHORT, NA_SHORT, 
+              NA_SHORT);
+          case 4:
+            return ReadMatrix<int, MatrixAccessor<int> >(
+              fileName, pMat, firstLine, numLines, numCols, 
+              separator, hasRowNames, useRowNames, NA_INTEGER, NA_INTEGER, 
+              NA_INTEGER, NA_INTEGER);
+          case 6:
+            return ReadMatrix<float, MatrixAccessor<float> >(
+              fileName, pMat, firstLine, numLines, numCols, 
+              separator, hasRowNames, useRowNames, NA_FLOAT, NA_FLOAT, 
+              NA_FLOAT, NA_FLOAT);
+          case 8:
+            return ReadMatrix<double, MatrixAccessor<double> >(
+              fileName, pMat, firstLine, numLines, numCols, 
+              separator, hasRowNames, useRowNames, NA_REAL, R_PosInf, R_NegInf, 
+              R_NaN);
+        }
     }
-  }
-  return R_NilValue;
+    return R_NilValue;
 }
 
 // [[Rcpp::export]]
 void WriteMatrix( SEXP bigMatAddr, SEXP fileName, SEXP rowNames,
   SEXP colNames, SEXP sep )
 {
-  BigMatrix *pMat = reinterpret_cast<BigMatrix*>(R_ExternalPtrAddr(bigMatAddr));
-  if (pMat->separated_columns())
-  {
-    switch (pMat->matrix_type())
+    Rcpp::XPtr<BigMatrix> pMat(bigMatAddr);
+    if (pMat->separated_columns())
     {
-      case 1:
-        WriteMatrix<char, SepMatrixAccessor<char> >(
-          pMat, fileName, rowNames, colNames, sep, NA_CHAR);
-        break;
-      case 2:
-        WriteMatrix<short, SepMatrixAccessor<short> >(
-          pMat, fileName, rowNames, colNames, sep, NA_SHORT);
-        break;
-      case 4:
-        WriteMatrix<int, SepMatrixAccessor<int> >(
-          pMat, fileName, rowNames, colNames, sep, NA_INTEGER);
-        break;
-      case 8:
-        WriteMatrix<double, SepMatrixAccessor<double> >(
-          pMat, fileName, rowNames, colNames, sep, NA_REAL);
+        switch (pMat->matrix_type())
+        {
+          case 1:
+            WriteMatrix<char, SepMatrixAccessor<char> >(
+              pMat, fileName, rowNames, colNames, sep, NA_CHAR);
+            break;
+          case 2:
+            WriteMatrix<short, SepMatrixAccessor<short> >(
+              pMat, fileName, rowNames, colNames, sep, NA_SHORT);
+            break;
+          case 4:
+            WriteMatrix<int, SepMatrixAccessor<int> >(
+              pMat, fileName, rowNames, colNames, sep, NA_INTEGER);
+            break;
+          case 6:
+            WriteMatrix<float, SepMatrixAccessor<float> >(
+              pMat, fileName, rowNames, colNames, sep, NA_FLOAT);
+            break;
+          case 8:
+            WriteMatrix<double, SepMatrixAccessor<double> >(
+              pMat, fileName, rowNames, colNames, sep, NA_REAL);
+        }
     }
-  }
-  else
-  {
-    switch (pMat->matrix_type())
+    else
     {
-      case 1:
-        WriteMatrix<char, MatrixAccessor<char> >(
-          pMat, fileName, rowNames, colNames, sep, NA_CHAR);
-        break;
-      case 2:
-        WriteMatrix<short, MatrixAccessor<short> >(
-          pMat, fileName, rowNames, colNames, sep, NA_SHORT);
-        break;
-      case 4:
-        WriteMatrix<int, MatrixAccessor<int> >(
-          pMat, fileName, rowNames, colNames, sep, NA_INTEGER);
-        break;
-      case 8:
-        WriteMatrix<double, MatrixAccessor<double> >(
-          pMat, fileName, rowNames, colNames, sep, NA_REAL);
+        switch (pMat->matrix_type())
+        {
+          case 1:
+            WriteMatrix<char, MatrixAccessor<char> >(
+              pMat, fileName, rowNames, colNames, sep, NA_CHAR);
+            break;
+          case 2:
+            WriteMatrix<short, MatrixAccessor<short> >(
+              pMat, fileName, rowNames, colNames, sep, NA_SHORT);
+            break;
+          case 4:
+            WriteMatrix<int, MatrixAccessor<int> >(
+              pMat, fileName, rowNames, colNames, sep, NA_INTEGER);
+            break;
+          case 6:
+            WriteMatrix<float, MatrixAccessor<float> >(
+              pMat, fileName, rowNames, colNames, sep, NA_FLOAT);
+            break;
+          case 8:
+            WriteMatrix<double, MatrixAccessor<double> >(
+              pMat, fileName, rowNames, colNames, sep, NA_REAL);
+        }
     }
-  }
 }
 
 // [[Rcpp::export]]
 SEXP GetMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row)
 {
-  BigMatrix *pMat = 
-    reinterpret_cast<BigMatrix*>(R_ExternalPtrAddr(bigMatAddr));
+  Rcpp::XPtr<BigMatrix> pMat(bigMatAddr);
   if (pMat->separated_columns())
   {
     switch(pMat->matrix_type())
@@ -1942,6 +2010,10 @@ SEXP GetMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row)
       case 4:
         return GetMatrixElements<int, int, SepMatrixAccessor<int> >
           (pMat, NA_INTEGER, NA_INTEGER, col, row, INTSXP);
+      case 6:
+        // possibly area of problem (REALSXP -> FLOATSXP???) but I think okay
+        return GetMatrixElements<float, float, SepMatrixAccessor<float> >
+          (pMat, NA_FLOAT, NA_FLOAT, col, row, REALSXP);
       case 8:
         return GetMatrixElements<double, double, SepMatrixAccessor<double> >(
           pMat, NA_REAL, NA_REAL, col, row, REALSXP);
@@ -1960,6 +2032,9 @@ SEXP GetMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row)
       case 4:
         return GetMatrixElements<int, int, MatrixAccessor<int> >(
           pMat, NA_INTEGER, NA_INTEGER, col, row, INTSXP);
+      case 6:
+        return GetMatrixElements<float, float, MatrixAccessor<float> >(
+          pMat, NA_FLOAT, NA_FLOAT, col, row, REALSXP);
       case 8:
         return GetMatrixElements<double, double, MatrixAccessor<double> >
           (pMat, NA_REAL, NA_REAL, col, row, REALSXP);
@@ -1971,8 +2046,7 @@ SEXP GetMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row)
 // [[Rcpp::export]]
 SEXP GetMatrixRows(SEXP bigMatAddr, SEXP row)
 {
-  BigMatrix *pMat = 
-    reinterpret_cast<BigMatrix*>(R_ExternalPtrAddr(bigMatAddr));
+  Rcpp::XPtr<BigMatrix> pMat(bigMatAddr);
   if (pMat->separated_columns())
   {
     switch(pMat->matrix_type())
@@ -1986,6 +2060,9 @@ SEXP GetMatrixRows(SEXP bigMatAddr, SEXP row)
       case 4:
         return GetMatrixRows<int, int, SepMatrixAccessor<int> >
           (pMat, NA_INTEGER, NA_INTEGER, row, INTSXP);
+      case 6:
+        return GetMatrixRows<float, float, SepMatrixAccessor<float> >
+          (pMat, NA_FLOAT, NA_FLOAT, row, REALSXP);
       case 8:
         return GetMatrixRows<double, double, SepMatrixAccessor<double> >(
           pMat, NA_REAL, NA_REAL, row, REALSXP);
@@ -2004,6 +2081,9 @@ SEXP GetMatrixRows(SEXP bigMatAddr, SEXP row)
       case 4:
         return GetMatrixRows<int, int, MatrixAccessor<int> >(
           pMat, NA_INTEGER, NA_INTEGER, row, INTSXP);
+      case 6:
+        return GetMatrixRows<float, float, MatrixAccessor<float> >(
+          pMat, NA_FLOAT, NA_FLOAT, row, REALSXP);
       case 8:
         return GetMatrixRows<double, double, MatrixAccessor<double> >
           (pMat, NA_REAL, NA_REAL, row, REALSXP);
@@ -2015,8 +2095,7 @@ SEXP GetMatrixRows(SEXP bigMatAddr, SEXP row)
 // [[Rcpp::export]]
 SEXP GetMatrixCols(SEXP bigMatAddr, SEXP col)
 {
-  BigMatrix *pMat = 
-    reinterpret_cast<BigMatrix*>(R_ExternalPtrAddr(bigMatAddr));
+  Rcpp::XPtr<BigMatrix> pMat(bigMatAddr);
   if (pMat->separated_columns())
   {
     switch(pMat->matrix_type())
@@ -2030,6 +2109,9 @@ SEXP GetMatrixCols(SEXP bigMatAddr, SEXP col)
       case 4:
         return GetMatrixCols<int, int, SepMatrixAccessor<int> >
           (pMat, NA_INTEGER, NA_INTEGER, col, INTSXP);
+      case 6:
+        return GetMatrixCols<float, float, SepMatrixAccessor<float> >
+          (pMat, NA_FLOAT, NA_FLOAT, col, REALSXP);
       case 8:
         return GetMatrixCols<double, double, SepMatrixAccessor<double> >(
           pMat, NA_REAL, NA_REAL, col, REALSXP);
@@ -2048,6 +2130,9 @@ SEXP GetMatrixCols(SEXP bigMatAddr, SEXP col)
       case 4:
         return GetMatrixCols<int, int, MatrixAccessor<int> >(
           pMat, NA_INTEGER, NA_INTEGER, col, INTSXP);
+      case 6:
+        return GetMatrixCols<float, float, MatrixAccessor<float> >(
+          pMat, NA_FLOAT, NA_FLOAT, col, REALSXP);
       case 8:
         return GetMatrixCols<double, double, MatrixAccessor<double> >
           (pMat, NA_REAL, NA_REAL, col, REALSXP);
@@ -2060,8 +2145,7 @@ SEXP GetMatrixCols(SEXP bigMatAddr, SEXP col)
 // [[Rcpp::export]]
 SEXP GetMatrixAll(SEXP bigMatAddr)
 {
-  BigMatrix *pMat = 
-    reinterpret_cast<BigMatrix*>(R_ExternalPtrAddr(bigMatAddr));
+  Rcpp::XPtr<BigMatrix> pMat(bigMatAddr);
   if (pMat->separated_columns())
   {
     switch(pMat->matrix_type())
@@ -2075,6 +2159,9 @@ SEXP GetMatrixAll(SEXP bigMatAddr)
       case 4:
         return GetMatrixAll<int, int, SepMatrixAccessor<int> >
           (pMat, NA_INTEGER, NA_INTEGER, INTSXP);
+      case 6:
+        return GetMatrixAll<float, float, SepMatrixAccessor<float> >
+          (pMat, NA_FLOAT, NA_FLOAT, REALSXP);
       case 8:
         return GetMatrixAll<double, double, SepMatrixAccessor<double> >(
           pMat, NA_REAL, NA_REAL, REALSXP);
@@ -2093,6 +2180,9 @@ SEXP GetMatrixAll(SEXP bigMatAddr)
       case 4:
         return GetMatrixAll<int, int, MatrixAccessor<int> >(
           pMat, NA_INTEGER, NA_INTEGER, INTSXP);
+      case 6:
+        return GetMatrixAll<float, float, MatrixAccessor<float> >(
+          pMat, NA_FLOAT, NA_FLOAT, REALSXP);
       case 8:
         return GetMatrixAll<double, double, MatrixAccessor<double> >
           (pMat, NA_REAL, NA_REAL, REALSXP);
@@ -2104,7 +2194,7 @@ SEXP GetMatrixAll(SEXP bigMatAddr)
 // [[Rcpp::export]]
 void SetMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row, SEXP values)
 {
-  BigMatrix *pMat = reinterpret_cast<BigMatrix*>(R_ExternalPtrAddr(bigMatAddr));
+  Rcpp::XPtr<BigMatrix> pMat(bigMatAddr);
   if (pMat->separated_columns())
   {
     switch (pMat->matrix_type())
@@ -2121,6 +2211,10 @@ void SetMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row, SEXP values)
       case 4:
         SetMatrixElements<int, int, SepMatrixAccessor<int> >( 
           pMat, col, row, values, NA_INTEGER, R_INT_MIN, R_INT_MAX, NA_INTEGER);
+        break;
+      case 6:
+        SetMatrixElements<float, float, SepMatrixAccessor<float> >( 
+          pMat, col, row, values, NA_FLOAT, R_FLT_MIN, R_FLT_MAX, NA_FLOAT);
         break;
       case 8:
         SetMatrixElements<double, double, SepMatrixAccessor<double> >( 
@@ -2144,6 +2238,10 @@ void SetMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row, SEXP values)
         SetMatrixElements<int, int, MatrixAccessor<int> >( 
           pMat, col, row, values, NA_INTEGER, R_INT_MIN, R_INT_MAX, NA_INTEGER);
         break;
+      case 6:
+        SetMatrixElements<float, float, MatrixAccessor<float> >( 
+          pMat, col, row, values, NA_FLOAT, R_FLT_MIN, R_FLT_MAX, NA_FLOAT);
+        break;
       case 8:
         SetMatrixElements<double, double, MatrixAccessor<double> >( 
           pMat, col, row, values, NA_REAL, R_DOUBLE_MIN, R_DOUBLE_MAX, NA_REAL);
@@ -2155,7 +2253,7 @@ void SetMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row, SEXP values)
 // [[Rcpp::export]]
 void SetIndivMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row, SEXP values)
 {
-  BigMatrix *pMat = reinterpret_cast<BigMatrix*>(R_ExternalPtrAddr(bigMatAddr));
+  Rcpp::XPtr<BigMatrix> pMat(bigMatAddr);
   if (pMat->separated_columns())
   {
     switch (pMat->matrix_type())
@@ -2171,6 +2269,10 @@ void SetIndivMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row, SEXP values)
     case 4:
       SetIndivMatrixElements<int, int, SepMatrixAccessor<int> >(
         pMat, col, row, values, NA_INTEGER, R_INT_MIN, R_INT_MAX, NA_INTEGER);
+      break;
+    case 6:
+      SetIndivMatrixElements<float, float, SepMatrixAccessor<float> >(
+        pMat, col, row, values, NA_FLOAT, R_FLT_MIN, R_FLT_MAX, NA_FLOAT);
       break;
     case 8:
       SetIndivMatrixElements<double, double, SepMatrixAccessor<double> >(
@@ -2193,6 +2295,10 @@ void SetIndivMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row, SEXP values)
       SetIndivMatrixElements<int, int, MatrixAccessor<int> >(
         pMat, col, row, values, NA_INTEGER, R_INT_MIN, R_INT_MAX, NA_INTEGER);
       break;
+    case 6:
+      SetIndivMatrixElements<float, float, MatrixAccessor<float> >(
+        pMat, col, row, values, NA_FLOAT, R_FLT_MIN, R_FLT_MAX, NA_FLOAT);
+      break;
     case 8:
       SetIndivMatrixElements<double, double, MatrixAccessor<double> >(
         pMat, col, row, values, NA_REAL, R_DOUBLE_MIN, R_DOUBLE_MAX, NA_REAL);
@@ -2203,7 +2309,7 @@ void SetIndivMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row, SEXP values)
 // [[Rcpp::export]]
 void SetMatrixAll(SEXP bigMatAddr, SEXP values)
 {
-  BigMatrix *pMat = reinterpret_cast<BigMatrix*>(R_ExternalPtrAddr(bigMatAddr));
+  Rcpp::XPtr<BigMatrix> pMat(bigMatAddr);
   if (pMat->separated_columns())
   {
     switch (pMat->matrix_type())
@@ -2220,6 +2326,10 @@ void SetMatrixAll(SEXP bigMatAddr, SEXP values)
       case 4:
         SetMatrixAll<int, int, SepMatrixAccessor<int> >( 
           pMat, values, NA_INTEGER, R_INT_MIN, R_INT_MAX, NA_INTEGER);
+        break;
+      case 6:
+        SetMatrixAll<float, float, SepMatrixAccessor<float> >( 
+          pMat, values, NA_FLOAT, R_FLT_MIN, R_FLT_MAX, NA_FLOAT);
         break;
       case 8:
         SetMatrixAll<double, double, SepMatrixAccessor<double> >( 
@@ -2243,6 +2353,10 @@ void SetMatrixAll(SEXP bigMatAddr, SEXP values)
         SetMatrixAll<int, int, MatrixAccessor<int> >( 
           pMat, values, NA_INTEGER, R_INT_MIN, R_INT_MAX, NA_INTEGER);
         break;
+      case 6:
+        SetMatrixAll<float, float, MatrixAccessor<float> >( 
+          pMat, values, NA_FLOAT, R_FLT_MIN, R_FLT_MAX, NA_FLOAT);
+        break;
       case 8:
         SetMatrixAll<double, double, MatrixAccessor<double> >( 
           pMat, values, NA_REAL, R_DOUBLE_MIN, R_DOUBLE_MAX, NA_REAL);
@@ -2253,7 +2367,7 @@ void SetMatrixAll(SEXP bigMatAddr, SEXP values)
 // [[Rcpp::export]]
 void SetMatrixCols(SEXP bigMatAddr, SEXP col, SEXP values)
 {
-  BigMatrix *pMat = reinterpret_cast<BigMatrix*>(R_ExternalPtrAddr(bigMatAddr));
+  Rcpp::XPtr<BigMatrix> pMat(bigMatAddr);
   if (pMat->separated_columns())
   {
     switch (pMat->matrix_type())
@@ -2270,6 +2384,10 @@ void SetMatrixCols(SEXP bigMatAddr, SEXP col, SEXP values)
       case 4:
         SetMatrixCols<int, int, SepMatrixAccessor<int> >( 
           pMat, col, values, NA_INTEGER, R_INT_MIN, R_INT_MAX, NA_INTEGER);
+        break;
+      case 6:
+        SetMatrixCols<float, float, SepMatrixAccessor<float> >( 
+          pMat, col, values, NA_FLOAT, R_FLT_MIN, R_FLT_MAX, NA_FLOAT);
         break;
       case 8:
         SetMatrixCols<double, double, SepMatrixAccessor<double> >( 
@@ -2293,6 +2411,10 @@ void SetMatrixCols(SEXP bigMatAddr, SEXP col, SEXP values)
         SetMatrixCols<int, int, MatrixAccessor<int> >( 
           pMat, col, values, NA_INTEGER, R_INT_MIN, R_INT_MAX, NA_INTEGER);
         break;
+      case 6:
+        SetMatrixCols<float, float, MatrixAccessor<float> >( 
+          pMat, col, values, NA_FLOAT, R_FLT_MIN, R_FLT_MAX, NA_FLOAT);
+        break;
       case 8:
         SetMatrixCols<double, double, MatrixAccessor<double> >( 
           pMat, col, values, NA_REAL, R_DOUBLE_MIN, R_DOUBLE_MAX, NA_REAL);
@@ -2303,7 +2425,7 @@ void SetMatrixCols(SEXP bigMatAddr, SEXP col, SEXP values)
 // [[Rcpp::export]]
 void SetMatrixRows(SEXP bigMatAddr, SEXP row, SEXP values)
 {
-  BigMatrix *pMat = reinterpret_cast<BigMatrix*>(R_ExternalPtrAddr(bigMatAddr));
+  Rcpp::XPtr<BigMatrix> pMat(bigMatAddr);
   if (pMat->separated_columns())
   {
     switch (pMat->matrix_type())
@@ -2320,6 +2442,10 @@ void SetMatrixRows(SEXP bigMatAddr, SEXP row, SEXP values)
       case 4:
         SetMatrixRows<int, int, SepMatrixAccessor<int> >( 
           pMat, row, values, NA_INTEGER, R_INT_MIN, R_INT_MAX, NA_INTEGER);
+        break;
+      case 6:
+        SetMatrixRows<float, float, SepMatrixAccessor<float> >( 
+          pMat, row, values, NA_FLOAT, R_FLT_MIN, R_FLT_MAX, NA_FLOAT);
         break;
       case 8:
         SetMatrixRows<double, double, SepMatrixAccessor<double> >( 
@@ -2342,6 +2468,10 @@ void SetMatrixRows(SEXP bigMatAddr, SEXP row, SEXP values)
       case 4:
         SetMatrixRows<int, int, MatrixAccessor<int> >( 
           pMat, row, values, NA_INTEGER, R_INT_MIN, R_INT_MAX, NA_INTEGER);
+        break;
+      case 6:
+        SetMatrixRows<float, float, MatrixAccessor<float> >( 
+          pMat, row, values, NA_FLOAT, R_FLT_MIN, R_FLT_MAX, NA_FLOAT);
         break;
       case 8:
         SetMatrixRows<double, double, MatrixAccessor<double> >( 
@@ -2422,6 +2552,10 @@ SEXP CreateFileBackedBigMatrix(SEXP fileName, SEXP filePath, SEXP row,
             SetAllMatrixElements<int, SepMatrixAccessor<int> >(
               pMat, ini, NA_INTEGER, R_INT_MIN, R_INT_MAX, NA_REAL);
             break;
+          case 6:
+            SetAllMatrixElements<float, SepMatrixAccessor<float> >(
+              pMat, ini, NA_FLOAT, R_FLT_MIN, R_FLT_MAX, NA_REAL);
+            break;
           case 8:
             SetAllMatrixElements<double, SepMatrixAccessor<double> >(
               pMat, ini, NA_REAL, R_DOUBLE_MIN, R_DOUBLE_MAX, NA_REAL);
@@ -2442,6 +2576,10 @@ SEXP CreateFileBackedBigMatrix(SEXP fileName, SEXP filePath, SEXP row,
           case 4:
             SetAllMatrixElements<int, MatrixAccessor<int> >(
               pMat, ini, NA_INTEGER, R_INT_MIN, R_INT_MAX, NA_REAL);
+            break;
+          case 6:
+            SetAllMatrixElements<float, MatrixAccessor<float> >(
+              pMat, ini, NA_FLOAT, R_FLT_MIN, R_FLT_MAX, NA_REAL);
             break;
           case 8:
             SetAllMatrixElements<double, MatrixAccessor<double> >(
@@ -2604,49 +2742,58 @@ SEXP isnil(SEXP address)
 // cases?  I thought we did.
 void SetAllMatrixElements(SEXP bigMatAddr, SEXP value)
 {
-  BigMatrix *pMat = reinterpret_cast<BigMatrix*>(R_ExternalPtrAddr(bigMatAddr));
-  if (pMat->separated_columns())
-  {
-    switch (pMat->matrix_type())
+    Rcpp::XPtr<BigMatrix> pMat(bigMatAddr);
+  
+    if (pMat->separated_columns())
     {
-      case 1:
-        SetAllMatrixElements<char, SepMatrixAccessor<char> >( 
-          pMat, value, NA_CHAR, R_CHAR_MIN, R_CHAR_MAX, NA_REAL);
-        break;
-      case 2:
-        SetAllMatrixElements<short, SepMatrixAccessor<short> >( 
-          pMat, value, NA_SHORT, R_SHORT_MIN, R_SHORT_MAX, NA_REAL);
-        break;
-      case 4:
-        SetAllMatrixElements<int, SepMatrixAccessor<int> >( 
-          pMat, value, NA_INTEGER, R_INT_MIN, R_INT_MAX, NA_REAL);
-        break;
-      case 8:
-        SetAllMatrixElements<double, SepMatrixAccessor<double> >( 
-          pMat, value, NA_REAL, R_DOUBLE_MIN, R_DOUBLE_MAX, NA_REAL);
+        switch (pMat->matrix_type())
+        {
+          case 1:
+            SetAllMatrixElements<char, SepMatrixAccessor<char> >( 
+              pMat, value, NA_CHAR, R_CHAR_MIN, R_CHAR_MAX, NA_REAL);
+            break;
+          case 2:
+            SetAllMatrixElements<short, SepMatrixAccessor<short> >( 
+              pMat, value, NA_SHORT, R_SHORT_MIN, R_SHORT_MAX, NA_REAL);
+            break;
+          case 4:
+            SetAllMatrixElements<int, SepMatrixAccessor<int> >( 
+              pMat, value, NA_INTEGER, R_INT_MIN, R_INT_MAX, NA_REAL);
+            break;
+          case 6:
+            SetAllMatrixElements<float, SepMatrixAccessor<float> >( 
+              pMat, value, NA_FLOAT, R_FLT_MIN, R_FLT_MAX, NA_REAL);
+            break;
+          case 8:
+            SetAllMatrixElements<double, SepMatrixAccessor<double> >( 
+              pMat, value, NA_REAL, R_DOUBLE_MIN, R_DOUBLE_MAX, NA_REAL);
+        }
     }
-  }
-  else
-  {
-    switch (pMat->matrix_type())
+    else
     {
-      case 1:
-        SetAllMatrixElements<char, MatrixAccessor<char> >( 
-          pMat, value, NA_CHAR, R_CHAR_MIN, R_CHAR_MAX, NA_REAL);
-        break;
-      case 2:
-        SetAllMatrixElements<short, MatrixAccessor<short> >( 
-          pMat, value, NA_SHORT, R_SHORT_MIN, R_SHORT_MAX, NA_REAL);
-        break;
-      case 4:
-        SetAllMatrixElements<int, MatrixAccessor<int> >( 
-          pMat, value, NA_INTEGER, R_INT_MIN, R_INT_MAX, NA_REAL);
-        break;
-      case 8:
-        SetAllMatrixElements<double, MatrixAccessor<double> >( 
-          pMat, value, NA_REAL, R_DOUBLE_MIN, R_DOUBLE_MAX, NA_REAL);
+        switch (pMat->matrix_type())
+        {
+          case 1:
+            SetAllMatrixElements<char, MatrixAccessor<char> >( 
+              pMat, value, NA_CHAR, R_CHAR_MIN, R_CHAR_MAX, NA_REAL);
+            break;
+          case 2:
+            SetAllMatrixElements<short, MatrixAccessor<short> >( 
+              pMat, value, NA_SHORT, R_SHORT_MIN, R_SHORT_MAX, NA_REAL);
+            break;
+          case 4:
+            SetAllMatrixElements<int, MatrixAccessor<int> >( 
+              pMat, value, NA_INTEGER, R_INT_MIN, R_INT_MAX, NA_REAL);
+            break;
+          case 6:
+            SetAllMatrixElements<float, MatrixAccessor<float> >( 
+              pMat, value, NA_FLOAT, R_FLT_MIN, R_FLT_MAX, NA_REAL);
+            break;
+          case 8:
+            SetAllMatrixElements<double, MatrixAccessor<double> >( 
+              pMat, value, NA_REAL, R_DOUBLE_MIN, R_DOUBLE_MAX, NA_REAL);
+        }
     }
-  }
 }
 
 // This doesn't appear to be used anywhere?!?!
