@@ -48,7 +48,7 @@ std::string ttos(T i)
 
 template<typename T>
 void CreateLocalMatrix( const index_type &nrow, const index_type &ncol, 
-                         void *p, index_type &allocationSize )
+                         void* &p, index_type &allocationSize )
 {
   allocationSize = nrow*ncol*sizeof(T);
   p = new char[allocationSize];
@@ -56,7 +56,7 @@ void CreateLocalMatrix( const index_type &nrow, const index_type &ncol,
 
 template<typename T>
 void CreateLocalSepMatrix( const index_type &nrow, 
-  const index_type &ncol, void *p, index_type &allocationSize )
+  const index_type &ncol, void* &p, index_type &allocationSize )
 {
   char** pt = new char*[ncol];
   index_type vecAllocSize = nrow*sizeof(T);
@@ -92,8 +92,7 @@ void CreateLocalSepMatrix( const index_type &nrow,
   }
 }
 
-bool LocalBigMatrix::create(const index_type numRow, 
-  const index_type numCol, const int matrixType, 
+bool LocalBigMatrix::create(const index_type numRow, const index_type numCol, const int matrixType, 
   const bool sepCols)
 {
   try
@@ -203,7 +202,7 @@ bool SharedBigMatrix::create_uuid()
 template<typename T>
 void CreateSharedSepMatrix( const std::string &sharedName, 
   MappedRegionPtrs &dataRegionPtrs, const index_type nrow, 
-  const index_type ncol, void *p, index_type &allocationSize)
+  const index_type ncol, void* &p, index_type &allocationSize)
 {
   T** pMat = new T*[ncol];
   index_type i;
@@ -248,7 +247,7 @@ void CreateSharedSepMatrix( const std::string &sharedName,
 template<typename T>
 void CreateSharedMatrix( const std::string &sharedName, 
   MappedRegionPtrs &dataRegionPtrs, const index_type nrow, 
-  const index_type ncol, void *p, index_type &allocationSize)
+  const index_type ncol, void* &p, index_type &allocationSize)
 {
   bool fail = false;
   try
