@@ -116,6 +116,9 @@ bool LocalBigMatrix::create(const index_type numRow, const index_type numCol, co
         case 4:
           CreateLocalSepMatrix<int>(_nrow, _ncol, _pdata, _allocationSize);
           break;
+        case 6:
+          CreateLocalSepMatrix<float>(_nrow, _ncol, _pdata, _allocationSize);
+          break;
         case 8:
           CreateLocalSepMatrix<double>(_nrow, _ncol, _pdata, _allocationSize);
       }
@@ -132,6 +135,9 @@ bool LocalBigMatrix::create(const index_type numRow, const index_type numCol, co
           break;
         case 4:
           CreateLocalMatrix<int>(_nrow, _ncol, _pdata, _allocationSize);
+          break;
+        case 6:
+          CreateLocalMatrix<float>(_nrow, _ncol, _pdata, _allocationSize);
           break;
         case 8:
           CreateLocalMatrix<double>(_nrow, _ncol, _pdata, _allocationSize);
@@ -319,6 +325,10 @@ bool SharedMemoryBigMatrix::create(const index_type numRow,
           CreateSharedSepMatrix<int>(_sharedName, _dataRegionPtrs, _nrow,
                                        _ncol, _pdata, _allocationSize);
           break;
+        case 6:
+          CreateSharedSepMatrix<float>(_sharedName, _dataRegionPtrs, 
+            _nrow, _ncol, _pdata, _allocationSize);
+          break;
         case 8:
           CreateSharedSepMatrix<double>(_sharedName, _dataRegionPtrs, _nrow,
                                        _ncol, _pdata, _allocationSize);
@@ -339,6 +349,10 @@ bool SharedMemoryBigMatrix::create(const index_type numRow,
         case 4:
           CreateSharedMatrix<int>(_sharedName, _dataRegionPtrs, _nrow,
                                        _ncol, _pdata, _allocationSize);
+          break;
+        case 6:
+          CreateSharedMatrix<float>(_sharedName, _dataRegionPtrs,
+            _nrow, _ncol, _pdata, _allocationSize);
           break;
         case 8:
           CreateSharedMatrix<double>(_sharedName, _dataRegionPtrs, _nrow,
@@ -493,6 +507,24 @@ bool SharedMemoryBigMatrix::connect( const std::string &uuid,
             } 
           }
           break;
+        case 6:
+          try
+          {
+            _pdata = ConnectSharedSepMatrix<float>(_sharedName, _dataRegionPtrs, 
+              _ncol, _readOnly);
+            _allocationSize = _ncol*_nrow*sizeof(float);
+
+          }
+          catch(boost::interprocess::interprocess_exception &e)
+          {
+            if (!_readOnly)
+            {
+              _readOnly=true;
+              _pdata = ConnectSharedSepMatrix<float>(_sharedName, 
+                _dataRegionPtrs, _ncol, _readOnly);
+            } 
+          }
+          break;
         case 8:
           try
           {
@@ -562,6 +594,24 @@ bool SharedMemoryBigMatrix::connect( const std::string &uuid,
             {
               _readOnly=true;
               _pdata = ConnectSharedMatrix<int>(_sharedName, _dataRegionPtrs,
+                _counter, _readOnly);
+            }
+          }
+          break;
+        case 6:
+          try
+          {
+            _pdata = ConnectSharedMatrix<float>(_sharedName, _dataRegionPtrs, 
+              _counter, _readOnly);
+            _allocationSize = _ncol*_nrow*sizeof(float);
+
+          }
+          catch(boost::interprocess::interprocess_exception &e)
+          {
+            if (!_readOnly)
+            {
+              _readOnly=true;
+              _pdata = ConnectSharedMatrix<float>(_sharedName, _dataRegionPtrs,
                 _counter, _readOnly);
             }
           }
@@ -844,6 +894,10 @@ bool FileBackedBigMatrix::create(const std::string &fileName,
           _pdata = CreateFileBackedSepMatrix<int>(_fileName, filePath,
             _dataRegionPtrs, _nrow, _ncol);
           break;
+        case 6:
+          _pdata = CreateFileBackedSepMatrix<float>(_fileName, filePath,
+            _dataRegionPtrs, _nrow, _ncol);
+          break;
         case 8:
           _pdata = CreateFileBackedSepMatrix<double>(_fileName, filePath,
             _dataRegionPtrs, _nrow, _ncol);
@@ -863,6 +917,10 @@ bool FileBackedBigMatrix::create(const std::string &fileName,
           break;
         case 4:
           _pdata = CreateFileBackedMatrix<int>(_fileName, filePath,
+            _dataRegionPtrs, _nrow, _ncol);
+          break;
+        case 6:
+          _pdata = CreateFileBackedMatrix<float>(_fileName, filePath,
             _dataRegionPtrs, _nrow, _ncol);
           break;
         case 8:
@@ -951,6 +1009,22 @@ bool FileBackedBigMatrix::connect( const std::string &fileName,
             }
           }
           break;
+        case 6:
+          try
+          {
+            _pdata = ConnectFileBackedSepMatrix<float>(_fileName, filePath,
+              _dataRegionPtrs, _ncol, _readOnly);
+          }
+          catch(boost::interprocess::interprocess_exception &e)
+          {
+            if (!_readOnly)
+            {
+              _readOnly=true;
+              _pdata = ConnectFileBackedSepMatrix<float>(_fileName, filePath,
+                _dataRegionPtrs, _ncol, _readOnly);
+            }
+          }
+          break;
         case 8:
           try
           {
@@ -1016,6 +1090,22 @@ bool FileBackedBigMatrix::connect( const std::string &fileName,
             {
               _readOnly=true;
               _pdata = ConnectFileBackedMatrix<int>(_fileName, filePath,
+                _dataRegionPtrs, _readOnly);
+            }
+          }
+          break;
+        case 6:
+          try
+          {
+            _pdata = ConnectFileBackedMatrix<float>(_fileName, filePath, 
+              _dataRegionPtrs, _readOnly);
+          }
+          catch(boost::interprocess::interprocess_exception &e)
+          {
+            if (!_readOnly)
+            {
+              _readOnly=true;
+              _pdata = ConnectFileBackedMatrix<float>(_fileName, filePath,
                 _dataRegionPtrs, _readOnly);
             }
           }
@@ -1087,6 +1177,9 @@ bool FileBackedBigMatrix::destroy()
             break;
           case 4:
             delete [] reinterpret_cast<int**>(_pdata);
+            break;
+          case 6:
+            delete [] reinterpret_cast<float**>(_pdata);
             break;
           case 8:
             delete [] reinterpret_cast<double**>(_pdata);

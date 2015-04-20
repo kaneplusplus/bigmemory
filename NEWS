@@ -7,7 +7,15 @@
 #
 # Jay Emerson <john.emerson@yale.edu>
 # Mike Kane <michael.kane@yale.edu>
-#
+# Charles Determan <cdetermanjr@gmail.com>
+
+2014-04-15 Mike and Charles <bigmemoryauthors@bigmemory.org>
+* Enabled use of Rcpp package to simply code and create
+  smaller barrier to adding additonal extensions.
+* Added new method to big.matrix objects, allocation_size, to
+  easily check the size of the object in memory.
+* Float type matrices have now been added to enable single
+  precision analytics.
 
 2013-03-09	Jay and Mike <bigmemoryauthors@bigmemory.org>
 

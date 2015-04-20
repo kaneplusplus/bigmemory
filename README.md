@@ -19,4 +19,5 @@ x[,]
 ### Wish List
 1. big.data.frame functionality
 2. direct access to a RDBMS (Oracle, Postgresql, etc.)
-3. Additional big.matrix subclasses (e.g. sparse, positive-definite, etc.)
+3. Additional big.matrix subclasses (e.g. sparse, positive-definite, etc.) 
+    -- see bigalgrebra package

@@ -1,9 +1,11 @@
 #ifndef BIGMEMORY_UTIL_HPP
 #define BIGMEMORY_UTIL_HPP
 
-#include <vector>
-#include <string>
+//#include <vector>
+//#include <string>
 #include <Rdefines.h>
+
+#include <Rcpp.h>
 
 #include "bigmemoryDefines.h"
 
@@ -45,6 +47,19 @@ template<>
 struct NewVec<int>
 {SEXP operator()(index_type n) const {return NEW_INTEGER(n);};};
 
+
+inline
+SEXP NEW_FLOAT(index_type n)
+{
+    std::vector<float> out (n, 0);
+    return Rcpp::wrap(out);
+}
+
+
+template<>
+struct NewVec<float>
+{SEXP operator()(index_type n) const {return NEW_FLOAT(n);};};
+
 template<>
 struct NewVec<double>
 {SEXP operator()(index_type n) const {return NEW_NUMERIC(n);};};
@@ -55,6 +70,10 @@ struct VecPtr;
 template<>
 struct VecPtr<int>
 {int* operator()(SEXP vec) const {return INTEGER_DATA(vec);};};
+
+template<>
+struct VecPtr<float>
+{float* operator()(SEXP vec) const {return (float *)(vec);};};
 
 template<>
 struct VecPtr<double>

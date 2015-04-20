@@ -35,6 +35,10 @@ extern "C"
 #define R_DOUBLE_MIN R_NegInf
 #define R_DOUBLE_MAX R_PosInf
 
+#define NA_FLOAT FLT_MIN
+#define R_FLT_MIN (1+FLT_MIN)
+#define R_FLT_MAX FLT_MAX
+
 #ifdef HAVE_LONG_DOUBLE
 # define LDOUBLE long double
 #else

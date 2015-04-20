@@ -72,6 +72,7 @@ big.matrix <- function(nrow, ncol, type=options()$bigmemory.default.type,
 
   typeVal <- NULL
   if (type == 'integer') typeVal <- 4
+  if (type == 'float') typeVal <- 6
   if (type == 'double') typeVal <- 8
   if (type == 'short') typeVal <- 2
   if (type == 'char') typeVal <- 1
@@ -117,6 +118,7 @@ filebacked.big.matrix <- function(nrow, ncol,
     
     typeVal=NULL
     if (type == 'integer') typeVal <- 4
+    if (type == 'float') typeVal <- 6
     if (type == 'double') typeVal <- 8
     if (type == 'short') typeVal <- 2
     if (type == 'char') typeVal <- 1
@@ -216,7 +218,8 @@ setMethod('as.big.matrix', signature(x='matrix'),
               }
               if (is.null(type)) type <- typeof(x)
               
-              if (type=="integer" | type=="double" | type=="short" | type=="char") 
+#               if (type=="integer" | type=="double" | type=="short" | type=="char") 
+              if (type %in% c("integer","double", "short", "char", "float"))
               {
                   y <- big.matrix(nrow=nrow(x), ncol=ncol(x), type=type, 
                                   init=NULL, dimnames=dimnames(x), separated=separated,
@@ -237,7 +240,8 @@ setMethod('as.big.matrix', signature(x='data.frame'),
           {
               warning("Coercing data.frame to matrix via factor level numberings.")
               if (is.null(type)) type <- options()$bigmemory.default.type
-              if (type=="integer" | type=="double" | type=="short" | type=="char") 
+#               if (type=="integer" | type=="double" | type=="short" | type=="char") 
+              if (type %in% c("integer","double", "short", "char", "float"))
               {
                   y <- big.matrix(nrow=nrow(x), ncol=ncol(x), type=type, 
                                   init=NULL, dimnames=dimnames(x), separated=separated,
@@ -411,7 +415,7 @@ GetIndivElements.bm <- function(x,i) {
   if (tempj[[1]]) i[,2] <- tempj[[2]]
 
   # Call .Call C++
-  return(.Call("GetIndivMatrixElements", x@address, as.double(i[,2]),
+  return(GetIndivMatrixElements(x@address, as.double(i[,2]),
     as.double(i[,1])))
 }
 
@@ -548,8 +552,11 @@ SetElements.bm <- function(x, i, j, value)
 
   if ( options()$bigmemory.typecast.warning &&
        ((typeof(value) == "double") && (typeof(x) != "double") ||
-       (typeof(value) == "integer" &&
-        (typeof(x) != "double" && typeof(x) != "integer"))) ) 
+       (typeof(value) == "integer" && (typeof(x) != "double" && 
+                                           typeof(x) != "float" &&
+                                           typeof(x) != "integer")) || 
+       (typeof(value) == "double" && (typeof(x) == "float")) 
+       )) 
   {
     warning(cat("Assignment will down cast from ", typeof(value), " to ",
                 typeof(x), "\nHint: To remove this warning type:  ",
@@ -583,13 +590,23 @@ SetElements.bm <- function(x, i, j, value)
     }
   }
   # Note: we pass doubles as doubles, but anything else as integers.
-  if (typeof(x) == 'double') {
-    SetMatrixElements(x@address, as.double(j), as.double(i), 
-          as.double(value))
-  } else {
-    SetMatrixElements(x@address, as.double(j), as.double(i), 
-          as.integer(value))
-  }
+#   if (typeof(x) == 'double') {
+#     SetMatrixElements(x@address, as.double(j), as.double(i), 
+#           as.double(value))
+#   } else {
+#     SetMatrixElements(x@address, as.double(j), as.double(i), 
+#           as.integer(value))
+#   }
+  
+  switch(typeof(x),
+         'double' = {SetMatrixElements(x@address, as.double(j), as.double(i), 
+                                      as.double(value))},
+         'float' = {SetMatrixElements(x@address, as.double(j), as.double(i), 
+                                     as.single(value))},
+         SetMatrixElements(x@address, as.double(j), as.double(i), 
+                           as.integer(value))
+         )
+  
   return(x)
 }
 
@@ -626,7 +643,9 @@ SetIndivElements.bm <- function(x, i, value) {
   if ( options()$bigmemory.typecast.warning &&
        ((typeof(value) == "double") && (typeof(x) != "double") ||
        (typeof(value) == "integer" &&
-        (typeof(x) != "double" && typeof(x) != "integer"))) )
+        (typeof(x) != "double" && typeof(x) != "integer"))) ||
+       (typeof(value) == "double" && (typeof(x) == "float"))
+       )
   {
     warning(cat("Assignment will down cast from ", typeof(value), " to ",
                 typeof(x), "\nHint: To remove this warning type:  ",
@@ -634,13 +653,23 @@ SetIndivElements.bm <- function(x, i, value) {
   }
 
   # Call appropriate .Call C++
-  if (typeof(x) == 'double') {
-    SetIndivMatrixElements(x@address, as.double(i[,2]),
-      as.double(i[,1]), as.double(value))
-  } else {
-    SetIndivMatrixElements(x@address, as.double(i[,2]),
-      as.double(i[,1]), as.integer(value))
-  }
+#   if (typeof(x) == 'double') {
+#     SetIndivMatrixElements(x@address, as.double(i[,2]),
+#       as.double(i[,1]), as.double(value))
+#   } else {
+#     SetIndivMatrixElements(x@address, as.double(i[,2]),
+#       as.double(i[,1]), as.integer(value))
+#   }
+  
+  switch(typeof(x),
+         'double' = {SetIndivMatrixElements(x@address, as.double(i[,2]),
+                                            as.double(i[,1]), as.double(value))},
+         'float' = {SetIndivMatrixElements(x@address, as.double(i[,2]),
+                                           as.double(i[,1]), as.single(value))},
+         SetIndivMatrixElements(x@address, as.double(i[,2]),
+                                as.double(i[,1]), as.integer(value))
+  )
+  
   return(x)
 }
 
@@ -667,7 +696,9 @@ SetCols.bm <- function(x, j, value)
   if ( options()$bigmemory.typecast.warning &&
        ((typeof(value) == "double") && (typeof(x) != "double") ||
        (typeof(value) == "integer" &&
-        (typeof(x) != "double" && typeof(x) != "integer"))) )
+        (typeof(x) != "double" && typeof(x) != "integer"))) || 
+       (typeof(value) == "double" && (typeof(x) == "float")) 
+       )
   {
     warning(cat("Assignment will down cast from ", typeof(value), " to ",
                 typeof(x), "\nHint: To remove this warning type:  ",
@@ -700,14 +731,21 @@ SetCols.bm <- function(x, j, value)
     }
   }
   # Note: we pass doubles as doubles, but anything else as integers.
-  if (typeof(x) == 'double') 
-  {
-    SetMatrixCols(x@address, as.double(j), as.double(value))
-  } 
-  else 
-  {
-    SetMatrixCols(x@address, as.double(j), as.integer(value))
-  }
+#   if (typeof(x) == 'double') 
+#   {
+#     SetMatrixCols(x@address, as.double(j), as.double(value))
+#   } 
+#   else 
+#   {
+#     SetMatrixCols(x@address, as.double(j), as.integer(value))
+#   }
+  
+  switch(typeof(x),
+         'double' = {SetMatrixCols(x@address, as.double(j), as.double(value))},
+         'float' = {SetMatrixCols(x@address, as.double(j), as.single(value))},
+         SetMatrixCols(x@address, as.double(j), as.integer(value))
+  )
+  
   return(x)
 }
 
@@ -732,7 +770,9 @@ SetRows.bm <- function(x, i, value)
   if ( options()$bigmemory.typecast.warning &&
        ((typeof(value) == "double") && (typeof(x) != "double") ||
        (typeof(value) == "integer" &&
-        (typeof(x) != "double" && typeof(x) != "integer"))) )
+        (typeof(x) != "double" && typeof(x) != "integer")))  || 
+       (typeof(value) == "double" && (typeof(x) == "float"))
+  )
   {
     warning(cat("Assignment will down cast from ", typeof(value), " to ",
                 typeof(x), "\nHint: To remove this warning type:  ",
@@ -772,13 +812,20 @@ SetRows.bm <- function(x, i, value)
     }
   }
   # Note: we pass doubles as doubles, but anything else as integers.
-  if (typeof(x) == 'double') {
-    SetMatrixRows(x@address, as.double(i), as.double(value))
-  } 
-  else 
-  {
-    SetMatrixRows(x@address, as.double(i), as.integer(value))
-  }
+#   if (typeof(x) == 'double') {
+#     SetMatrixRows(x@address, as.double(i), as.double(value))
+#   } 
+#   else 
+#   {
+#     SetMatrixRows(x@address, as.double(i), as.integer(value))
+#   }
+  
+  switch(typeof(x),
+         'double' = {SetMatrixRows(x@address, as.double(j), as.double(value))},
+         'float' = {SetMatrixRows(x@address, as.double(j), as.single(value))},
+         SetMatrixRows(x@address, as.double(j), as.integer(value))
+  )
+  
   return(x)
 }
 
@@ -788,7 +835,9 @@ SetAll.bm <- function(x, value)
   if ( options()$bigmemory.typecast.warning &&
        ((typeof(value) == "double") && (typeof(x) != "double") ||
        (typeof(value) == "integer" &&
-        (typeof(x) != "double" && typeof(x) != "integer"))) )
+        (typeof(x) != "double" && typeof(x) != "integer")))  || 
+       (typeof(value) == "double" && (typeof(x) == "float"))
+  )
   {
     warning(cat("Assignment will down cast from ", typeof(value), " to ",
                 typeof(x), "\nHint: To remove this warning type:  ",
@@ -824,14 +873,21 @@ SetAll.bm <- function(x, value)
     }
   }
   # Note: we pass doubles as doubles, but anything else as integers.
-  if (typeof(x) == 'double') 
-  {
-    SetMatrixAll(x@address, as.double(value))
-  } 
-  else 
-  {
-    SetMatrixAll(x@address, as.integer(value))
-  }
+#   if (typeof(x) == 'double') 
+#   {
+#     SetMatrixAll(x@address, as.double(value))
+#   } 
+#   else 
+#   {
+#     SetMatrixAll(x@address, as.integer(value))
+#   }
+  
+  switch(typeof(x),
+         'double' = {SetMatrixAll(x@address, as.double(value))},
+         'float' = {SetMatrixAll(x@address, as.single(value))},
+         SetMatrixAll(x@address, as.integer(value))
+  )
+  
   return(x)
 }
 
@@ -863,7 +919,28 @@ setMethod('[<-',
 
 #' @export
 setMethod('typeof', signature(x="big.matrix"),
-  function(x) return(GetTypeString(x@address)))
+  function(x) {
+      return(GetTypeString(x@address))
+      }
+  )
+
+
+# Little function to test if a value is
+# the 'R' representation of float/single value
+#' @export
+setGeneric('is.float', function(x){
+    standardGeneric('is.float')
+})
+
+setMethod('is.float', signature(x='numeric'),
+          function(x){
+              if(is.null(attr(x, 'Csingle'))){
+                  return(FALSE)
+              }else{
+                  bool <- attr(x, 'Csingle')
+                  return(bool)
+              }
+          })
 
 #' @export
 setMethod('head', signature(x="big.matrix"),
@@ -1462,6 +1539,7 @@ setMethod('attach.resource', signature(obj='big.matrix.descriptor'),
     if (info$type == 'char') typeLength <- 1
     if (info$type == 'short') typeLength <- 2
     if (info$type == 'integer') typeLength <- 4
+    if (info$type == 'float') typeLength <- 6
     if (info$type == 'double') typeLength <- 8
     if (is.null(typeLength)) 
       stop('invalid type')

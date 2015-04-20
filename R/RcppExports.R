@@ -117,6 +117,11 @@ GetTypeString <- function(bigMatAddr) {
     .Call('bigmemory_GetTypeString', PACKAGE = 'bigmemory', bigMatAddr)
 }
 
+#' @export
+GetMatrixSize <- function(bigMat) {
+    .Call('bigmemory_GetMatrixSize', PACKAGE = 'bigmemory', bigMat)
+}
+
 MWhichBigMatrix <- function(bigMatAddr, selectColumn, minVal, maxVal, chkMin, chkMax, opVal) {
     .Call('bigmemory_MWhichBigMatrix', PACKAGE = 'bigmemory', bigMatAddr, selectColumn, minVal, maxVal, chkMin, chkMax, opVal)
 }
