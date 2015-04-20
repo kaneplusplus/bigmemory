@@ -118,7 +118,7 @@ bool LocalBigMatrix::create(const index_type numRow,
           CreateLocalSepMatrix<int>(_nrow, _ncol, _pdata, _allocationSize);
           break;
         case 6:
-          _pdata = CreateLocalSepMatrix<float>(_nrow, _ncol);
+          CreateLocalSepMatrix<float>(_nrow, _ncol, _pdata, _allocationSize);
           break;
         case 8:
           CreateLocalSepMatrix<double>(_nrow, _ncol, _pdata, _allocationSize);
@@ -138,7 +138,7 @@ bool LocalBigMatrix::create(const index_type numRow,
           CreateLocalMatrix<int>(_nrow, _ncol, _pdata, _allocationSize);
           break;
         case 6:
-          _pdata = CreateLocalMatrix<float>(_nrow, _ncol);
+          CreateLocalMatrix<float>(_nrow, _ncol, _pdata, _allocationSize);
           break;
         case 8:
           CreateLocalMatrix<double>(_nrow, _ncol, _pdata, _allocationSize);
@@ -327,8 +327,8 @@ bool SharedMemoryBigMatrix::create(const index_type numRow,
                                        _ncol, _pdata, _allocationSize);
           break;
         case 6:
-          _pdata = CreateSharedSepMatrix<float>(_sharedName, _dataRegionPtrs, 
-            _nrow, _ncol);
+          CreateSharedSepMatrix<float>(_sharedName, _dataRegionPtrs, 
+            _nrow, _ncol, _pdata, _allocationSize);
           break;
         case 8:
           CreateSharedSepMatrix<double>(_sharedName, _dataRegionPtrs, _nrow,
@@ -352,8 +352,8 @@ bool SharedMemoryBigMatrix::create(const index_type numRow,
                                        _ncol, _pdata, _allocationSize);
           break;
         case 6:
-          _pdata = CreateSharedMatrix<float>(_sharedName, _dataRegionPtrs,
-            _nrow, _ncol);
+          CreateSharedMatrix<float>(_sharedName, _dataRegionPtrs,
+            _nrow, _ncol, _pdata, _allocationSize);
           break;
         case 8:
           CreateSharedMatrix<double>(_sharedName, _dataRegionPtrs, _nrow,
@@ -513,6 +513,8 @@ bool SharedMemoryBigMatrix::connect( const std::string &uuid,
           {
             _pdata = ConnectSharedSepMatrix<float>(_sharedName, _dataRegionPtrs, 
               _ncol, _readOnly);
+            _allocationSize = _ncol*_nrow*sizeof(float);
+
           }
           catch(boost::interprocess::interprocess_exception &e)
           {
@@ -602,6 +604,8 @@ bool SharedMemoryBigMatrix::connect( const std::string &uuid,
           {
             _pdata = ConnectSharedMatrix<float>(_sharedName, _dataRegionPtrs, 
               _counter, _readOnly);
+            _allocationSize = _ncol*_nrow*sizeof(float);
+
           }
           catch(boost::interprocess::interprocess_exception &e)
           {
