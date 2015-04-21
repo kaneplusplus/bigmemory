@@ -1,6 +1,9 @@
 library("bigmemory")
-context("big.matrix Float Type")
+context("big.matrix float type")
 
+options(bigmemory.typecast.warning=FALSE)
+
+set.seed(123)
 z <- filebacked.big.matrix(3, 3, type='float', init=123.0,
                            backingfile="example.bin",
                            descriptorfile="example.desc",
@@ -12,7 +15,10 @@ mat <- matrix(1:9, ncol = 3, nrow = 3, dimnames = list(letters[1:3],
 dmat <- matrix(rnorm(9), ncol = 3, nrow = 3, dimnames = list(letters[1:3], 
                                                        LETTERS[1:3]))
 
-bm <- as.big.matrix(mat, type="float")
+fmat <- big.matrix(3,3, type="float", init = 13.123)
+
+bm <- as.big.matrix(dmat, type="float")
+
 
 test_that("filebacked matrix created successfully",{
     expect_true(file.exists("example.bin"))
@@ -22,14 +28,29 @@ test_that("filebacked matrix created successfully",{
 })
 
 test_that("RAM matrix created successfully",{
-    expect_true(all(bm[,] == mat))
+    expect_equivalent(bm[,], dmat)
     expect_true(typeof(bm) == "float")
+})
+
+test_that("Able to access and assign elements", {
+    fmat[1,3] <- 15.123
+    expect_equivalent(fmat[1,3], 15.123)
+    
+    newRow <- rnorm(3)
+    fmat[1,] <- newRow    
+    expect_equal(fmat[1,], newRow, tolerance = 1e-07)
+
+    newCol <- rnorm(3)
+    fmat[,1] <- newCol
+    expect_equal(fmat[,1], newCol, tolerance = 1e-07)
 })
 
 # Float data types are not typical in R
 # The default warning is a sanity check to realize that
 # any double (i.e. numeric) values passed are down cast to float
+options(bigmemory.typecast.warning=TRUE)
 test_that("Proper warning returned", {
     expect_warning(as.big.matrix(dmat, type="float"), info="Not warning about
                    float type downcast")
 })
+

@@ -9,6 +9,23 @@
 
 #include <Rcpp.h>
 
+/* Notes
+ * R does not natively contain float type objects
+ * Therefore, every time you pass object to see they will initially be
+ * double unless they are already within a C/C++ object.
+ *
+ * For example, the SetMatrixElements function
+ * Normally the function looks like this:
+ *  SetMatrixElements<double, double, MatrixAccessor<double> >(...
+ 
+ * Where both the CType and RType are double but with float
+ * types R is still passing only double.  Trying to pass RType
+ * as float will result in all NA values.  So the function ultimately
+ * must still pass double like so:
+ *  SetMatrixElements<float, double, MatrixAccessor<float> >(...
+ */
+ 
+
 template<typename T>
 string ttos(T i)
 {
@@ -345,7 +362,7 @@ SEXP GetIndivMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row)
         return GetIndivMatrixElements<int, int, SepMatrixAccessor<int> >(
           pMat, NA_INTEGER, NA_INTEGER, col, row, INTSXP);
       case 6:
-        return GetIndivMatrixElements<float, float, SepMatrixAccessor<float> >(
+        return GetIndivMatrixElements<float, double, SepMatrixAccessor<float> >(
           pMat, NA_FLOAT, NA_FLOAT, col, row, REALSXP);
       case 8:
         return GetIndivMatrixElements<double,double,SepMatrixAccessor<double> >(
@@ -366,7 +383,7 @@ SEXP GetIndivMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row)
         return GetIndivMatrixElements<int, int, MatrixAccessor<int> >(
           pMat, NA_INTEGER, NA_INTEGER, col, row, INTSXP);
       case 6:
-        return GetIndivMatrixElements<float, float, MatrixAccessor<float> >(
+        return GetIndivMatrixElements<float, double, MatrixAccessor<float> >(
           pMat, NA_FLOAT, NA_FLOAT, col, row, REALSXP);
       case 8:
         return GetIndivMatrixElements<double, double, MatrixAccessor<double> >(
@@ -574,6 +591,7 @@ SEXP GetMatrixAll( BigMatrix *pMat, double NA_C, double NA_R,
     pColumn = mat[i];
     for (j=0; j < numRows; ++j) 
     {
+        //std::cout << pColumn[j] << std::endl;
       pRet[k] = (pColumn[j] == static_cast<CType>(NA_C)) ?  static_cast<RType>(NA_R) : 
                  (static_cast<RType>(pColumn[j]));
       ++k;
@@ -2012,7 +2030,7 @@ SEXP GetMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row)
           (pMat, NA_INTEGER, NA_INTEGER, col, row, INTSXP);
       case 6:
         // possibly area of problem (REALSXP -> FLOATSXP???) but I think okay
-        return GetMatrixElements<float, float, SepMatrixAccessor<float> >
+        return GetMatrixElements<float, double, SepMatrixAccessor<float> >
           (pMat, NA_FLOAT, NA_FLOAT, col, row, REALSXP);
       case 8:
         return GetMatrixElements<double, double, SepMatrixAccessor<double> >(
@@ -2033,7 +2051,7 @@ SEXP GetMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row)
         return GetMatrixElements<int, int, MatrixAccessor<int> >(
           pMat, NA_INTEGER, NA_INTEGER, col, row, INTSXP);
       case 6:
-        return GetMatrixElements<float, float, MatrixAccessor<float> >(
+        return GetMatrixElements<float, double, MatrixAccessor<float> >(
           pMat, NA_FLOAT, NA_FLOAT, col, row, REALSXP);
       case 8:
         return GetMatrixElements<double, double, MatrixAccessor<double> >
@@ -2061,7 +2079,7 @@ SEXP GetMatrixRows(SEXP bigMatAddr, SEXP row)
         return GetMatrixRows<int, int, SepMatrixAccessor<int> >
           (pMat, NA_INTEGER, NA_INTEGER, row, INTSXP);
       case 6:
-        return GetMatrixRows<float, float, SepMatrixAccessor<float> >
+        return GetMatrixRows<float, double, SepMatrixAccessor<float> >
           (pMat, NA_FLOAT, NA_FLOAT, row, REALSXP);
       case 8:
         return GetMatrixRows<double, double, SepMatrixAccessor<double> >(
@@ -2082,7 +2100,7 @@ SEXP GetMatrixRows(SEXP bigMatAddr, SEXP row)
         return GetMatrixRows<int, int, MatrixAccessor<int> >(
           pMat, NA_INTEGER, NA_INTEGER, row, INTSXP);
       case 6:
-        return GetMatrixRows<float, float, MatrixAccessor<float> >(
+        return GetMatrixRows<float, double, MatrixAccessor<float> >(
           pMat, NA_FLOAT, NA_FLOAT, row, REALSXP);
       case 8:
         return GetMatrixRows<double, double, MatrixAccessor<double> >
@@ -2110,7 +2128,7 @@ SEXP GetMatrixCols(SEXP bigMatAddr, SEXP col)
         return GetMatrixCols<int, int, SepMatrixAccessor<int> >
           (pMat, NA_INTEGER, NA_INTEGER, col, INTSXP);
       case 6:
-        return GetMatrixCols<float, float, SepMatrixAccessor<float> >
+        return GetMatrixCols<float, double, SepMatrixAccessor<float> >
           (pMat, NA_FLOAT, NA_FLOAT, col, REALSXP);
       case 8:
         return GetMatrixCols<double, double, SepMatrixAccessor<double> >(
@@ -2131,7 +2149,7 @@ SEXP GetMatrixCols(SEXP bigMatAddr, SEXP col)
         return GetMatrixCols<int, int, MatrixAccessor<int> >(
           pMat, NA_INTEGER, NA_INTEGER, col, INTSXP);
       case 6:
-        return GetMatrixCols<float, float, MatrixAccessor<float> >(
+        return GetMatrixCols<float, double, MatrixAccessor<float> >(
           pMat, NA_FLOAT, NA_FLOAT, col, REALSXP);
       case 8:
         return GetMatrixCols<double, double, MatrixAccessor<double> >
@@ -2160,7 +2178,7 @@ SEXP GetMatrixAll(SEXP bigMatAddr)
         return GetMatrixAll<int, int, SepMatrixAccessor<int> >
           (pMat, NA_INTEGER, NA_INTEGER, INTSXP);
       case 6:
-        return GetMatrixAll<float, float, SepMatrixAccessor<float> >
+        return GetMatrixAll<float, double, SepMatrixAccessor<float> >
           (pMat, NA_FLOAT, NA_FLOAT, REALSXP);
       case 8:
         return GetMatrixAll<double, double, SepMatrixAccessor<double> >(
@@ -2181,8 +2199,8 @@ SEXP GetMatrixAll(SEXP bigMatAddr)
         return GetMatrixAll<int, int, MatrixAccessor<int> >(
           pMat, NA_INTEGER, NA_INTEGER, INTSXP);
       case 6:
-        return GetMatrixAll<float, float, MatrixAccessor<float> >(
-          pMat, NA_FLOAT, NA_FLOAT, REALSXP);
+        return GetMatrixAll<float, double, MatrixAccessor<float> >(
+          pMat, NA_FLOAT, NA_REAL, REALSXP);
       case 8:
         return GetMatrixAll<double, double, MatrixAccessor<double> >
           (pMat, NA_REAL, NA_REAL, REALSXP);
@@ -2195,6 +2213,7 @@ SEXP GetMatrixAll(SEXP bigMatAddr)
 void SetMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row, SEXP values)
 {
   Rcpp::XPtr<BigMatrix> pMat(bigMatAddr);
+  
   if (pMat->separated_columns())
   {
     switch (pMat->matrix_type())
@@ -2213,7 +2232,7 @@ void SetMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row, SEXP values)
           pMat, col, row, values, NA_INTEGER, R_INT_MIN, R_INT_MAX, NA_INTEGER);
         break;
       case 6:
-        SetMatrixElements<float, float, SepMatrixAccessor<float> >( 
+        SetMatrixElements<float, double, SepMatrixAccessor<float> >( 
           pMat, col, row, values, NA_FLOAT, R_FLT_MIN, R_FLT_MAX, NA_FLOAT);
         break;
       case 8:
@@ -2239,7 +2258,7 @@ void SetMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row, SEXP values)
           pMat, col, row, values, NA_INTEGER, R_INT_MIN, R_INT_MAX, NA_INTEGER);
         break;
       case 6:
-        SetMatrixElements<float, float, MatrixAccessor<float> >( 
+        SetMatrixElements<float, double, MatrixAccessor<float> >( 
           pMat, col, row, values, NA_FLOAT, R_FLT_MIN, R_FLT_MAX, NA_FLOAT);
         break;
       case 8:
@@ -2271,7 +2290,7 @@ void SetIndivMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row, SEXP values)
         pMat, col, row, values, NA_INTEGER, R_INT_MIN, R_INT_MAX, NA_INTEGER);
       break;
     case 6:
-      SetIndivMatrixElements<float, float, SepMatrixAccessor<float> >(
+      SetIndivMatrixElements<float, double, SepMatrixAccessor<float> >(
         pMat, col, row, values, NA_FLOAT, R_FLT_MIN, R_FLT_MAX, NA_FLOAT);
       break;
     case 8:
@@ -2296,7 +2315,7 @@ void SetIndivMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row, SEXP values)
         pMat, col, row, values, NA_INTEGER, R_INT_MIN, R_INT_MAX, NA_INTEGER);
       break;
     case 6:
-      SetIndivMatrixElements<float, float, MatrixAccessor<float> >(
+      SetIndivMatrixElements<float, double, MatrixAccessor<float> >(
         pMat, col, row, values, NA_FLOAT, R_FLT_MIN, R_FLT_MAX, NA_FLOAT);
       break;
     case 8:
@@ -2328,7 +2347,7 @@ void SetMatrixAll(SEXP bigMatAddr, SEXP values)
           pMat, values, NA_INTEGER, R_INT_MIN, R_INT_MAX, NA_INTEGER);
         break;
       case 6:
-        SetMatrixAll<float, float, SepMatrixAccessor<float> >( 
+        SetMatrixAll<float, double, SepMatrixAccessor<float> >( 
           pMat, values, NA_FLOAT, R_FLT_MIN, R_FLT_MAX, NA_FLOAT);
         break;
       case 8:
@@ -2354,7 +2373,7 @@ void SetMatrixAll(SEXP bigMatAddr, SEXP values)
           pMat, values, NA_INTEGER, R_INT_MIN, R_INT_MAX, NA_INTEGER);
         break;
       case 6:
-        SetMatrixAll<float, float, MatrixAccessor<float> >( 
+        SetMatrixAll<float, double, MatrixAccessor<float> >( 
           pMat, values, NA_FLOAT, R_FLT_MIN, R_FLT_MAX, NA_FLOAT);
         break;
       case 8:
@@ -2386,7 +2405,7 @@ void SetMatrixCols(SEXP bigMatAddr, SEXP col, SEXP values)
           pMat, col, values, NA_INTEGER, R_INT_MIN, R_INT_MAX, NA_INTEGER);
         break;
       case 6:
-        SetMatrixCols<float, float, SepMatrixAccessor<float> >( 
+        SetMatrixCols<float, double, SepMatrixAccessor<float> >( 
           pMat, col, values, NA_FLOAT, R_FLT_MIN, R_FLT_MAX, NA_FLOAT);
         break;
       case 8:
@@ -2412,7 +2431,7 @@ void SetMatrixCols(SEXP bigMatAddr, SEXP col, SEXP values)
           pMat, col, values, NA_INTEGER, R_INT_MIN, R_INT_MAX, NA_INTEGER);
         break;
       case 6:
-        SetMatrixCols<float, float, MatrixAccessor<float> >( 
+        SetMatrixCols<float, double, MatrixAccessor<float> >( 
           pMat, col, values, NA_FLOAT, R_FLT_MIN, R_FLT_MAX, NA_FLOAT);
         break;
       case 8:
@@ -2444,7 +2463,7 @@ void SetMatrixRows(SEXP bigMatAddr, SEXP row, SEXP values)
           pMat, row, values, NA_INTEGER, R_INT_MIN, R_INT_MAX, NA_INTEGER);
         break;
       case 6:
-        SetMatrixRows<float, float, SepMatrixAccessor<float> >( 
+        SetMatrixRows<float, double, SepMatrixAccessor<float> >( 
           pMat, row, values, NA_FLOAT, R_FLT_MIN, R_FLT_MAX, NA_FLOAT);
         break;
       case 8:
@@ -2470,7 +2489,7 @@ void SetMatrixRows(SEXP bigMatAddr, SEXP row, SEXP values)
           pMat, row, values, NA_INTEGER, R_INT_MIN, R_INT_MAX, NA_INTEGER);
         break;
       case 6:
-        SetMatrixRows<float, float, MatrixAccessor<float> >( 
+        SetMatrixRows<float, double, MatrixAccessor<float> >( 
           pMat, row, values, NA_FLOAT, R_FLT_MIN, R_FLT_MAX, NA_FLOAT);
         break;
       case 8:

@@ -602,7 +602,7 @@ SetElements.bm <- function(x, i, j, value)
          'double' = {SetMatrixElements(x@address, as.double(j), as.double(i), 
                                       as.double(value))},
          'float' = {SetMatrixElements(x@address, as.double(j), as.double(i), 
-                                     as.single(value))},
+                                     as.double(value))},
          SetMatrixElements(x@address, as.double(j), as.double(i), 
                            as.integer(value))
          )
@@ -696,8 +696,8 @@ SetCols.bm <- function(x, j, value)
   if ( options()$bigmemory.typecast.warning &&
        ((typeof(value) == "double") && (typeof(x) != "double") ||
        (typeof(value) == "integer" &&
-        (typeof(x) != "double" && typeof(x) != "integer"))) || 
-       (typeof(value) == "double" && (typeof(x) == "float")) 
+        (typeof(x) != "double" && typeof(x) != "integer")) || 
+       (typeof(value) == "double" && (typeof(x) == "float"))) 
        )
   {
     warning(cat("Assignment will down cast from ", typeof(value), " to ",
@@ -766,12 +766,12 @@ SetRows.bm <- function(x, i, value)
   tempi <- CCleanIndices(as.double(i), as.double(nrow(x)))
   if (is.null(tempi[[1]])) stop("Illegal row index usage in extraction.\n")
   if (tempi[[1]]) i <- tempi[[2]]
-
+  
   if ( options()$bigmemory.typecast.warning &&
        ((typeof(value) == "double") && (typeof(x) != "double") ||
        (typeof(value) == "integer" &&
-        (typeof(x) != "double" && typeof(x) != "integer")))  || 
-       (typeof(value) == "double" && (typeof(x) == "float"))
+        (typeof(x) != "double" && typeof(x) != "integer"))  || 
+       (typeof(value) == "double" && (typeof(x) == "float")))
   )
   {
     warning(cat("Assignment will down cast from ", typeof(value), " to ",
@@ -821,9 +821,9 @@ SetRows.bm <- function(x, i, value)
 #   }
   
   switch(typeof(x),
-         'double' = {SetMatrixRows(x@address, as.double(j), as.double(value))},
-         'float' = {SetMatrixRows(x@address, as.double(j), as.single(value))},
-         SetMatrixRows(x@address, as.double(j), as.integer(value))
+         'double' = {SetMatrixRows(x@address, as.double(i), as.double(value))},
+         'float' = {SetMatrixRows(x@address, as.double(i), as.single(value))},
+         SetMatrixRows(x@address, as.double(i), as.integer(value))
   )
   
   return(x)
