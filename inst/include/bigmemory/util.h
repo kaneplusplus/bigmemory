@@ -1,11 +1,10 @@
 #ifndef BIGMEMORY_UTIL_HPP
 #define BIGMEMORY_UTIL_HPP
 
-//#include <vector>
-//#include <string>
+#include <vector>
+#include <string>
 #include <Rdefines.h>
 
-#include <Rcpp.h>
 
 #include "bigmemoryDefines.h"
 
@@ -39,6 +38,10 @@ SEXP StringVec2RChar( const vector<string> &strVec,
   return ret;
 }
 
+#ifdef DARWIN
+#undef length
+#endif //DARWIN
+#include <Rcpp.h>
 
 template<typename T>
 struct NewVec;
@@ -54,7 +57,6 @@ SEXP NEW_FLOAT(index_type n)
     std::vector<float> out (n, 0);
     return Rcpp::wrap(out);
 }
-
 
 template<>
 struct NewVec<float>
@@ -79,4 +81,7 @@ template<>
 struct VecPtr<double>
 {double* operator()(SEXP vec) const {return NUMERIC_DATA(vec);};};
 
+#ifdef DARWIN
+#define length(x) Rf_length(x)
+#endif // DARWIN
 #endif // BIGMEMORY_UTIL_HPP

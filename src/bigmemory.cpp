@@ -7,8 +7,6 @@
 #include "bigmemory/util.h"
 #include "bigmemory/isna.hpp"
 
-#include <Rcpp.h>
-
 /* Notes
  * R does not natively contain float type objects
  * Therefore, every time you pass object to see they will initially be
