@@ -13,14 +13,12 @@
 #include <boost/interprocess/exceptions.hpp>
 #include <boost/interprocess/sync/scoped_lock.hpp>
 #include <boost/exception/exception.hpp>
-#include <boost/uuid/uuid_generators.hpp>
-#include <boost/uuid/uuid_io.hpp>
 
-#ifndef INTERLOCKED_EXCHANGE_HACK
-  #include <boost/interprocess/sync/named_mutex.hpp>
-#endif
+#include <boost/interprocess/sync/named_mutex.hpp>
 
 #include "bigmemory/BigMatrix.h"
+
+#include <Rcpp.h>
 
 #define COND_EXCEPTION_PRINT(bYes)                \
   if (bYes)                                       \
@@ -187,11 +185,15 @@ bool SharedBigMatrix::create_uuid()
 {
   try
   {
-    stringstream ss;
-    boost::uuids::basic_random_generator<boost::mt19937> gen;
-    boost::uuids::uuid u = gen();
-    ss << u;
-    _uuid = ss.str();
+    size_t string_len = 24;
+    std::string letters("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
+    Rcpp::NumericVector inds=
+      Rcpp::runif(string_len, -0.49, letters.size()-0.51);
+    _uuid.clear();
+    for (int i=0; i < string_len; ++i) {
+      _uuid.push_back(letters[round(inds[i])]);
+    }
+
     #ifdef DARWIN
     // Darwin has a limit on the size of share memory names.
     _uuid.resize(15);
