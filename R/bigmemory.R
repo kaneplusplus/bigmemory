@@ -835,8 +835,8 @@ SetAll.bm <- function(x, value)
   if ( options()$bigmemory.typecast.warning &&
        ((typeof(value) == "double") && (typeof(x) != "double") ||
        (typeof(value) == "integer" &&
-        (typeof(x) != "double" && typeof(x) != "integer")))  || 
-       (typeof(value) == "double" && (typeof(x) == "float"))
+        (typeof(x) != "double" && typeof(x) != "integer"))  || 
+       (typeof(value) == "double" && (typeof(x) == "float")))
   )
   {
     warning(cat("Assignment will down cast from ", typeof(value), " to ",
