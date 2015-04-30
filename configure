@@ -30,7 +30,7 @@ elif test `uname` = "SunOS" ; then
   LIBS="PKG_LIBS=-lrt -lm"
 elif test `uname` = "Darwin" ; then
   echo "Darwin"
-  FLAGS="${FLAGS} -DDARWIN -Wno-deprecated-declarations"
+  FLAGS="${FLAGS} -DDARWIN -DLENGTH_HACK -Wno-deprecated-declarations"
 else
   echo "Other:" `uname`
 fi

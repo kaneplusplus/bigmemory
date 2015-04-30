@@ -3,3 +3,4 @@
 appveyor.yml
 .git
 .travis.yml
+.gitignore

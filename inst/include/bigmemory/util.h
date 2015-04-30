@@ -38,9 +38,7 @@ SEXP StringVec2RChar( const vector<string> &strVec,
 }
 */
 
-#ifdef DARWIN | WINDOWS
 #undef length
-#endif //DARWIN
 #include <Rcpp.h>
 
 template<typename T>
@@ -81,7 +79,5 @@ template<>
 struct VecPtr<double>
 {double* operator()(SEXP vec) const {return NUMERIC_DATA(vec);};};
 
-#ifdef DARWIN | WINDOWS
 #define length(x) Rf_length(x)
-#endif // DARWIN
 #endif // BIGMEMORY_UTIL_HPP

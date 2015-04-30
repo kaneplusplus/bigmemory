@@ -589,7 +589,6 @@ SEXP GetMatrixAll( BigMatrix *pMat, double NA_C, double NA_R,
     pColumn = mat[i];
     for (j=0; j < numRows; ++j) 
     {
-        //std::cout << pColumn[j] << std::endl;
       pRet[k] = (pColumn[j] == static_cast<CType>(NA_C)) ?  static_cast<RType>(NA_R) : 
                  (static_cast<RType>(pColumn[j]));
       ++k;
@@ -1748,7 +1747,6 @@ Rcpp::String GetTypeString( SEXP bigMatAddr )
 {
     Rcpp::XPtr<BigMatrix> pMat(bigMatAddr);
     
-//    std::cout << type_name<decltype(pMat->matrix())>() << std::endl;
     
     switch(pMat->matrix_type())
     {
@@ -1763,7 +1761,6 @@ Rcpp::String GetTypeString( SEXP bigMatAddr )
         case 8:
             return "double";
         default:
-            std::cout << pMat->matrix_type() << std::endl;
             throw Rcpp::exception("unknown type detected for big.matrix object!");
     }
 }

@@ -5,6 +5,6 @@
 
 FLAGS="PKG_CPPFLAGS=-I../inst/include"
 echo "Windows"
-FLAGS="${FLAGS} -DWINDOWS"
+FLAGS="${FLAGS} -DWINDOWS -DLENGTH_HACK"
 echo "${FLAGS}" > src/Makevars
 
