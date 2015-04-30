@@ -5,6 +5,7 @@ warnings_are_errors: true
 r_binary_packages:
   - Rcpp
   - bigmemory.sri
+  - BH
 
 r_github_packages:
   - jimhester/covr
