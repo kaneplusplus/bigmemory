@@ -1413,7 +1413,7 @@ SEXP CGetType(SEXP bigMatAddr)
 {
   Rcpp::XPtr<BigMatrix> pMat(bigMatAddr);
   int ret = pMat->matrix_type();
-  return Rcpp::wrap((int)ret);
+  return Rcpp::wrap(ret);
 }
 
 // not currently used?!?!?!
