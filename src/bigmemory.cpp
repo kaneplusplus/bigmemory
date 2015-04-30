@@ -1411,11 +1411,9 @@ SEXP CGetNcol(SEXP bigMatAddr)
 // [[Rcpp::export]]
 SEXP CGetType(SEXP bigMatAddr)
 {
-  BigMatrix *pMat = (BigMatrix*)R_ExternalPtrAddr(bigMatAddr);
-  SEXP ret = PROTECT(NEW_INTEGER(1));
-  INTEGER_DATA(ret)[0] = pMat->matrix_type();
-  UNPROTECT(1);
-  return(ret);
+  Rcpp::XPtr<BigMatrix> pMat(bigMatAddr);
+  int ret = pMat->matrix_type();
+  return Rcpp::wrap(ret);
 }
 
 // not currently used?!?!?!
