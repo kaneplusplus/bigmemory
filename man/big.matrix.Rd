@@ -175,6 +175,7 @@ factors numeric before forming the \code{big.matrix}.  Level labels are
 not preserved and must be managed by the user if desired.
 }
 \examples{
+\dontrun{
 x <- as.big.matrix(matrix(-5, 10, 2))
 colnames(x) <- c("alpha", "beta")
 is.big.matrix(x)
@@ -223,6 +224,7 @@ zzz <- attach.big.matrix(describe(z))
 zzz[,]
 
 is.nil(z@address)
+}
 }
 \author{
 John W. Emerson and Michael J. Kane

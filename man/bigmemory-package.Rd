@@ -96,6 +96,7 @@ is \code{\link{split}}, because this function only accesses subsets of the
 matrix.
 }
 \examples{
+\dontrun{
 # Our examples are all trivial in size, rather than burning huge amounts
 # of memory.
 
@@ -109,6 +110,7 @@ colnames(x)
 options(bigmemory.allow.dimnames=TRUE)
 colnames(x) <- NULL
 x[,]
+}
 }
 \author{
 Michael J. Kane and John W. Emerson
