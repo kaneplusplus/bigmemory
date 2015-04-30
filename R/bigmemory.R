@@ -1779,7 +1779,7 @@ getCType <- function(x) {
   if (!inherits(x, "big.matrix"))
     stop("getCType takes a big.matrix as an argument.")
 
-  return(CGetType(x@address, PACKAGE="bigmemory"))
+  return(CGetType(x@address))
 }
 
 .addDimnames <- function(retList, nrow, ncol, drop) {
