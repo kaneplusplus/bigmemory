@@ -110,26 +110,26 @@ BEGIN_RCPP
 END_RCPP
 }
 // GetIndexRowNames
-SEXP GetIndexRowNames(SEXP address, SEXP indices);
-RcppExport SEXP bigmemory_GetIndexRowNames(SEXP addressSEXP, SEXP indicesSEXP) {
+SEXP GetIndexRowNames(SEXP address, SEXP indices_);
+RcppExport SEXP bigmemory_GetIndexRowNames(SEXP addressSEXP, SEXP indices_SEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< SEXP >::type address(addressSEXP);
-    Rcpp::traits::input_parameter< SEXP >::type indices(indicesSEXP);
-    __result = Rcpp::wrap(GetIndexRowNames(address, indices));
+    Rcpp::traits::input_parameter< SEXP >::type indices_(indices_SEXP);
+    __result = Rcpp::wrap(GetIndexRowNames(address, indices_));
     return __result;
 END_RCPP
 }
 // GetIndexColNames
-SEXP GetIndexColNames(SEXP address, SEXP indices);
-RcppExport SEXP bigmemory_GetIndexColNames(SEXP addressSEXP, SEXP indicesSEXP) {
+SEXP GetIndexColNames(SEXP address, SEXP indices_);
+RcppExport SEXP bigmemory_GetIndexColNames(SEXP addressSEXP, SEXP indices_SEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< SEXP >::type address(addressSEXP);
-    Rcpp::traits::input_parameter< SEXP >::type indices(indicesSEXP);
-    __result = Rcpp::wrap(GetIndexColNames(address, indices));
+    Rcpp::traits::input_parameter< SEXP >::type indices_(indices_SEXP);
+    __result = Rcpp::wrap(GetIndexColNames(address, indices_));
     return __result;
 END_RCPP
 }

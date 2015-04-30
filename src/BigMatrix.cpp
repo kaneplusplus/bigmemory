@@ -190,7 +190,7 @@ bool SharedBigMatrix::create_uuid()
     Rcpp::NumericVector inds=
       Rcpp::runif(string_len, -0.49, letters.size()-0.51);
     _uuid.clear();
-    for (int i=0; i < string_len; ++i) {
+    for (unsigned int i=0; i < string_len; ++i) {
       _uuid.push_back(letters[round(inds[i])]);
     }
 

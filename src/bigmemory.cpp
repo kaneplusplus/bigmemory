@@ -1297,20 +1297,28 @@ SEXP HasRowColNames(SEXP address)
 
 // Not currently used?!?!
 // [[Rcpp::export]]
-SEXP GetIndexRowNames(SEXP address, SEXP indices)
+SEXP GetIndexRowNames(SEXP address, SEXP indices_)
 {
   BigMatrix *pMat = (BigMatrix*)R_ExternalPtrAddr(address);
   Names rn = pMat->row_names();
-  return StringVec2RChar(rn, NUMERIC_DATA(indices), GET_LENGTH(indices));
+  Rcpp::IntegerVector indices = Rcpp::as<Rcpp::IntegerVector>(indices_);
+  Rcpp::CharacterVector rcpp_rn = Rcpp::wrap(rn);
+  return rcpp_rn[indices-1];
+//  vector<int> c_idx = Rcpp::as<vector<int> >(indices); 
+//  return StringVec2RChar(rn, c_idx, indices.size());
 }
 
 // Not currently used?!?!
 // [[Rcpp::export]]
-SEXP GetIndexColNames(SEXP address, SEXP indices)
+SEXP GetIndexColNames(SEXP address, SEXP indices_)
 {
   BigMatrix *pMat = (BigMatrix*)R_ExternalPtrAddr(address);
   Names cn = pMat->column_names();
-  return StringVec2RChar(cn, NUMERIC_DATA(indices), GET_LENGTH(indices));
+  Rcpp::IntegerVector indices = Rcpp::as<Rcpp::IntegerVector>(indices_);
+  Rcpp::CharacterVector rcpp_cn = Rcpp::wrap(cn);
+  return rcpp_cn[indices-1];
+//  vector<int> c_idx = Rcpp::as<vector<int> >(indices); 
+//  return StringVec2RChar(cn, c_idx, indices.size());
 }
 
 // [[Rcpp::export]]
@@ -1318,7 +1326,7 @@ SEXP GetColumnNamesBM(SEXP address)
 {
   BigMatrix *pMat = (BigMatrix*)R_ExternalPtrAddr(address);
   Names cn = pMat->column_names();
-  return StringVec2RChar(cn);
+  return Rcpp::wrap(cn);
 }
 
 // [[Rcpp::export]]
@@ -1326,7 +1334,7 @@ SEXP GetRowNamesBM(SEXP address)
 {
   BigMatrix *pMat = (BigMatrix*)R_ExternalPtrAddr(address);
   Names rn = pMat->row_names();
-  return StringVec2RChar(rn);
+  return Rcpp::wrap(rn);
 }
 
 // [[Rcpp::export]]
