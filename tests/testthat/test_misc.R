@@ -4,7 +4,7 @@ context("miscellaneous")
 z <- filebacked.big.matrix(3, 3, type='integer', init=123,
                            backingfile="example.bin",
                            descriptorfile="example.desc",
-                           dimnames=list(c('a','b','c'), c('d', 'e', 'f')))
+                           dimnames=list(c('a','b','c'), c('A', 'B', 'C')))
 mat <- matrix(1:9, ncol = 3, nrow = 3, dimnames = list(letters[1:3], 
                                                        LETTERS[1:3]))
 bm <- as.big.matrix(mat)
@@ -27,4 +27,14 @@ test_that("basic matrix metrics work",{
     expect_equivalent(ncol(z), 3L)
     expect_equivalent(nrow(z), 3L)
     expect_equivalent(dim(z), c(3L, 3L))
+})
+
+test_that("dimnames returned are correct", {
+    expect_is(dimnames(mat), "list")
+    expect_identical(dimnames(mat), dimnames(bm), 
+                     info = "dimnames don't match between big.matrix 
+                     and matrix")
+    expect_identical(dimnames(mat), dimnames(z), 
+                     info = "dimnames don't match between 
+                     filebacked.big.matrix and matrix")
 })

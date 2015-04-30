@@ -414,9 +414,8 @@ GetIndivElements.bm <- function(x,i) {
   if (is.null(tempj[[1]])) stop("Illegal column index usage in assignment.\n")
   if (tempj[[1]]) i[,2] <- tempj[[2]]
 
-  # Call .Call C++
-  .Call("GetIndivMatrixElements", x@address, as.double(i[,2]),
-    as.double(i[,1]))
+  return(GetIndivMatrixElements(x@address, as.double(i[,2]),
+                                as.double(i[,1])))
 }
 
 
@@ -835,8 +834,8 @@ SetAll.bm <- function(x, value)
   if ( options()$bigmemory.typecast.warning &&
        ((typeof(value) == "double") && (typeof(x) != "double") ||
        (typeof(value) == "integer" &&
-        (typeof(x) != "double" && typeof(x) != "integer")))  || 
-       (typeof(value) == "double" && (typeof(x) == "float"))
+        (typeof(x) != "double" && typeof(x) != "integer"))  || 
+       (typeof(value) == "double" && (typeof(x) == "float")))
   )
   {
     warning(cat("Assignment will down cast from ", typeof(value), " to ",

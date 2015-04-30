@@ -33,12 +33,12 @@ HasRowColNames <- function(address) {
     .Call('bigmemory_HasRowColNames', PACKAGE = 'bigmemory', address)
 }
 
-GetIndexRowNames <- function(address, indices) {
-    .Call('bigmemory_GetIndexRowNames', PACKAGE = 'bigmemory', address, indices)
+GetIndexRowNames <- function(address, indices_) {
+    .Call('bigmemory_GetIndexRowNames', PACKAGE = 'bigmemory', address, indices_)
 }
 
-GetIndexColNames <- function(address, indices) {
-    .Call('bigmemory_GetIndexColNames', PACKAGE = 'bigmemory', address, indices)
+GetIndexColNames <- function(address, indices_) {
+    .Call('bigmemory_GetIndexColNames', PACKAGE = 'bigmemory', address, indices_)
 }
 
 GetColumnNamesBM <- function(address) {
@@ -225,3 +225,4 @@ isnil <- function(address) {
 CDeepCopy <- function(inAddr, outAddr, rowInds, colInds, typecast_warning) {
     .Call('bigmemory_CDeepCopy', PACKAGE = 'bigmemory', inAddr, outAddr, rowInds, colInds, typecast_warning)
 }
+

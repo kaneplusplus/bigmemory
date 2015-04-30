@@ -1,10 +1,7 @@
 #ifndef BIGMEMORY_UTIL_HPP
 #define BIGMEMORY_UTIL_HPP
 
-#include <vector>
-#include <string>
-#include <Rdefines.h>
-
+#include <Rcpp.h>
 
 #include "bigmemoryDefines.h"
 
@@ -21,6 +18,8 @@ std::string RChar2String(SEXP str);
 
 SEXP StringVec2RChar( const vector<string> &strVec );
 
+// Removed because no longer required with Rcpp
+/*
 template<typename T>
 SEXP StringVec2RChar( const vector<string> &strVec,
   T indices, const index_type indicesLength )
@@ -37,6 +36,7 @@ SEXP StringVec2RChar( const vector<string> &strVec,
   UNPROTECT(1);
   return ret;
 }
+*/
 
 #undef length
 #include <Rcpp.h>
@@ -46,7 +46,7 @@ struct NewVec;
 
 template<>
 struct NewVec<int>
-{SEXP operator()(index_type n) const {return NEW_INTEGER(n);};};
+{SEXP operator()(index_type n) const {return Rcpp::IntegerVector(n);};};
 
 
 inline
@@ -62,7 +62,7 @@ struct NewVec<float>
 
 template<>
 struct NewVec<double>
-{SEXP operator()(index_type n) const {return NEW_NUMERIC(n);};};
+{SEXP operator()(index_type n) const {return Rcpp::NumericVector(n);};};
 
 template<typename T>
 struct VecPtr;
