@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/kaneplusplus/bigmemory.png)](https://travis-ci.org/kaneplusplus/bigmemory)
-[![Covalls Status](https://coveralls.io/repos/kaneplusplus/bigmemory/badge.svg)](https://coveralls.io/r/kaneplusplus/bigmemory)
+[![Coverage Status](https://coveralls.io/repos/kaneplusplus/bigmemory/badge.svg)](https://coveralls.io/r/kaneplusplus/bigmemory)
 [![Appveyor Status](https://ci.appveyor.com/api/projects/status/github/kaneplusplus/bigmemory)](https://ci.appveyor.com/api/projects/status/github/kaneplusplus/bigmemory)
 <!---
 [![Total Downloads](https://poser.pugx.org/simkimsia/utility_behaviors/d/total.png)](https://packagist.org/packages/simkimsia/utility_behaviors)
