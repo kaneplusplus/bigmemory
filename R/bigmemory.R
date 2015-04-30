@@ -414,9 +414,8 @@ GetIndivElements.bm <- function(x,i) {
   if (is.null(tempj[[1]])) stop("Illegal column index usage in assignment.\n")
   if (tempj[[1]]) i[,2] <- tempj[[2]]
 
-  # Call .Call C++
   return(GetIndivMatrixElements(x@address, as.double(i[,2]),
-    as.double(i[,1])))
+                                as.double(i[,1])))
 }
 
 
@@ -1617,12 +1616,14 @@ setGeneric('is.filebacked', function(x) standardGeneric('is.filebacked'))
 setMethod('is.filebacked', signature(x='big.matrix'),
   function(x) return(IsFileBackedBigMatrix(x@address)))
 
+#' @rdname big.matrix
 #' @export
 setGeneric('shared.name', function(x) standardGeneric('shared.name'))
 
 setMethod('shared.name', signature(x='big.matrix'),
   function(x) return(SharedName(x@address)))
 
+#' @rdname big.matrix
 #' @export
 setGeneric('file.name', function(x) standardGeneric('file.name'))
 

@@ -3,6 +3,7 @@
 \name{big.matrix}
 \alias{as.big.matrix}
 \alias{big.matrix}
+\alias{file.name}
 \alias{filebacked.big.matrix}
 \alias{is.big.matrix}
 \alias{is.filebacked}
@@ -10,6 +11,7 @@
 \alias{is.readonly}
 \alias{is.separated}
 \alias{is.shared}
+\alias{shared.name}
 \title{The core "big.matrix" operations.}
 \usage{
 big.matrix(nrow, ncol, type = options()$bigmemory.default.type, init = NULL,
@@ -30,6 +32,10 @@ is.big.matrix(x)
 is.separated(x)
 
 is.filebacked(x)
+
+shared.name(x)
+
+file.name(x)
 
 is.shared(x)
 
