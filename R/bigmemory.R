@@ -415,8 +415,8 @@ GetIndivElements.bm <- function(x,i) {
   if (tempj[[1]]) i[,2] <- tempj[[2]]
 
   # Call .Call C++
-  return(GetIndivMatrixElements(x@address, as.double(i[,2]),
-    as.double(i[,1])))
+  .Call("GetIndivMatrixElements", x@address, as.double(i[,2]),
+    as.double(i[,1]))
 }
 
 
@@ -1617,12 +1617,14 @@ setGeneric('is.filebacked', function(x) standardGeneric('is.filebacked'))
 setMethod('is.filebacked', signature(x='big.matrix'),
   function(x) return(IsFileBackedBigMatrix(x@address)))
 
+#' @rdname big.matrix
 #' @export
 setGeneric('shared.name', function(x) standardGeneric('shared.name'))
 
 setMethod('shared.name', signature(x='big.matrix'),
   function(x) return(SharedName(x@address)))
 
+#' @rdname big.matrix
 #' @export
 setGeneric('file.name', function(x) standardGeneric('file.name'))
 
@@ -1779,7 +1781,7 @@ getCType <- function(x) {
   if (!inherits(x, "big.matrix"))
     stop("getCType takes a big.matrix as an argument.")
 
-  return(CGetType(x@address, PACKAGE="bigmemory"))
+  return(CGetType(x@address))
 }
 
 .addDimnames <- function(retList, nrow, ncol, drop) {

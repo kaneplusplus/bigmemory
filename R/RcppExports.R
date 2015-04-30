@@ -225,4 +225,3 @@ isnil <- function(address) {
 CDeepCopy <- function(inAddr, outAddr, rowInds, colInds, typecast_warning) {
     .Call('bigmemory_CDeepCopy', PACKAGE = 'bigmemory', inAddr, outAddr, rowInds, colInds, typecast_warning)
 }
-

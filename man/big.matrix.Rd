@@ -3,6 +3,7 @@
 \name{big.matrix}
 \alias{as.big.matrix}
 \alias{big.matrix}
+\alias{file.name}
 \alias{filebacked.big.matrix}
 \alias{is.big.matrix}
 \alias{is.filebacked}
@@ -10,6 +11,7 @@
 \alias{is.readonly}
 \alias{is.separated}
 \alias{is.shared}
+\alias{shared.name}
 \title{The core "big.matrix" operations.}
 \usage{
 big.matrix(nrow, ncol, type = options()$bigmemory.default.type, init = NULL,
@@ -30,6 +32,10 @@ is.big.matrix(x)
 is.separated(x)
 
 is.filebacked(x)
+
+shared.name(x)
+
+file.name(x)
 
 is.shared(x)
 
@@ -169,18 +175,6 @@ factors numeric before forming the \code{big.matrix}.  Level labels are
 not preserved and must be managed by the user if desired.
 }
 \examples{
-x <- big.matrix(10, 2, type='integer', init=-5)
-options(bigmemory.allow.dimnames=TRUE)
-colnames(x) <- c("alpha", "beta")
-is.big.matrix(x)
-dim(x)
-colnames(x)
-rownames(x)
-x[,]
-x[1:8,1] <- 11:18
-colnames(x) <- NULL
-x[,]
-
 x <- as.big.matrix(matrix(-5, 10, 2))
 colnames(x) <- c("alpha", "beta")
 is.big.matrix(x)
