@@ -1,5 +1,6 @@
-[![Build Status](https://travis-ci.org/https://api.travis-ci.org/kaneplusplus/bigmemory.png)](https://travis-ci.org/https://api.travis-ci.org/kaneplusplus/bigmemory.png)
-[![Coverage Status](https://coveralls.io/repos/kaneplusplus/bigmemory/badge.svg)](https://coveralls.io/r/kaneplusplus/bigmemory)
+[![Travis-CI Status](https://travis-ci.org/https://api.travis-ci.org/kaneplusplus/bigmemory.png)](https://travis-ci.org/https://api.travis-ci.org/kaneplusplus/bigmemory.png)
+[![Covalls Status](https://coveralls.io/repos/kaneplusplus/bigmemory/badge.svg)](https://coveralls.io/r/kaneplusplus/bigmemory)
+[![Appveyor Status](https://ci.appveyor.com/api/projects/status/github/kaneplusplus/bigmemory)](https://ci.appveyor.com/api/projects/status/github/kaneplusplus/bigmemory)
 <!---
 [![Total Downloads](https://poser.pugx.org/simkimsia/utility_behaviors/d/total.png)](https://packagist.org/packages/simkimsia/utility_behaviors)
 [![Latest Stable Version](https://poser.pugx.org/simkimsia/utility_behaviors/v/stable.png)](https://packagist.org/packages/simkimsia/utility_behaviors)
