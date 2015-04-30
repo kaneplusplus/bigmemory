@@ -2,6 +2,10 @@ language: r
 sudo: required
 warnings_are_errors: true
 
+os:
+  - linux
+  - osx
+
 r_binary_packages:
   - Rcpp
   - bigmemory.sri
