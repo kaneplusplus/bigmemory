@@ -28,7 +28,7 @@ test_that("filebacked matrix created successfully",{
 })
 
 test_that("RAM matrix created successfully",{
-    expect_equal(bm[,], dmat, tolerance=1e-07)
+    expect_equal(bm[,], dmat, tolerance = 1e-7)
     expect_true(typeof(bm) == "float")
 })
 

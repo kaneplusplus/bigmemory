@@ -10,15 +10,6 @@ x[1:8,1] <- 11:18
 colnames(x) <- NULL
 x[,]
 
-x <- as.big.matrix(matrix(-5, 10, 2))
-colnames(x) <- c("alpha", "beta")
-is.big.matrix(x)
-dim(x)
-colnames(x)
-rownames(x)
-x[1:8,1] <- 11:18
-x[,]
-
 # The following shared memory example is quite silly, as you wouldn't
 # likely do this in a single R session.  But if zdescription were
 # passed to another R session via SNOW, foreach, or even by a
