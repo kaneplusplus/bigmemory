@@ -4,5 +4,7 @@
 #
 
 FLAGS="PKG_CPPFLAGS=-I../inst/include"
+echo "Windows"
+FLAGS="${FLAGS} -DWINDOWS"
 echo "${FLAGS}" > src/Makevars
 
