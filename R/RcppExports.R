@@ -117,6 +117,9 @@ GetTypeString <- function(bigMatAddr) {
     .Call('bigmemory_GetTypeString', PACKAGE = 'bigmemory', bigMatAddr)
 }
 
+#' @title big.matrix size
+#' @description Returns the size of the created matrix in bytes
+#' @param bigMat a \code{big.matrix} object
 #' @export
 GetMatrixSize <- function(bigMat) {
     .Call('bigmemory_GetMatrixSize', PACKAGE = 'bigmemory', bigMat)

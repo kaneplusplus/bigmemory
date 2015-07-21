@@ -99,7 +99,6 @@ matrix.
 # Our examples are all trivial in size, rather than burning huge amounts
 # of memory.
 
-gc()
 x <- big.matrix(5, 2, type="integer", init=0,
                 dimnames=list(NULL, c("alpha", "beta")))
 x

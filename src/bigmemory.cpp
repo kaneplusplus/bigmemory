@@ -1768,6 +1768,9 @@ Rcpp::String GetTypeString( SEXP bigMatAddr )
  * quick function to access big.matrix sizes
  * possibly convert in to a method for object.size???
  */
+//' @title big.matrix size
+//' @description Returns the size of the created matrix in bytes
+//' @param bigMat a \code{big.matrix} object
 //' @export
 // [[Rcpp::export]]
 SEXP GetMatrixSize( SEXP bigMat )

@@ -16,6 +16,25 @@
 
 \S4method{attach.resource}{big.matrix.descriptor}(obj, ...)
 }
+\arguments{
+\item{x}{A descriptor object}
+
+\item{firstRow}{the first row of the submatrix}
+
+\item{lastRow}{the last row of the submatrix if not NULL}
+
+\item{firstCol}{the first column of the submatrix}
+
+\item{lastCol}{of the submatrix if not NULL}
+
+\item{backingpath}{required path to the filebacked object, if applicable}
+
+\item{obj}{The filename of the descriptor for a filebacked matrix,
+assumed ot be in the directory specified}
+
+\item{...}{possibly \code{path} which gives the path where the descriptor
+and/or filebacking can be found.}
+}
 \description{
 An object of this class contains necessary and sufficient information
 to ``attach'' a shared or filebacked \code{\link{big.matrix}}.

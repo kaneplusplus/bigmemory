@@ -199,6 +199,10 @@ setGeneric('as.big.matrix',
                     descriptorfile=NULL, binarydescriptor=FALSE, shared=TRUE) standardGeneric('as.big.matrix'))
 
 
+#' @title Convert to base R matrix
+#' @description Extract values from a \code{big.matrix} object
+#' and convert to a base R matrix object
+#' @param x A big.matrix object
 #' @export
 setMethod('as.matrix', signature(x='big.matrix'),
           function(x) return(x[,]))
@@ -283,9 +287,11 @@ setMethod('as.big.matrix', signature(x='vector'),
 #' @export
 setGeneric('is.big.matrix', function(x) standardGeneric('is.big.matrix'))
 
+#' @rdname big.matrix
 setMethod('is.big.matrix', signature(x='big.matrix'),
   function(x) return(TRUE))
 
+#' @rdname big.matrix
 setMethod('is.big.matrix', definition=function(x) return(FALSE))
 
   
@@ -341,18 +347,32 @@ assign('rownames.bm<-',
       return(x)
   })
 
+#' @title The Number of Rows/Columns of a big.matrix
+#' @description \code{nrow} and \code{ncol} return the number of
+#' rows or columns present in a \code{big.matrix} object.
+#' @param x A big.matrix object
+#' @return An integer of length 1
+#' @docType methods
+#' @rdname ncol-methods
 #' @export
 setMethod('ncol', signature(x="big.matrix"),
   function(x) return(CGetNcol(x@address)))
 
+#' @rdname ncol-methods
 #' @export
 setMethod('nrow', signature(x="big.matrix"), 
   function(x) return(CGetNrow(x@address)))
 
+#' @title Dimensions of a big.matrix object
+#' @description Retrieve the dimensions of a \code{big.matrix} object
+#' @param x A \code{big.matrix} object
 #' @export
 setMethod('dim', signature(x="big.matrix"),
   function(x) return(c(nrow(x), ncol(x))))
 
+#' @title Length of a big.matrix object
+#' @description Get the length of a \code{big.matrix} object
+#' @param x A \code{big.matrix} object
 #' @export
 setMethod('length', signature(x="big.matrix"),
   function(x) return(prod(dim(x))))
@@ -470,51 +490,76 @@ GetAll.bm <- function(x, drop=TRUE)
   return(mat)
 }
 
+#' @title Extract or Replace big.matrix elements
+#' @name Extract,big.matrix
+#' @param x A \code{big.matrix object}
+#' @param i Indices specifying the rows
+#' @param j Indices specifying the columns
+#' @param drop Logical indication if reduce to minimum dimensions
+#' @param value typically an array-like R object of similar class
+#' @docType methods
+#' @rdname extract-methods
+#' @aliases [,big.matrix,ANY,ANY,missing-method
 #' @export
 setMethod("[",
   signature(x = "big.matrix", drop = "missing"),
-  function(x, i, j) return(GetElements.bm(x, i, j)))
+  function(x, i, j, drop) return(GetElements.bm(x, i, j)))
 
+
+#' @rdname extract-methods
 #' @export
 setMethod("[",
   signature(x = "big.matrix", drop = "logical"),
   function(x, i, j, drop) return(GetElements.bm(x, i, j, drop)))
 
+
+#' @rdname extract-methods
 #' @export
 setMethod("[",
   signature(x = "big.matrix", i="missing", drop = "missing"),
-  function(x, j) return(GetCols.bm(x, j)))
+  function(x, i, j, drop) return(GetCols.bm(x, j)))
 
+
+#' @rdname extract-methods
 #' @export
 setMethod("[",
   signature(x = "big.matrix", i="missing", drop = "logical"),
-  function(x, j, drop) return(GetCols.bm(x, j, drop)))
+  function(x, i, j, drop) return(GetCols.bm(x, j, drop)))
 
+
+#' @rdname extract-methods
 #' @export
 setMethod("[",
   signature(x = "big.matrix", j="missing", drop = "missing"),
-  function(x, i) return(GetRows.bm(x, i)))
+  function(x, i, j, drop) return(GetRows.bm(x, i)))
 
+
+#' @rdname extract-methods
 #' @export
 setMethod("[",
   signature(x = "big.matrix", j="missing", drop = "logical"),
-  function(x, i, drop) return(GetRows.bm(x, i, drop)))
+  function(x, i, j, drop) return(GetRows.bm(x, i, drop)))
 
+
+#' @rdname extract-methods
 #' @export
 setMethod("[",
   signature(x = "big.matrix", i="missing", j="missing", drop = "missing"),
-  function(x) return(GetAll.bm(x)))
+  function(x, i, j, drop) return(GetAll.bm(x)))
 
+
+#' @rdname extract-methods
 #' @export
 setMethod("[",
   signature(x = "big.matrix", i="missing", j="missing", drop = "logical"),
-  function(x, drop) return(GetAll.bm(x, drop)))
+  function(x, i, j, drop) return(GetAll.bm(x, drop)))
 
 # Function contributed by Peter Haverty at Genentech.
+#' @rdname extract-methods
 #' @export
 setMethod('[',
   signature(x = "big.matrix",i="matrix",j="missing",drop="missing"),
-  function(x, i) return(GetIndivElements.bm(x, i)))
+  function(x, i, j, drop) return(GetIndivElements.bm(x, i)))
 
 
 SetElements.bm <- function(x, i, j, value)
@@ -890,32 +935,41 @@ SetAll.bm <- function(x, value)
   return(x)
 }
 
+#' @rdname extract-methods
 #' @export
 setMethod('[<-',
   signature(x = "big.matrix"),
   function(x, i, j, value) return(SetElements.bm(x, i, j, value)))
 
+#' @rdname extract-methods
 #' @export
 setMethod('[<-',
   signature(x = "big.matrix", i="missing"),
-  function(x, j, value) return(SetCols.bm(x, j, value)))
+  function(x, i, j, value) return(SetCols.bm(x, j, value)))
 
+#' @rdname extract-methods
 #' @export
 setMethod('[<-',
   signature(x = "big.matrix", j="missing"),
-  function(x, i, value) return(SetRows.bm(x, i, value)))
+  function(x, i, j, value) return(SetRows.bm(x, i, value)))
 
+#' @rdname extract-methods
 #' @export
 setMethod('[<-',
   signature(x = "big.matrix", i="missing", j="missing"),
-  function(x, value) return(SetAll.bm(x, value)))
+  function(x, i, j, value) return(SetAll.bm(x, value)))
 
 # Function contributed by Peter Haverty at Genentech.
+#' @rdname extract-methods
 #' @export
 setMethod('[<-',
   signature(x = "big.matrix",i="matrix",j="missing"),
-  function(x, i, value) return(SetIndivElements.bm(x, i, value)))
+  function(x, i, j, value) return(SetIndivElements.bm(x, i, value)))
 
+#' @title The Type of a big.matrix Object
+#' @description \code{typeof} returns the storage type of a 
+#' \code{big.matrix} object
+#' @param x A \code{big.matrix} object
 #' @export
 setMethod('typeof', signature(x="big.matrix"),
   function(x) {
@@ -926,11 +980,16 @@ setMethod('typeof', signature(x="big.matrix"),
 
 # Little function to test if a value is
 # the 'R' representation of float/single value
+#' @title Check if Float
+#' @param x An object to be evaluated if float
 #' @export
 setGeneric('is.float', function(x){
     standardGeneric('is.float')
 })
 
+#' @title Is Float?
+#' @description Check if R numeric value has float flag
+#' @param x A numeric value
 setMethod('is.float', signature(x='numeric'),
           function(x){
               if(is.null(attr(x, 'Csingle'))){
@@ -941,6 +1000,13 @@ setMethod('is.float', signature(x='numeric'),
               }
           })
 
+#' @title Return First or Last Part of a big.matrix Object
+#' @description Returns the first or last parts of a \code{big.matrix}
+#' object.
+#' @param x A big.matrix object
+#' @param n A single integer for the number of rows to return
+#' @docType methods
+#' @rdname head-methods
 #' @export
 setMethod('head', signature(x="big.matrix"),
   function(x, n = 6) {
@@ -949,6 +1015,8 @@ setMethod('head', signature(x="big.matrix"),
     return(x[1:n,])
   })
 
+
+#' @rdname head-methods
 #' @export
 setMethod('tail', signature(x="big.matrix"),
   function(x, n = 6) {
@@ -957,6 +1025,13 @@ setMethod('tail', signature(x="big.matrix"),
     return(x[(nrow(x)-n+1):nrow(x),])
   })
 
+#' @title Print Values
+#' @description \code{print} will print out the elements within
+#' a \code{big.matrix} object.
+#' @note By default, this will only return the \code{head} of a big.matrix
+#' to prevent console overflow.  If you trun off the bigmemory.print.warning
+#' option then it will convert to a base R matrix and print all elements.
+#' @param x A \code{big.matrix} object
 #' @export
 setMethod('print', signature(x='big.matrix'), 
   function(x) {
@@ -1143,10 +1218,19 @@ mwhich.internal <- function(x, cols, vals, comps, op, whichFuncName)
   return(ret)
 }
 
+
+#' @title Dimnames of a big.matrix Object
+#' @description Retrieve or set the dimnames of an object
+#' @param x A big.matrix object
+#' @param value A possible value for \code{dimnames(x)}
+#' @docType methods
+#' @rdname dimnames-methods
 #' @export
 setMethod('dimnames', signature(x = "big.matrix"),
   function(x) return(list(rownames.bm(x), colnames.bm(x))))
 
+
+#' @rdname dimnames-methods
 #' @export
 setMethod('dimnames<-', signature(x = "big.matrix", value='list'),
   function(x, value) {
@@ -1167,6 +1251,7 @@ setGeneric('write.big.matrix',
            function(x, filename, row.names=FALSE, col.names=FALSE, sep=",") 
                standardGeneric('write.big.matrix'))
 
+#' @rdname write.big.matrix
 setMethod('write.big.matrix', signature(x='big.matrix',filename='character'),
           function(x, filename, row.names, col.names, sep)
           {
@@ -1198,6 +1283,7 @@ setGeneric('read.big.matrix',
            shared=TRUE) 
   standardGeneric('read.big.matrix'))
 
+#' @rdname write.big.matrix
 setMethod('read.big.matrix', signature(filename='character'),
   function(filename, sep, header, col.names, row.names, has.row.names, 
            ignore.row.names, type, skip, separated, backingfile, backingpath, 
@@ -1308,6 +1394,7 @@ setMethod('read.big.matrix', signature(filename='character'),
 #' @export
 setGeneric('is.separated', function(x) standardGeneric('is.separated'))
 
+#' @rdname big.matrix
 setMethod('is.separated', signature(x='big.matrix'),
   function(x) return(IsSeparated(x@address)))
 
@@ -1399,7 +1486,7 @@ deepcopy <- function(x, cols=NULL, rows=NULL,
 setGeneric('is.sub.big.matrix', function(x)
 	standardGeneric('is.sub.big.matrix'))
 
-
+#' @rdname sub.big.matrix
 setMethod('is.sub.big.matrix', signature(x='big.matrix'),
   function(x) return(CIsSubMatrix(x@address)) )
 
@@ -1412,6 +1499,8 @@ setMethod('is.sub.big.matrix', signature(x='big.matrix'),
 setGeneric('sub.big.matrix', function(x, firstRow=1, lastRow=NULL,
   firstCol=1, lastCol=NULL, backingpath=NULL) standardGeneric('sub.big.matrix'))
 
+
+#' @rdname sub.big.matrix
 setMethod('sub.big.matrix', signature(x='big.matrix'),
   function(x, firstRow, lastRow, firstCol, lastCol, backingpath)
   {
@@ -1420,6 +1509,12 @@ setMethod('sub.big.matrix', signature(x='big.matrix'),
   })
 
 #' @rdname big.matrix.descriptor-class
+#' @param x A descriptor object
+#' @param firstRow the first row of the submatrix
+#' @param lastRow the last row of the submatrix if not NULL
+#' @param firstCol the first column of the submatrix
+#' @param lastCol of the submatrix if not NULL
+#' @param backingpath required path to the filebacked object, if applicable
 setMethod('sub.big.matrix', signature(x='big.matrix.descriptor'),
   function( x, firstRow, lastRow, firstCol, lastCol, backingpath)
   {
@@ -1494,6 +1589,10 @@ attach.big.matrix = function(obj, ...)
 }
 
 #' @rdname big.matrix.descriptor-class
+#' @param obj The filename of the descriptor for a filebacked matrix,
+#' assumed ot be in the directory specified
+#' @param ... possibly \code{path} which gives the path where the descriptor
+#' and/or filebacking can be found.
 #' @export
 setMethod('attach.resource', signature(obj='character'),
   function(obj, ...)
@@ -1613,6 +1712,7 @@ setMethod('attach.resource', signature(obj='big.matrix.descriptor'),
 #' @export
 setGeneric('is.filebacked', function(x) standardGeneric('is.filebacked'))
 
+#' @rdname big.matrix
 setMethod('is.filebacked', signature(x='big.matrix'),
   function(x) return(IsFileBackedBigMatrix(x@address)))
 
@@ -1620,6 +1720,7 @@ setMethod('is.filebacked', signature(x='big.matrix'),
 #' @export
 setGeneric('shared.name', function(x) standardGeneric('shared.name'))
 
+#' @rdname big.matrix
 setMethod('shared.name', signature(x='big.matrix'),
   function(x) return(SharedName(x@address)))
 
@@ -1627,6 +1728,7 @@ setMethod('shared.name', signature(x='big.matrix'),
 #' @export
 setGeneric('file.name', function(x) standardGeneric('file.name'))
 
+#' @rdname big.matrix
 setMethod('file.name', signature(x='big.matrix'),
   function(x)
   {
@@ -1658,6 +1760,7 @@ t.big.matrix <- function(x, backingfile=NULL,
 #' @export
 setGeneric('flush', function(con) standardGeneric('flush'))
 
+#' @rdname flush-methods
 setMethod('flush', signature(con='big.matrix'),
   function(con) 
   {
@@ -1674,6 +1777,7 @@ setMethod('flush', signature(con='big.matrix'),
 #' @export
 setGeneric('is.shared', function(x) standardGeneric('is.shared'))
 
+#' @rdname big.matrix
 setMethod('is.shared', signature(x='big.matrix'),
   function(x) return(IsShared(x@address)))
 
@@ -1764,6 +1868,7 @@ mpermute <- function(x, order=NULL, cols=NULL, allow.duplicates=FALSE, ...)
 #' @export
 setGeneric('is.readonly', function(x) standardGeneric('is.readonly'))
 
+#' @rdname big.matrix
 setMethod('is.readonly', signature(x='big.matrix'),
   function(x) IsReadOnly(x@address))
 

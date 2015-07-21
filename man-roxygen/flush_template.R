@@ -17,4 +17,6 @@
 #' x[1,1] <- 0
 #' flush(x)
 #' }
+#' @docType methods
+#' @rdname flush-methods
 #' @keywords methods
