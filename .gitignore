@@ -8,3 +8,5 @@ src/*.dll
 src/Makevars
 tests/testthat/*bin
 tests/testthat/*desc
+*.bin
+*.desc

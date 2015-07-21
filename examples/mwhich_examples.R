@@ -31,6 +31,7 @@ mwhich(x, 2, 15, 'le')
 # No NAs in either column, and column 2 strictly less than 15:
 mwhich(x, c(1:2,2), list(NA, NA, 15), list('neq', 'neq', 'lt'), 'AND')
 
+gc()
 x <- big.matrix(4, 2, init=1, type="double")
 x[1,1] <- Inf
 mwhich(x, 1, Inf, 'eq')

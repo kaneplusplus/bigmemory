@@ -1,4 +1,5 @@
 # Without specifying the type, this big.matrix x will hold integers.
+
 x <- as.big.matrix(matrix(1:10, 5, 2))
 x[2,2] <- NA
 x[,]

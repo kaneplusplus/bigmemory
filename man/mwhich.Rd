@@ -53,6 +53,7 @@ and \code{\link{intersect}}, for example) on the results of multiple
  pointer trick (accessor) in \acronym{C++}.
 }
 \examples{
+\dontrun{
 x <- as.big.matrix(matrix(1:30, 10, 3))
 options(bigmemory.allow.dimnames=TRUE)
 colnames(x) <- c("A", "B", "C")
@@ -60,7 +61,7 @@ x[,]
 x[mwhich(x, 1:2, list(c(2,3), c(11,17)),
          list(c('ge','le'), c('gt', 'lt')), 'OR'),]
 
-x[mwhich(x, c("A","B"), list(c(2,3), c(11,17)), 
+x[mwhich(x, c("A","B"), list(c(2,3), c(11,17)),
          list(c('ge','le'), c('gt', 'lt')), 'AND'),]
 
 # These should produce the same answer with a regular matrix:
@@ -91,6 +92,7 @@ x[1,1] <- Inf
 mwhich(x, 1, Inf, 'eq')
 mwhich(x, 1, 1, 'gt')
 mwhich(x, 1, 1, 'le')
+}
 }
 \author{
 John W. Emerson \email{<bigmemoryauthors@gmail.com>}

@@ -175,6 +175,9 @@ factors numeric before forming the \code{big.matrix}.  Level labels are
 not preserved and must be managed by the user if desired.
 }
 \examples{
+\dontrun{
+# Not Run
+library(bigmemory)
 x <- big.matrix(10, 2, type='integer', init=-5)
 options(bigmemory.allow.dimnames=TRUE)
 colnames(x) <- c("alpha", "beta")
@@ -194,6 +197,7 @@ x[,]
 # second R process would give access to the same object in memory.
 # Please see the package vignette for real examples.
 
+# Not run
 z <- big.matrix(3, 3, type='integer', init=3)
 z[,]
 dim(z)
@@ -210,8 +214,10 @@ y[,]
 z[,]
 
 # A short filebacked example, showing the creation of associated files:
+
 files <- dir()
 files[grep("example.bin", files)]
+
 z <- filebacked.big.matrix(3, 3, type='integer', init=123,
                            backingfile="example.bin",
                            descriptorfile="example.desc",
@@ -224,8 +230,7 @@ zz[,]
 zz[1,1] <- 0
 zzz <- attach.big.matrix(describe(z))
 zzz[,]
-
-is.nil(z@address)
+}
 }
 \author{
 John W. Emerson and Michael J. Kane

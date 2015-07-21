@@ -11,9 +11,10 @@
 #'    on flushing creates a bottleneck (likely near the threshold of available \acronym{RAM}).
 #' @return \code{TRUE} or \code{FALSE} (invisible), indicating whether or not the flush was successful.
 #' @author John W. Emerson and Michael J. Kane
-#' @examples
+#' @examples \dontrun{
 #' x <- big.matrix(nrow=3, ncol=3, backingfile='flushtest.bin',
 #'                 descriptorfile='flushtest.desc', type='integer')
 #' x[1,1] <- 0
 #' flush(x)
+#' }
 #' @keywords methods

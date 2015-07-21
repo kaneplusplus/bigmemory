@@ -62,6 +62,7 @@ this function has side-effects, that is \code{x} is changed when this
 function is called.
 }
 \examples{
+\dontrun{
 m = matrix(as.double(as.matrix(iris)), nrow=nrow(iris))
 morder(m, 1)
 order(m[,1])
@@ -69,6 +70,7 @@ order(m[,1])
 m[order(m[,1]), 2]
 mpermute(m, cols=1)
 m[,2]
+}
 }
 \author{
 Michael J. Kane \email{<bigmemoryauthors@gmail.com>}
