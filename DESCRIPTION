@@ -18,3 +18,5 @@ License: LGPL-3 | Apache License 2.0
 URL: http://www.bigmemory.org
 LazyLoad: yes
 Biarch: yes
+VignetteBuilder: knitr
+Suggests: knitr, testthat

@@ -9,8 +9,8 @@ fbm.file = "fbm"
 fbm.desc.file = "fbm.desc"
 fbm.desc.path = file.path(back.dir,fbm.desc.file)
 fbm.data.path = file.path(back.dir,fbm.file)
-fbm = filebacked.big.matrix(3,3,dimnames=list(rownames,colnames),backingpath=back.dir, backingfile=fbm.file, descriptorfile=paste(fbm.file,".desc",sep=""))
-fbm[,] = 1:9
+# fbm = filebacked.big.matrix(3,3,dimnames=list(rownames,colnames),backingpath=back.dir, backingfile=fbm.file, descriptorfile=paste(fbm.file,".desc",sep=""))
+# fbm[,] = 1:9
 
 bm = big.matrix(3,3,dimnames=list(rownames,colnames))
 
@@ -39,6 +39,13 @@ test_that("test_readonly", {
     expect_error({
         bm2[matrix(c(1, 2, 2, 2), ncol = 2), ] = 100
     }, info = "Writing subset by matrix to a big.matrix made read-only by FS before attached gives error")
+    
+    # in order to reuse, must remove prior objects
+#     rm(fbm)
+#     gc()
+#     file.remove(file.path(back.dir, fbm.file))
+#     file.remove(file.path(back.dir, fbm.desc.file))
+    
     fbm = filebacked.big.matrix(3, 3, dimnames = list(rownames, 
                                                       colnames), backingpath = back.dir, backingfile = fbm.file, 
                                 descriptorfile = fbm.desc.file)
@@ -83,4 +90,11 @@ test_that("test_readonly", {
         fbm3[1, 1] = 100
     }, info = "Should give error if you ask for a readonly matrix and try to write to it.")
     return(TRUE)
+
+    rm(fbm, fbm2, fbm3)
+    gc()
+    file.remove(file.path(back.dir, fbm.file))
+    file.remove(file.path(back.dir, fbm.desc.file))
 })
+
+

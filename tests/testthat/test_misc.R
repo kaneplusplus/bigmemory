@@ -38,3 +38,8 @@ test_that("dimnames returned are correct", {
                      info = "dimnames don't match between 
                      filebacked.big.matrix and matrix")
 })
+
+rm(z)
+gc()
+file.remove('example.bin')
+file.remove('example.desc')
