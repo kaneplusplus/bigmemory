@@ -46,3 +46,8 @@ test_that("flush works correctly",{
     expect_warning(flush(bm), info="You cannot call flush on a non-filebacked 
                  big.matrix")
 })
+
+rm(z)
+gc()
+file.remove('example.bin')
+file.remove('example.desc')

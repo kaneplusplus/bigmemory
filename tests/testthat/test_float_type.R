@@ -54,3 +54,8 @@ test_that("Proper warning returned", {
                    float type downcast")
 })
 
+rm(z)
+gc()
+file.remove('example.bin')
+file.remove('example.desc')
+

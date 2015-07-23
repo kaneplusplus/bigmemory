@@ -112,7 +112,7 @@ filebacked.big.matrix <- function(nrow, ncol,
                                   init=NULL, dimnames=NULL, separated=FALSE,
                                   backingfile=NULL, backingpath=NULL, 
                                   descriptorfile=NULL, binarydescriptor=FALSE)
-{
+{    
     if (nrow < 1 | ncol < 1)
         stop('A big.matrix must have at least one row and one column')
     
@@ -157,6 +157,12 @@ filebacked.big.matrix <- function(nrow, ncol,
     backingpath <- path.expand(backingpath)
     backingpath <- file.path(backingpath, '.')
     backingpath <- substr( backingpath, 1, nchar(backingpath)-1 )
+    
+    if(file.exists(file.path(backingpath, backingfile))){
+        stop("Backing file already exists! Either remove or specify
+             different backing file name")
+    }
+    
     address <- CreateFileBackedBigMatrix(as.character(backingfile), 
                      as.character(backingpath), as.double(nrow), as.double(ncol), 
                      as.character(colnames), as.character(rownames), as.integer(typeVal), 

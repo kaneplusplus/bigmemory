@@ -40,3 +40,8 @@ test_that("attach methods successful",{
     expect_false(identical(z@address, y@address))
     expect_identical(bm[,], x[,])
 })
+
+rm(z)
+gc()
+file.remove('example.bin')
+file.remove('example.desc')
