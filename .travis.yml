@@ -6,6 +6,9 @@ os:
   - linux
   - osx
 
+r_build_args: --no-build-vignettes --no-manual --no-resave-data
+r_check_args: --no-build-vignettes --no-manual
+
 r_binary_packages:
   - Rcpp
   - bigmemory.sri
