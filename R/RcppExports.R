@@ -13,6 +13,18 @@ ReorderBigMatrix <- function(address, orderVec) {
     invisible(.Call('bigmemory_ReorderBigMatrix', PACKAGE = 'bigmemory', address, orderVec))
 }
 
+ReorderRIntMatrixCols <- function(matrixVector, nrow, ncol, orderVec) {
+    invisible(.Call('bigmemory_ReorderRIntMatrixCols', PACKAGE = 'bigmemory', matrixVector, nrow, ncol, orderVec))
+}
+
+ReorderRNumericMatrixCols <- function(matrixVector, nrow, ncol, orderVec) {
+    invisible(.Call('bigmemory_ReorderRNumericMatrixCols', PACKAGE = 'bigmemory', matrixVector, nrow, ncol, orderVec))
+}
+
+ReorderBigMatrixCols <- function(address, orderVec) {
+    invisible(.Call('bigmemory_ReorderBigMatrixCols', PACKAGE = 'bigmemory', address, orderVec))
+}
+
 OrderRIntMatrix <- function(matrixVector, nrow, columns, naLast, decreasing) {
     .Call('bigmemory_OrderRIntMatrix', PACKAGE = 'bigmemory', matrixVector, nrow, columns, naLast, decreasing)
 }
@@ -23,6 +35,18 @@ OrderRNumericMatrix <- function(matrixVector, nrow, columns, naLast, decreasing)
 
 OrderBigMatrix <- function(address, columns, naLast, decreasing) {
     .Call('bigmemory_OrderBigMatrix', PACKAGE = 'bigmemory', address, columns, naLast, decreasing)
+}
+
+OrderRIntMatrixCols <- function(matrixVector, nrow, ncol, rows, naLast, decreasing) {
+    .Call('bigmemory_OrderRIntMatrixCols', PACKAGE = 'bigmemory', matrixVector, nrow, ncol, rows, naLast, decreasing)
+}
+
+OrderRNumericMatrixCols <- function(matrixVector, nrow, ncol, rows, naLast, decreasing) {
+    .Call('bigmemory_OrderRNumericMatrixCols', PACKAGE = 'bigmemory', matrixVector, nrow, ncol, rows, naLast, decreasing)
+}
+
+OrderBigMatrixCols <- function(address, rows, naLast, decreasing) {
+    .Call('bigmemory_OrderBigMatrixCols', PACKAGE = 'bigmemory', address, rows, naLast, decreasing)
 }
 
 CCleanIndices <- function(indices, rc) {

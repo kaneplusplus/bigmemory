@@ -2,13 +2,19 @@
 % Please edit documentation in R/bigmemory.R
 \name{morder}
 \alias{morder}
+\alias{morderCols}
 \alias{mpermute}
-\title{Ordering and row-permuting functions for ``big.matrix'' and
+\alias{mpermuteCols}
+\title{Ordering and Permuting functions for ``big.matrix'' and
 ``matrix'' objects}
 \usage{
 morder(x, cols, na.last = TRUE, decreasing = FALSE)
 
+morderCols(x, rows, na.last = TRUE, decreasing = FALSE)
+
 mpermute(x, order = NULL, cols = NULL, allow.duplicates = FALSE, ...)
+
+mpermuteCols(x, order = NULL, rows = NULL, allow.duplicates = FALSE, ...)
 }
 \arguments{
 \item{x}{A \code{big.matrix} or \code{matrix} object with numeric values.}
@@ -21,6 +27,8 @@ they are put first; if \code{NA}, they are removed.}
 
 \item{decreasing}{logical. Should the sort order be increasing or
 decreasing?}
+
+\item{rows}{The rows of \code{x} to get the ordering for or reorder on}
 
 \item{order}{A vector specifying the reordering of rows, i.e. the
 result of a call to \code{order} or \code{morder}.}

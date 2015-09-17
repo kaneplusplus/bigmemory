@@ -913,6 +913,33 @@ void reorder_matrix( MatrixAccessorType m, SEXP orderVec,
   }
 }
 
+// Function to reorder columns
+// It likely could use improvement as it just goes element by element
+// Added 9-17-2015 by Charles Determan
+template<typename MatrixAccessorType>
+void reorder_matrix2( MatrixAccessorType m, SEXP orderVec, 
+  index_type numRows, FileBackedBigMatrix *pfbm )
+{
+  double *pov = NUMERIC_DATA(orderVec);
+  typedef typename MatrixAccessorType::value_type ValueType;
+  typedef std::vector<ValueType> Values;
+  Values vs(m.ncol());
+  index_type i,j;
+  
+  for (j=0; j < numRows; ++j)
+  {
+    for (i=0; i < m.ncol(); ++i)
+    {           
+      vs[i] = m[static_cast<index_type>(pov[i])-1][j];
+    }
+    for(i = 0; i < m.ncol(); ++i)
+    {
+      m[i][j] = vs[i];
+    }
+    if (pfbm) pfbm->flush();
+  }
+}
+
 template<typename RType, typename MatrixAccessorType>
 SEXP get_order( MatrixAccessorType m, SEXP columns, SEXP naLast,
   SEXP decreasing )
@@ -977,6 +1004,95 @@ SEXP get_order( MatrixAccessorType m, SEXP columns, SEXP naLast,
         for (i=0; i < static_cast<size_t>(m.nrow()); ++i)
         {
           ov[i].second = m[col][static_cast<index_type>(ov[i].first)];
+        }
+      }
+    }
+    if (LOGICAL_VALUE(decreasing) == 0)
+    {
+      std::stable_sort(ov.begin(), ov.end(), 
+        SecondLess<PairType>(INTEGER_VALUE(naLast)) );
+    }
+    else
+    {
+      std::stable_sort(ov.begin(), ov.end(), 
+        SecondGreater<PairType>(INTEGER_VALUE(naLast)));
+    }
+  }
+
+  SEXP ret = PROTECT(NEW_NUMERIC(ov.size()));
+  double *pret = NUMERIC_DATA(ret);
+  for (i=0, it=ov.begin(); it < ov.end(); ++it, ++i)
+  {
+    pret[i] = it->first+1;
+  }
+  UNPROTECT(1);
+  return ret;
+}
+
+template<typename RType, typename MatrixAccessorType>
+SEXP get_order2( MatrixAccessorType m, SEXP rows, SEXP naLast,
+  SEXP decreasing )
+{
+  typedef typename MatrixAccessorType::value_type ValueType;
+  typedef typename std::pair<double, ValueType> PairType;
+  typedef std::vector<PairType> OrderVecs;
+  std::size_t i;
+  index_type k;
+  index_type row;
+  OrderVecs ov;
+  ov.reserve(m.ncol());
+  typename OrderVecs::iterator begin, end, it, naIt;
+  ValueType val;
+  for (k=GET_LENGTH(rows)-1; k >= 0; --k)
+  {
+    row = static_cast<index_type>(NUMERIC_DATA(rows)[k]-1);
+    if (k==GET_LENGTH(rows)-1)
+    {
+      if (isna(INTEGER_VALUE(naLast)))
+      {
+        for (i=0; i < static_cast<size_t>(m.ncol()); ++i)
+        {
+          val = m[row][i];
+          if (!isna(val)) 
+          {
+            ov.push_back( std::make_pair( static_cast<double>(i), val) );
+          }
+        }
+      }
+      else
+      {
+        ov.resize(m.ncol());
+        for (i=0; i < static_cast<size_t>(m.ncol()); ++i)
+        {
+          val = m[i][row];
+          ov[i].first = i;
+          ov[i].second = val;
+        }
+      }
+    }
+    else // not the first column we've looked at
+    {
+      if (isna(INTEGER_VALUE(naLast)))
+      {
+        i=0;
+        while (i < ov.size())
+        {
+          val = m[static_cast<index_type>(ov[i].first)][row];
+          if (!isna(val)) 
+          {
+            ov[i++].second = val;
+          }
+          else
+          {
+            ov.erase(ov.begin()+i);
+          }
+        }
+      }
+      else
+      {
+        for (i=0; i < static_cast<size_t>(m.ncol()); ++i)
+        {
+          ov[i].second = m[static_cast<index_type>(ov[i].first)][row];
         }
       }
     }
@@ -1073,6 +1189,75 @@ void ReorderBigMatrix( SEXP address, SEXP orderVec )
 }
 
 // [[Rcpp::export]]
+void ReorderRIntMatrixCols( SEXP matrixVector, SEXP nrow, SEXP ncol, SEXP orderVec )
+{
+  return reorder_matrix2( 
+    MatrixAccessor<int>(INTEGER_DATA(matrixVector), 
+      static_cast<index_type>(INTEGER_VALUE(nrow)),
+      static_cast<index_type>(INTEGER_VALUE(ncol))), orderVec,
+      static_cast<index_type>(INTEGER_VALUE(nrow)), NULL );
+}
+
+// [[Rcpp::export]]
+void ReorderRNumericMatrixCols( SEXP matrixVector, SEXP nrow, SEXP ncol, 
+  SEXP orderVec )
+{
+  return reorder_matrix2( 
+    MatrixAccessor<double>(NUMERIC_DATA(matrixVector), 
+      static_cast<index_type>(INTEGER_VALUE(nrow)),
+      static_cast<index_type>(INTEGER_VALUE(ncol))), orderVec,
+      static_cast<index_type>(INTEGER_VALUE(nrow)), NULL );
+}
+
+// [[Rcpp::export]]
+void ReorderBigMatrixCols( SEXP address, SEXP orderVec )
+{
+  BigMatrix *pMat = reinterpret_cast<BigMatrix*>(R_ExternalPtrAddr(address));
+  if (pMat->separated_columns())
+  {
+    switch (pMat->matrix_type())
+    {
+      case 1:
+        return reorder_matrix2( SepMatrixAccessor<char>(*pMat), orderVec,
+          pMat->nrow(), dynamic_cast<FileBackedBigMatrix*>(pMat) );
+      case 2:
+        return reorder_matrix2( SepMatrixAccessor<short>(*pMat), orderVec,
+          pMat->nrow(), dynamic_cast<FileBackedBigMatrix*>(pMat) );
+      case 4:
+        return reorder_matrix2( SepMatrixAccessor<int>(*pMat),orderVec,
+          pMat->nrow(), dynamic_cast<FileBackedBigMatrix*>(pMat) );
+      case 6:
+        return reorder_matrix2( SepMatrixAccessor<float>(*pMat),orderVec,
+          pMat->nrow(), dynamic_cast<FileBackedBigMatrix*>(pMat) );
+      case 8:
+        return reorder_matrix2( SepMatrixAccessor<double>(*pMat),orderVec,
+          pMat->nrow(), dynamic_cast<FileBackedBigMatrix*>(pMat) );
+    }
+  }
+  else
+  {
+    switch (pMat->matrix_type())
+    {
+      case 1:
+        return reorder_matrix2( MatrixAccessor<char>(*pMat),orderVec,
+          pMat->nrow(), dynamic_cast<FileBackedBigMatrix*>(pMat) );
+      case 2:
+        return reorder_matrix2( MatrixAccessor<short>(*pMat),orderVec,
+          pMat->nrow(), dynamic_cast<FileBackedBigMatrix*>(pMat) );
+      case 4:
+        return reorder_matrix2( MatrixAccessor<int>(*pMat),orderVec,
+          pMat->nrow(), dynamic_cast<FileBackedBigMatrix*>(pMat) );
+      case 6:
+        return reorder_matrix2( MatrixAccessor<float>(*pMat),orderVec,
+          pMat->nrow(), dynamic_cast<FileBackedBigMatrix*>(pMat) );
+      case 8:
+        return reorder_matrix2( MatrixAccessor<double>(*pMat),orderVec,
+          pMat->nrow(), dynamic_cast<FileBackedBigMatrix*>(pMat) );
+    }
+  }
+}
+
+// [[Rcpp::export]]
 SEXP OrderRIntMatrix( SEXP matrixVector, SEXP nrow, SEXP columns,
   SEXP naLast, SEXP decreasing )
 {
@@ -1136,6 +1321,78 @@ SEXP OrderBigMatrix(SEXP address, SEXP columns, SEXP naLast, SEXP decreasing)
       case 8:
         return get_order<double>( MatrixAccessor<double>(*pMat),
           columns, naLast, decreasing );
+    }
+  }
+  return R_NilValue;
+}
+
+// [[Rcpp::export]]
+SEXP OrderRIntMatrixCols( SEXP matrixVector, SEXP nrow, SEXP ncol,
+  SEXP rows, SEXP naLast, SEXP decreasing )
+{
+  return get_order2<int>( 
+    MatrixAccessor<int>(INTEGER_DATA(matrixVector), 
+      static_cast<index_type>(INTEGER_VALUE(nrow)),
+      static_cast<index_type>(INTEGER_VALUE(ncol))), 
+    rows, naLast, decreasing );
+}
+
+// [[Rcpp::export]]
+SEXP OrderRNumericMatrixCols( SEXP matrixVector, SEXP nrow, SEXP ncol,
+  SEXP rows, SEXP naLast, SEXP decreasing )
+{
+  return get_order2<double>( 
+    MatrixAccessor<double>(NUMERIC_DATA(matrixVector), 
+      static_cast<index_type>(INTEGER_VALUE(nrow)),
+      static_cast<index_type>(INTEGER_VALUE(ncol))), 
+    rows, naLast, decreasing );
+}
+
+// [[Rcpp::export]]
+SEXP OrderBigMatrixCols(SEXP address, SEXP rows, 
+SEXP naLast, SEXP decreasing)
+{
+  BigMatrix *pMat = reinterpret_cast<BigMatrix*>(R_ExternalPtrAddr(address));
+  if (pMat->separated_columns())
+  {
+    switch (pMat->matrix_type())
+    {
+      case 1:
+        return get_order2<char>( SepMatrixAccessor<char>(*pMat), 
+          rows, naLast, decreasing );
+      case 2:
+        return get_order2<short>( SepMatrixAccessor<short>(*pMat), 
+          rows, naLast, decreasing );
+      case 4:
+        return get_order2<int>( SepMatrixAccessor<int>(*pMat),
+          rows, naLast, decreasing );
+      case 6:
+        return get_order2<float>( SepMatrixAccessor<float>(*pMat),
+          rows, naLast, decreasing );
+      case 8:
+        return get_order2<double>( SepMatrixAccessor<double>(*pMat),
+          rows, naLast, decreasing );
+    }
+  }
+  else
+  {
+    switch (pMat->matrix_type())
+    {
+      case 1:
+        return get_order2<char>( MatrixAccessor<char>(*pMat),
+          rows, naLast, decreasing );
+      case 2:
+        return get_order2<short>( MatrixAccessor<short>(*pMat),
+          rows, naLast, decreasing );
+      case 4:
+        return get_order2<int>( MatrixAccessor<int>(*pMat),
+          rows, naLast, decreasing );
+      case 6:
+        return get_order2<float>( MatrixAccessor<float>(*pMat),
+          rows, naLast, decreasing );
+      case 8:
+        return get_order2<double>( MatrixAccessor<double>(*pMat),
+          rows, naLast, decreasing );
     }
   }
   return R_NilValue;
