@@ -1796,29 +1796,18 @@ morder <- function(x, cols, na.last=TRUE, decreasing = FALSE)
   {
     stop("Bad column indices.")
   }
-
-  if (class(x) == 'big.matrix')
-  {
-    return(OrderBigMatrix(x@address, as.double(cols), 
-      as.integer(na.last), as.logical(decreasing) ))
-  }
-  else if (class(x) == 'matrix')
-  {
-    if (typeof(x) == 'integer')
-    {
-      return(OrderRIntMatrix(x, nrow(x), as.double(cols), 
-        as.integer(na.last), as.logical(decreasing) ))
-    }
-    else if (typeof(x) == 'double')
-    {
-      return(OrderRNumericMatrix(x, nrow(x), as.double(cols), 
-        as.integer(na.last), as.logical(decreasing) ))
-    }
-    else
-      stop("Unsupported matrix value type.")
-  }
-  else
-    stop("Unsupported matrix type.")
+  
+  switch(class(x),
+         "big.matrix" = OrderBigMatrix(x@address, as.double(cols), 
+                                       as.integer(na.last), as.logical(decreasing) ),
+         "matrix" = switch(typeof(x),
+                           'integer' = OrderRIntMatrix(x, nrow(x), as.double(cols), 
+                                                       as.integer(na.last), as.logical(decreasing) ),
+                           'double' = OrderRNumericMatrix(x, nrow(x), as.double(cols), 
+                                                          as.integer(na.last), as.logical(decreasing) ),
+                           stop("Unsupported matrix value type.")),
+         stop("unsupported matrix type")
+  )
 }
 
 #' @rdname morder
@@ -1831,28 +1820,17 @@ morderCols <- function(x, rows, na.last=TRUE, decreasing = FALSE)
     stop("Bad row indices.")
   }
   
-  if (class(x) == 'big.matrix')
-  {
-    return(OrderBigMatrixCols(x@address, as.double(rows), 
-                          as.integer(na.last), as.logical(decreasing) ))
-  }
-  else if (class(x) == 'matrix')
-  {
-    if (typeof(x) == 'integer')
-    {
-      return(OrderRIntMatrixCols(x, nrow(x), ncol(x), as.double(rows), 
-                             as.integer(na.last), as.logical(decreasing) ))
-    }
-    else if (typeof(x) == 'double')
-    {
-      return(OrderRNumericMatrixCols(x, nrow(x), ncol(x), as.double(rows), 
-                                 as.integer(na.last), as.logical(decreasing) ))
-    }
-    else
-      stop("Unsupported matrix value type.")
-  }
-  else
-    stop("Unsupported matrix type.")
+  switch(class(x),
+         "big.matrix" = OrderBigMatrixCols(x@address, as.double(rows), 
+                                           as.integer(na.last), as.logical(decreasing) ),
+         "matrix" = switch(typeof(x),
+                           'integer' = OrderRIntMatrixCols(x, nrow(x), ncol(x), as.double(rows), 
+                                                           as.integer(na.last), as.logical(decreasing) ),
+                           'double' = OrderRNumericMatrixCols(x, nrow(x), ncol(x), as.double(rows), 
+                                                              as.integer(na.last), as.logical(decreasing) ),
+                           stop("Unsupported matrix value type.")),
+         stop("unsupported matrix type")
+  )
 }
 
 #' @rdname morder
