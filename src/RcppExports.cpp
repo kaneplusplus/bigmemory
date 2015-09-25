@@ -42,6 +42,43 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// ReorderRIntMatrixCols
+void ReorderRIntMatrixCols(SEXP matrixVector, SEXP nrow, SEXP ncol, SEXP orderVec);
+RcppExport SEXP bigmemory_ReorderRIntMatrixCols(SEXP matrixVectorSEXP, SEXP nrowSEXP, SEXP ncolSEXP, SEXP orderVecSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< SEXP >::type matrixVector(matrixVectorSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type nrow(nrowSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type ncol(ncolSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type orderVec(orderVecSEXP);
+    ReorderRIntMatrixCols(matrixVector, nrow, ncol, orderVec);
+    return R_NilValue;
+END_RCPP
+}
+// ReorderRNumericMatrixCols
+void ReorderRNumericMatrixCols(SEXP matrixVector, SEXP nrow, SEXP ncol, SEXP orderVec);
+RcppExport SEXP bigmemory_ReorderRNumericMatrixCols(SEXP matrixVectorSEXP, SEXP nrowSEXP, SEXP ncolSEXP, SEXP orderVecSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< SEXP >::type matrixVector(matrixVectorSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type nrow(nrowSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type ncol(ncolSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type orderVec(orderVecSEXP);
+    ReorderRNumericMatrixCols(matrixVector, nrow, ncol, orderVec);
+    return R_NilValue;
+END_RCPP
+}
+// ReorderBigMatrixCols
+void ReorderBigMatrixCols(SEXP address, SEXP orderVec);
+RcppExport SEXP bigmemory_ReorderBigMatrixCols(SEXP addressSEXP, SEXP orderVecSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< SEXP >::type address(addressSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type orderVec(orderVecSEXP);
+    ReorderBigMatrixCols(address, orderVec);
+    return R_NilValue;
+END_RCPP
+}
 // OrderRIntMatrix
 SEXP OrderRIntMatrix(SEXP matrixVector, SEXP nrow, SEXP columns, SEXP naLast, SEXP decreasing);
 RcppExport SEXP bigmemory_OrderRIntMatrix(SEXP matrixVectorSEXP, SEXP nrowSEXP, SEXP columnsSEXP, SEXP naLastSEXP, SEXP decreasingSEXP) {
@@ -83,6 +120,52 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< SEXP >::type naLast(naLastSEXP);
     Rcpp::traits::input_parameter< SEXP >::type decreasing(decreasingSEXP);
     __result = Rcpp::wrap(OrderBigMatrix(address, columns, naLast, decreasing));
+    return __result;
+END_RCPP
+}
+// OrderRIntMatrixCols
+SEXP OrderRIntMatrixCols(SEXP matrixVector, SEXP nrow, SEXP ncol, SEXP rows, SEXP naLast, SEXP decreasing);
+RcppExport SEXP bigmemory_OrderRIntMatrixCols(SEXP matrixVectorSEXP, SEXP nrowSEXP, SEXP ncolSEXP, SEXP rowsSEXP, SEXP naLastSEXP, SEXP decreasingSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< SEXP >::type matrixVector(matrixVectorSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type nrow(nrowSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type ncol(ncolSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type rows(rowsSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type naLast(naLastSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type decreasing(decreasingSEXP);
+    __result = Rcpp::wrap(OrderRIntMatrixCols(matrixVector, nrow, ncol, rows, naLast, decreasing));
+    return __result;
+END_RCPP
+}
+// OrderRNumericMatrixCols
+SEXP OrderRNumericMatrixCols(SEXP matrixVector, SEXP nrow, SEXP ncol, SEXP rows, SEXP naLast, SEXP decreasing);
+RcppExport SEXP bigmemory_OrderRNumericMatrixCols(SEXP matrixVectorSEXP, SEXP nrowSEXP, SEXP ncolSEXP, SEXP rowsSEXP, SEXP naLastSEXP, SEXP decreasingSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< SEXP >::type matrixVector(matrixVectorSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type nrow(nrowSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type ncol(ncolSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type rows(rowsSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type naLast(naLastSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type decreasing(decreasingSEXP);
+    __result = Rcpp::wrap(OrderRNumericMatrixCols(matrixVector, nrow, ncol, rows, naLast, decreasing));
+    return __result;
+END_RCPP
+}
+// OrderBigMatrixCols
+SEXP OrderBigMatrixCols(SEXP address, SEXP rows, SEXP naLast, SEXP decreasing);
+RcppExport SEXP bigmemory_OrderBigMatrixCols(SEXP addressSEXP, SEXP rowsSEXP, SEXP naLastSEXP, SEXP decreasingSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< SEXP >::type address(addressSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type rows(rowsSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type naLast(naLastSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type decreasing(decreasingSEXP);
+    __result = Rcpp::wrap(OrderBigMatrixCols(address, rows, naLast, decreasing));
     return __result;
 END_RCPP
 }

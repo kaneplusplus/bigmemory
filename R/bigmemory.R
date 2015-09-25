@@ -1796,29 +1796,41 @@ morder <- function(x, cols, na.last=TRUE, decreasing = FALSE)
   {
     stop("Bad column indices.")
   }
+  
+  switch(class(x),
+         "big.matrix" = OrderBigMatrix(x@address, as.double(cols), 
+                                       as.integer(na.last), as.logical(decreasing) ),
+         "matrix" = switch(typeof(x),
+                           'integer' = OrderRIntMatrix(x, nrow(x), as.double(cols), 
+                                                       as.integer(na.last), as.logical(decreasing) ),
+                           'double' = OrderRNumericMatrix(x, nrow(x), as.double(cols), 
+                                                          as.integer(na.last), as.logical(decreasing) ),
+                           stop("Unsupported matrix value type.")),
+         stop("unsupported matrix type")
+  )
+}
 
-  if (class(x) == 'big.matrix')
+#' @rdname morder
+#' @export
+morderCols <- function(x, rows, na.last=TRUE, decreasing = FALSE)
+{
+  if (is.character(rows)) rows <- mmap( rows, rownames(x) )
+  if (sum(rows > nrow(x)) > 0 | sum(rows < 1) > 0 | sum(is.na(rows) > 0))
   {
-    return(OrderBigMatrix(x@address, as.double(cols), 
-      as.integer(na.last), as.logical(decreasing) ))
+    stop("Bad row indices.")
   }
-  else if (class(x) == 'matrix')
-  {
-    if (typeof(x) == 'integer')
-    {
-      return(OrderRIntMatrix(x, nrow(x), as.double(cols), 
-        as.integer(na.last), as.logical(decreasing) ))
-    }
-    else if (typeof(x) == 'double')
-    {
-      return(OrderRNumericMatrix(x, nrow(x), as.double(cols), 
-        as.integer(na.last), as.logical(decreasing) ))
-    }
-    else
-      stop("Unsupported matrix value type.")
-  }
-  else
-    stop("Unsupported matrix type.")
+  
+  switch(class(x),
+         "big.matrix" = OrderBigMatrixCols(x@address, as.double(rows), 
+                                           as.integer(na.last), as.logical(decreasing) ),
+         "matrix" = switch(typeof(x),
+                           'integer' = OrderRIntMatrixCols(x, nrow(x), ncol(x), as.double(rows), 
+                                                           as.integer(na.last), as.logical(decreasing) ),
+                           'double' = OrderRNumericMatrixCols(x, nrow(x), ncol(x), as.double(rows), 
+                                                              as.integer(na.last), as.logical(decreasing) ),
+                           stop("Unsupported matrix value type.")),
+         stop("unsupported matrix type")
+  )
 }
 
 #' @rdname morder
@@ -1848,27 +1860,58 @@ mpermute <- function(x, order=NULL, cols=NULL, allow.duplicates=FALSE, ...)
   else 
     order = morder(x, cols, ...)
 
-  if (class(x) == 'big.matrix')
-  {
-    ReorderBigMatrix(x@address, order)
-  }
-  else if (class(x) == 'matrix')
-  {
-    if (typeof(x) == 'integer')
-    {
-      OrderRIntMatrix(x, nrow(x), ncol(x), order)
-    }
-    else if (typeof(x) == 'double')
-    {
-      ReorderRNumericMatrix(x, nrow(x), ncol(x), order)
-    }
-    else
-      stop("Unsupported matrix value type.")
-  }
+  switch(class(x),
+         "big.matrix" = ReorderBigMatrix(x@address, order),
+         "matrix" = switch(typeof(x),
+                           'integer' = ReorderRIntMatrix(x, nrow(x), ncol(x), order),
+                           'double' = ReorderRNumericMatrix(x, nrow(x), ncol(x), order),
+                           stop("Unsupported matrix value type.")),
+         stop("invalid class")
+  )
+
   return(invisible(TRUE))
   
 }
 
+#' @rdname morder
+#' @export
+mpermuteCols <- function(x, order=NULL, rows=NULL, allow.duplicates=FALSE, ...)
+{
+  if (is.null(order) && is.null(rows))
+    stop("You must specify either order or cols.")
+  
+  if (!is.null(order) && !is.null(rows))
+    stop("You must specify either order or cols.")
+  
+  if (!is.null(order))
+  {
+    if (length(order) != ncol(x))
+      stop("order parameter must have the same length as ncol(x)")
+    
+    if (!allow.duplicates && sum(duplicated(order)) > 0)
+      stop("order parameter contains duplicated entries.")
+    
+    r = range(order)
+    if (is.na(r[1]))
+      stop("order parameter contains NAs")
+    if (r[1] < 1 || r[2] > nrow(x))
+      stop("order parameter contains values that are out-of-range.")
+  }
+  else 
+    order = morderCols(x, rows, ...)
+  
+  switch(class(x),
+         "big.matrix" = ReorderBigMatrixCols(x@address, order),
+         "matrix" = switch(typeof(x),
+                           'integer' = ReorderRIntMatrixCols(x, nrow(x), ncol(x), order),
+                           'double' = ReorderRNumericMatrixCols(x, nrow(x), ncol(x), order),
+                           stop("Unsupported matrix value type.")),
+         stop("unimplemented class")
+         )
+  
+  return(invisible(TRUE))
+  
+}
 
 #' @rdname big.matrix
 #' @export

@@ -1,5 +1,5 @@
 #' @rdname morder
-#' @title Ordering and row-permuting functions for ``big.matrix'' and 
+#' @title Ordering and Permuting functions for ``big.matrix'' and 
 #' ``matrix'' objects
 #' @description The \code{morder} function returns a permutation of row 
 #' indices which can be used to rearrangea an object according to the values 
@@ -9,6 +9,7 @@
 #' an order vector or a desired ordering on a set of columns.
 #' @param x A \code{big.matrix} or \code{matrix} object with numeric values.
 #' @param cols The columns of \code{x} to get the ordering for or reorder on
+#' @param rows The rows of \code{x} to get the ordering for or reorder on
 #' @param na.last for controlling the treatment of \code{NA}s. If 
 #' \code{TRUE}, missing values in the data are put last; if \code{FALSE}, 
 #' they are put first; if \code{NA}, they are removed.
