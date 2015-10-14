@@ -193,11 +193,6 @@ SetMatrixElements <- function(bigMatAddr, col, row, values) {
     invisible(.Call('bigmemory_SetMatrixElements', PACKAGE = 'bigmemory', bigMatAddr, col, row, values))
 }
 
-GetIndivMatrixElements <- function(bigMatAddr, col, row) {
-  .Call('bigmemory_GetIndivMatrixElements', PACKAGE = 'bigmemory', bigMatAddr, 
-        col, row)
-}
-
 SetIndivMatrixElements <- function(bigMatAddr, col, row, values) {
     invisible(.Call('bigmemory_SetIndivMatrixElements', PACKAGE = 'bigmemory', bigMatAddr, col, row, values))
 }

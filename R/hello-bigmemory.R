@@ -12,8 +12,8 @@
 #' \code{big.matrix} and native \code{matrix} objects.
 #' 
 #' \tabular{ll}{ Package: \tab bigmemory\cr Type: \tab Package\cr Version: \tab
-#' 4.5.0\cr Date: \tab 2015-03-30\cr License: \tab LGPL-3 | APv2\cr Copyright:
-#' \tab (C) 2014 Michael J. Kane and John W. Emerson\cr URL: \tab
+#' 4.5.2\cr Date: \tab 2015-10-14\cr License: \tab LGPL-3 | APv2\cr Copyright:
+#' \tab (C) 2015 Michael J. Kane and John W. Emerson\cr URL: \tab
 #' http://www.bigmemory.org\cr LazyLoad: \tab yes\cr }
 #' 
 #' Index of functions/methods (grouped in a friendly way): \preformatted{
