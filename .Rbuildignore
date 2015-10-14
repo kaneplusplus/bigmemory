@@ -1,6 +1,8 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-appveyor.yml
 .git
-.travis.yml
 .gitignore
+.travis.yml
+README.md
+appveyor.yml
+man-roxygen
