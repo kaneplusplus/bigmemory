@@ -582,6 +582,18 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// GetIndivMatrixElements
+void GetIndivMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row);
+RcppExport SEXP bigmemory_GetIndivMatrixElements(SEXP bigMatAddrSEXP, SEXP colSEXP, SEXP rowSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< SEXP >::type bigMatAddr(bigMatAddrSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type col(colSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type row(rowSEXP);
+    GetIndivMatrixElements(bigMatAddr, col, row);
+    return R_NilValue;
+END_RCPP
+}
 // SetMatrixElements
 void SetMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row, SEXP values);
 RcppExport SEXP bigmemory_SetMatrixElements(SEXP bigMatAddrSEXP, SEXP colSEXP, SEXP rowSEXP, SEXP valuesSEXP) {
