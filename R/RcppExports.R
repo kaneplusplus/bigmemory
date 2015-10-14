@@ -2,8 +2,7 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 GetIndivMatrixElements <- function(bigMatAddr, col, row) {
-  .Call('bigmemory_GetIndivMatrixElements', PACKAGE = 'bigmemory', bigMatAddr, 
-        col, row)
+    .Call('bigmemory_GetIndivMatrixElements', PACKAGE = 'bigmemory', bigMatAddr, col, row)
 }
 
 ReorderRIntMatrix <- function(matrixVector, nrow, ncol, orderVec) {

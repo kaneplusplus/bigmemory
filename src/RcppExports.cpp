@@ -4,16 +4,18 @@
 #include <Rcpp.h>
 
 using namespace Rcpp;
+
 // GetIndivMatrixElements
-void GetIndivMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row);
+SEXP GetIndivMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row);
 RcppExport SEXP bigmemory_GetIndivMatrixElements(SEXP bigMatAddrSEXP, SEXP colSEXP, SEXP rowSEXP) {
 BEGIN_RCPP
+    Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< SEXP >::type bigMatAddr(bigMatAddrSEXP);
     Rcpp::traits::input_parameter< SEXP >::type col(colSEXP);
     Rcpp::traits::input_parameter< SEXP >::type row(rowSEXP);
-    GetIndivMatrixElements(bigMatAddr, col, row);
-    return R_NilValue;
+    __result = Rcpp::wrap(GetIndivMatrixElements(bigMatAddr, col, row));
+    return __result;
 END_RCPP
 }
 // ReorderRIntMatrix
