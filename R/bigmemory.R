@@ -568,6 +568,7 @@ setMethod('[',
   function(x, i, j, drop) return(GetIndivElements.bm(x, i)))
 
 
+#' @importFrom stats na.omit
 SetElements.bm <- function(x, i, j, value)
 {
   checkReadOnly(x)
@@ -723,7 +724,7 @@ SetIndivElements.bm <- function(x, i, value) {
   return(x)
 }
 
-
+#' @importFrom stats na.omit
 SetCols.bm <- function(x, j, value)
 {
   checkReadOnly(x)
@@ -799,6 +800,7 @@ SetCols.bm <- function(x, j, value)
   return(x)
 }
 
+#' @importFrom stats na.omit
 SetRows.bm <- function(x, i, value) 
 {
   checkReadOnly(x)
@@ -879,6 +881,7 @@ SetRows.bm <- function(x, i, value)
   return(x)
 }
 
+#' @importFrom stats na.omit
 SetAll.bm <- function(x, value) 
 {
   checkReadOnly(x)
@@ -1289,6 +1292,7 @@ setGeneric('read.big.matrix',
            shared=TRUE) 
   standardGeneric('read.big.matrix'))
 
+#' @@importFrom stats na.omit
 #' @rdname write.big.matrix
 setMethod('read.big.matrix', signature(filename='character'),
   function(filename, sep, header, col.names, row.names, has.row.names, 
