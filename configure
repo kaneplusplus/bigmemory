@@ -7,7 +7,7 @@
 # of the shared counters, but the chance of a problem is very
 # small.  Hopefully BOOST will catch up, soon.
 
-FLAGS="PKG_CPPFLAGS=-I../inst/include -std=c++0x"
+FLAGS="PKG_CPPFLAGS=-I../inst/include"
 LIBS=""
 
 echo -n "  checking for Sun Studio compiler..."
@@ -30,7 +30,7 @@ elif test `uname` = "SunOS" ; then
   LIBS="PKG_LIBS=-lrt -lm"
 elif test `uname` = "Darwin" ; then
   echo "Darwin"
-  FLAGS="${FLAGS} -DDARWIN -DLENGTH_HACK -Wno-deprecated-declarations"
+  FLAGS="${FLAGS} -DDARWIN -DLENGTH_HACK"
 else
   echo "Other:" `uname`
 fi
