@@ -38,7 +38,7 @@
 #' @return a vector of row indices satisfying the criteria.
 #' @author John W. Emerson \email{<bigmemoryauthors@@gmail.com>}
 #' @seealso \code{\link{big.matrix}}, \code{\link{which}}
-#' @examples \dontrun{
+#' @examples
 #' x <- as.big.matrix(matrix(1:30, 10, 3))
 #' options(bigmemory.allow.dimnames=TRUE)
 #' colnames(x) <- c("A", "B", "C")
@@ -77,5 +77,4 @@
 #' mwhich(x, 1, Inf, 'eq')
 #' mwhich(x, 1, 1, 'gt')
 #' mwhich(x, 1, 1, 'le')
-#' }
 #' @keywords methods

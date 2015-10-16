@@ -53,7 +53,6 @@ and \code{\link{intersect}}, for example) on the results of multiple
  pointer trick (accessor) in \acronym{C++}.
 }
 \examples{
-\dontrun{
 x <- as.big.matrix(matrix(1:30, 10, 3))
 options(bigmemory.allow.dimnames=TRUE)
 colnames(x) <- c("A", "B", "C")
@@ -92,7 +91,6 @@ x[1,1] <- Inf
 mwhich(x, 1, Inf, 'eq')
 mwhich(x, 1, 1, 'gt')
 mwhich(x, 1, 1, 'le')
-}
 }
 \author{
 John W. Emerson \email{<bigmemoryauthors@gmail.com>}

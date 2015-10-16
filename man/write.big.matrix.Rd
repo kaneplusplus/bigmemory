@@ -110,7 +110,6 @@ Or perhaps to specify columns targeted for factor or character conversion
 to numeric values.  Would you use such features?  Email us and let us know!
 }
 \examples{
-\dontrun{
 # Without specifying the type, this big.matrix x will hold integers.
 
 x <- as.big.matrix(matrix(1:10, 5, 2))
@@ -145,7 +144,6 @@ head(y)
 
 # The following would fail with a dimension mismatch:
 if (FALSE) y <- read.big.matrix("IrisData.txt", header=TRUE)
-}
 }
 \author{
 John W. Emerson and Michael J. Kane
