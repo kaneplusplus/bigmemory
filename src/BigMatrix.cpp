@@ -30,7 +30,7 @@
 #define COND_PRINT(bYes, str, format) \
   if (bYes) Rprintf(str, format);
     
-#define DEBUG true
+#define DEBUG false
 
 using namespace std;
 using namespace boost;
@@ -360,7 +360,7 @@ bool SharedMemoryBigMatrix::create(const index_type numRow,
       {
         COND_EXCEPTION_PRINT(DEBUG);
         if (string(e.what()) != string("File exists") && 
-            string(e.what()) != string("File exists."))
+            string(e.what()) != string("The file exists."))
         {
           // It's a problem. Rethrow.
           throw e;
