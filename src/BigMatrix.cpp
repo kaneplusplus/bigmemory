@@ -30,7 +30,7 @@
 #define COND_PRINT(bYes, str, format) \
   if (bYes) Rprintf(str, format);
     
-#define DEBUG false
+#define DEBUG true
 
 using namespace std;
 using namespace boost;
