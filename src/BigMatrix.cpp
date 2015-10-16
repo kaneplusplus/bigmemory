@@ -368,7 +368,7 @@ bool SharedMemoryBigMatrix::create(const index_type numRow,
         named_mutex::remove((_sharedName+"_counter_mutex").c_str());
  
       }
-    } while(++retry < 10);
+    } while(++retry < 200);
   }
   catch(std::exception &e)
   {
