@@ -118,8 +118,7 @@
 #' \code{\linkS4class{big.matrix}}; \code{\link{attach.big.matrix}} and
 #' \code{\link{describe}}.  Sister packages \pkg{biganalytics}, \pkg{bigtabulate},
 #' \pkg{synchronicity}, and \pkg{bigalgebra} provide advanced functionality.
-#' @examples \dontrun{
-#' # Not Run
+#' @examples 
 #' library(bigmemory)
 #' x <- big.matrix(10, 2, type='integer', init=-5)
 #' options(bigmemory.allow.dimnames=TRUE)
@@ -140,7 +139,6 @@
 #' # second R process would give access to the same object in memory.
 #' # Please see the package vignette for real examples.
 #' 
-#' # Not run
 #' z <- big.matrix(3, 3, type='integer', init=3)
 #' z[,]
 #' dim(z)
@@ -173,5 +171,4 @@
 #' zz[1,1] <- 0
 #' zzz <- attach.big.matrix(describe(z))
 #' zzz[,]
-#' }
 #' @keywords classes methods

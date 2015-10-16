@@ -36,11 +36,9 @@
 #' @seealso \code{\link{big.matrix}}
 #' @keywords methods
 #' @examples
-#' \dontrun{
 #' x <- as.big.matrix(matrix(1:30, 10, 3))
 #' y <- deepcopy(x, -1)    # Don't include the first column.
 #' x
 #' y
 #' head(x)
 #' head(y)
-#' }

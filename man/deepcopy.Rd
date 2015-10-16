@@ -58,14 +58,12 @@ traditional syntax would only copy the object (the pointer to the
 It can also make a copy of only a subset of columns.
 }
 \examples{
-\dontrun{
 x <- as.big.matrix(matrix(1:30, 10, 3))
 y <- deepcopy(x, -1)    # Don't include the first column.
 x
 y
 head(x)
 head(y)
-}
 }
 \seealso{
 \code{\link{big.matrix}}

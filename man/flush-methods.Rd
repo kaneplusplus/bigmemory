@@ -27,12 +27,10 @@ This function flushes any modified data (in \acronym{RAM}) of a file-backed
    on flushing creates a bottleneck (likely near the threshold of available \acronym{RAM}).
 }
 \examples{
-\dontrun{
 x <- big.matrix(nrow=3, ncol=3, backingfile='flushtest.bin',
                 descriptorfile='flushtest.desc', type='integer')
 x[1,1] <- 0
 flush(x)
-}
 }
 \author{
 John W. Emerson and Michael J. Kane
