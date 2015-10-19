@@ -19,7 +19,7 @@ framework for the development of new tools that can work both with
 }
 \details{
 \tabular{ll}{ Package: \tab bigmemory\cr Type: \tab Package\cr Version: \tab
-4.5.2\cr Date: \tab 2015-10-14\cr License: \tab LGPL-3 | APv2\cr Copyright:
+4.5.6\cr Date: \tab 2015-10-19\cr License: \tab LGPL-3 | APv2\cr Copyright:
 \tab (C) 2015 Michael J. Kane and John W. Emerson\cr URL: \tab
 http://www.bigmemory.org\cr LazyLoad: \tab yes\cr }
 
