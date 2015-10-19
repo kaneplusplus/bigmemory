@@ -360,7 +360,8 @@ bool SharedMemoryBigMatrix::create(const index_type numRow,
       {
         COND_EXCEPTION_PRINT(DEBUG);
         if (string(e.what()) != string("File exists") && 
-            string(e.what()) != string("The file exists."))
+            string(e.what()) != string("The file exists.") &&
+            string(e.what()) != string("Die Datei ist vorhanden."))
         {
           // It's a problem. Rethrow.
           throw e;
