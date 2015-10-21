@@ -7,6 +7,8 @@
 #include <errno.h>
 #include <stdint.h>
 
+#include <Rcpp.h>
+
 #include <boost/interprocess/shared_memory_object.hpp>
 #include <boost/interprocess/file_mapping.hpp>
 #include <boost/interprocess/mapped_region.hpp>
@@ -17,8 +19,6 @@
 #include <boost/interprocess/sync/named_mutex.hpp>
 
 #include "bigmemory/BigMatrix.h"
-
-#include <Rcpp.h>
 
 #define COND_EXCEPTION_PRINT(bYes)                \
   if (bYes)                                       \
