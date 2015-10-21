@@ -7,15 +7,13 @@
 
 #include "bigmemory/BigMatrix.h"
 #include "bigmemory/MatrixAccessor.hpp"
-#include "bigmemory/util.h"
 #include "bigmemory/isna.hpp"
 
-#include <stdio.h>
-#include <R.h>
-#include <Rinternals.h>
-#include <Rdefines.h>
-#include <stdlib.h>
-#include <sys/types.h>
+// undefine length which Rcpp maps to Rf_length and uses as member function
+#undef length
+#include <Rcpp.h>
+// but redefine it to Rf_length for subsequent use below and in util.h
+#define length Rf_length
 
 
 template<typename in_CType, typename in_BMAccessorType, 
