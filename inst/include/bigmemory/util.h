@@ -1,8 +1,6 @@
 #ifndef BIGMEMORY_UTIL_HPP
 #define BIGMEMORY_UTIL_HPP
 
-#include <Rcpp.h>
-
 #include "bigmemoryDefines.h"
 
 using namespace std;
@@ -37,9 +35,6 @@ SEXP StringVec2RChar( const vector<string> &strVec,
   return ret;
 }
 */
-
-#undef length
-#include <Rcpp.h>
 
 template<typename T>
 struct NewVec;
@@ -79,5 +74,4 @@ template<>
 struct VecPtr<double>
 {double* operator()(SEXP vec) const {return NUMERIC_DATA(vec);};};
 
-#define length(x) Rf_length(x)
 #endif // BIGMEMORY_UTIL_HPP
