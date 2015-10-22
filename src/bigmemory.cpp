@@ -2,15 +2,10 @@
 #include <fstream>
 //#include <typeinfo>
 
+#include <Rcpp.h>
 #include "bigmemory/BigMatrix.h"
 #include "bigmemory/MatrixAccessor.hpp"
 #include "bigmemory/isna.hpp"
-
-// undefine length which Rcpp maps to Rf_length and uses as member function
-#undef length
-#include <Rcpp.h>
-// but redefine it to Rf_length for subsequent use below and in util.h
-#define length Rf_length
 
 #include "bigmemory/util.h"
 
@@ -58,13 +53,13 @@ void SetMatrixElements( BigMatrix *pMat, SEXP col, SEXP row, SEXP values,
   double NA_C, double C_MIN, double C_MAX, double NA_R)
 {
   BMAccessorType mat( *pMat );
-  double *pCols = NUMERIC_DATA(col);
-  index_type numCols = GET_LENGTH(col);
-  double *pRows = NUMERIC_DATA(row);
-  index_type numRows = GET_LENGTH(row);
+  double *pCols = REAL(col);
+  index_type numCols = Rf_length(col);
+  double *pRows = REAL(row);
+  index_type numRows = Rf_length(row);
   VecPtr<RType> vec_ptr;
   RType *pVals = vec_ptr(values);
-  index_type valLength = GET_LENGTH(values);
+  index_type valLength = Rf_length(values);
   index_type i=0;
   index_type j=0;
   index_type k=0;
@@ -90,11 +85,11 @@ SEXP GetIndivMatrixElements( BigMatrix *pMat, double NA_C, double NA_R,
 {
   VecPtr<RType> vec_ptr;
   BMAccessorType mat(*pMat);
-  double *pCols = NUMERIC_DATA(col);
-  double *pRows = NUMERIC_DATA(row);
-  index_type numCols = GET_LENGTH(col);
+  double *pCols = REAL(col);
+  double *pRows = REAL(row);
+  index_type numCols = Rf_length(col);
   int protectCount = 0;
-  SEXP retVec = PROTECT( Rf_allocVector(sxpType, numCols) );
+  SEXP retVec = Rf_protect( Rf_allocVector(sxpType, numCols) );
   ++protectCount;
   RType *pRet = vec_ptr(retVec);
   CType *pColumn;
@@ -107,7 +102,7 @@ SEXP GetIndivMatrixElements( BigMatrix *pMat, double NA_C, double NA_R,
         static_cast<RType>(NA_R) :
         (static_cast<RType>(pColumn[static_cast<index_type>(pRows[i])-1]));
   }
-  UNPROTECT(protectCount);
+  Rf_unprotect(protectCount);
   return(retVec);
 }
 
@@ -119,9 +114,9 @@ void SetIndivMatrixElements( BigMatrix *pMat, SEXP col, SEXP row, SEXP values,
       double NA_C, double C_MIN, double C_MAX, double NA_R)
 {
   BMAccessorType mat( *pMat );
-  double *pCols = NUMERIC_DATA(col);
-  index_type numCols = GET_LENGTH(col);
-  double *pRows = NUMERIC_DATA(row);
+  double *pCols = REAL(col);
+  index_type numCols = Rf_length(col);
+  double *pRows = REAL(row);
   VecPtr<RType> vec_ptr;
   RType *pVals = vec_ptr(values);
   index_type i=0;
@@ -145,7 +140,7 @@ void SetMatrixAll( BigMatrix *pMat, SEXP values,
   index_type numRows = pMat->nrow();
   VecPtr<RType> vec_ptr;
   RType *pVals = vec_ptr(values);
-  index_type valLength = GET_LENGTH(values);
+  index_type valLength = Rf_length(values);
   index_type i=0;
   index_type j=0;
   index_type k=0;
@@ -169,12 +164,12 @@ void SetMatrixCols( BigMatrix *pMat, SEXP col, SEXP values,
   double NA_C, double C_MIN, double C_MAX, double NA_R)
 {
   BMAccessorType mat( *pMat );
-  double *pCols = NUMERIC_DATA(col);
-  index_type numCols = GET_LENGTH(col);
+  double *pCols = REAL(col);
+  index_type numCols = Rf_length(col);
   index_type numRows = pMat->nrow();
   VecPtr<RType> vec_ptr;
   RType *pVals = vec_ptr(values);
-  index_type valLength = GET_LENGTH(values);
+  index_type valLength = Rf_length(values);
   index_type i=0;
   index_type j=0;
   index_type k=0;
@@ -199,11 +194,11 @@ void SetMatrixRows( BigMatrix *pMat, SEXP row, SEXP values,
 {
   BMAccessorType mat( *pMat );
   index_type numCols = pMat->ncol();
-  double *pRows = NUMERIC_DATA(row);
-  index_type numRows = GET_LENGTH(row);
+  double *pRows = REAL(row);
+  index_type numRows = Rf_length(row);
   VecPtr<RType> vec_ptr;
   RType *pVals = vec_ptr(values);
-  index_type valLength = GET_LENGTH(values);
+  index_type valLength = Rf_length(values);
   index_type i=0;
   index_type j=0;
   index_type k=0;
@@ -227,7 +222,7 @@ void SetAllMatrixElements( BigMatrix *pMat, SEXP value,
   double NA_C, double C_MIN, double C_MAX, double NA_R)
 {
   BMAccessorType mat( *pMat );
-  double val = NUMERIC_VALUE(value);
+  double val = REAL(value)[0];
   index_type i=0;
   index_type j=0;
   index_type ncol = pMat->ncol();
@@ -239,7 +234,7 @@ void SetAllMatrixElements( BigMatrix *pMat, SEXP value,
     if (!isna(val))
     {
       //outOfRange=true;
-      warning("The value given is out of range, elements will be set to NA.");
+      Rf_warning("The value given is out of range, elements will be set to NA.");
     }
     val = NA_C;
   }
@@ -259,30 +254,30 @@ SEXP GetMatrixElements( BigMatrix *pMat, double NA_C, double NA_R,
 {
   VecPtr<RType> vec_ptr; 
   BMAccessorType mat(*pMat);
-  double *pCols = NUMERIC_DATA(col);
-  double *pRows = NUMERIC_DATA(row);
-  index_type numCols = GET_LENGTH(col);
-  index_type numRows = GET_LENGTH(row);
+  double *pCols = REAL(col);
+  double *pRows = REAL(row);
+  index_type numCols = Rf_length(col);
+  index_type numRows = Rf_length(row);
 /*
   if (TooManyRIndices(numCols*numRows))
   {
-    error("Too many indices (>2^31-1) for extraction.");
+    Rf_error("Too many indices (>2^31-1) for extraction.");
     return R_NilValue;
   }
 */
-  SEXP ret = PROTECT(NEW_LIST(3));
+  SEXP ret = Rf_protect(Rf_allocVector(VECSXP, 3));
   int protectCount = 1;
-  SET_VECTOR_ELT( ret, 1, NULL_USER_OBJECT );
-  SET_VECTOR_ELT( ret, 2, NULL_USER_OBJECT );
+  SET_VECTOR_ELT( ret, 1, R_NilValue );
+  SET_VECTOR_ELT( ret, 2, R_NilValue );
   SEXP retMat;
   if (numCols == 1 || numRows == 1) {
-    retMat = PROTECT( Rf_allocVector(sxpType, numRows * numCols) );
+    retMat = Rf_protect( Rf_allocVector(sxpType, numRows * numCols) );
   } else {
-    retMat = PROTECT( Rf_allocMatrix(sxpType, numRows, numCols) );
+    retMat = Rf_protect( Rf_allocMatrix(sxpType, numRows, numCols) );
   }
   ++protectCount;
   SET_VECTOR_ELT(ret, 0, retMat);
-  //SEXP ret = PROTECT( new_vec(numCols*numRows) );
+  //SEXP ret = Rf_protect( new_vec(numCols*numRows) );
   RType *pRet = vec_ptr(retMat);
   CType *pColumn;
   index_type k=0;
@@ -319,12 +314,12 @@ SEXP GetMatrixElements( BigMatrix *pMat, double NA_C, double NA_R,
   if (!colNames.empty())
   {
     ++protectCount;
-    SEXP rCNames = PROTECT(allocVector(STRSXP, numCols));
+    SEXP rCNames = Rf_protect(Rf_allocVector(STRSXP, numCols));
     for (i=0; i < numCols; ++i)
     {
       if (!isna(pCols[i]))
         SET_STRING_ELT( rCNames, i, 
-          mkChar(colNames[static_cast<index_type>(pCols[i])-1].c_str()) );
+          Rf_mkChar(colNames[static_cast<index_type>(pCols[i])-1].c_str()) );
     }
     SET_VECTOR_ELT(ret, 2, rCNames);
   }
@@ -332,18 +327,18 @@ SEXP GetMatrixElements( BigMatrix *pMat, double NA_C, double NA_R,
   if (!rowNames.empty())
   {
     ++protectCount;
-    SEXP rRNames = PROTECT(allocVector(STRSXP, numRows));
+    SEXP rRNames = Rf_protect(Rf_allocVector(STRSXP, numRows));
     for (i=0; i < numRows; ++i)
     {
       if (!isna(pRows[i]))
       {
         SET_STRING_ELT( rRNames, i, 
-          mkChar(rowNames[static_cast<index_type>(pRows[i])-1].c_str()) );  
+          Rf_mkChar(rowNames[static_cast<index_type>(pRows[i])-1].c_str()) );  
       }
     }
     SET_VECTOR_ELT(ret, 1, rRNames);
   }
-  UNPROTECT(protectCount);
+  Rf_unprotect(protectCount);
   return ret;
 }
 
@@ -404,25 +399,25 @@ SEXP GetMatrixRows( BigMatrix *pMat, double NA_C, double NA_R,
 {
   VecPtr<RType> vec_ptr; 
   BMAccessorType mat(*pMat);
-  double *pRows=NUMERIC_DATA(row);
-  index_type numRows = GET_LENGTH(row);
+  double *pRows=REAL(row);
+  index_type numRows = Rf_length(row);
   index_type numCols = pMat->ncol();
 /*
   if (TooManyRIndices(numCols*numRows))
   {
-    error("Too many indices (>2^31-1) for extraction.");
+    Rf_error("Too many indices (>2^31-1) for extraction.");
     return R_NilValue;
   }
 */
-  SEXP ret = PROTECT(NEW_LIST(3));
+  SEXP ret = Rf_protect(Rf_allocVector(VECSXP, 3));
   int protectCount = 1;
-  SET_VECTOR_ELT( ret, 1, NULL_USER_OBJECT );
-  SET_VECTOR_ELT( ret, 2, NULL_USER_OBJECT );
+  SET_VECTOR_ELT( ret, 1, R_NilValue );
+  SET_VECTOR_ELT( ret, 2, R_NilValue );
   SEXP retMat;
   if (numCols == 1 || numRows == 1) {
-    retMat = PROTECT( Rf_allocVector(sxpType, numCols*numRows) );
+    retMat = Rf_protect( Rf_allocVector(sxpType, numCols*numRows) );
   } else {
-    retMat = PROTECT( Rf_allocMatrix(sxpType, numRows, numCols) );
+    retMat = Rf_protect( Rf_allocMatrix(sxpType, numRows, numCols) );
   }
   ++protectCount;
   SET_VECTOR_ELT(ret, 0, retMat);
@@ -452,10 +447,10 @@ SEXP GetMatrixRows( BigMatrix *pMat, double NA_C, double NA_R,
   if (!colNames.empty())
   {
     ++protectCount;
-    SEXP rCNames = PROTECT(allocVector(STRSXP, numCols));
+    SEXP rCNames = Rf_protect(Rf_allocVector(STRSXP, numCols));
     for (i=0; i < numCols; ++i)
     {
-      SET_STRING_ELT( rCNames, i, mkChar(colNames[i].c_str()) );
+      SET_STRING_ELT( rCNames, i, Rf_mkChar(colNames[i].c_str()) );
     }
     SET_VECTOR_ELT(ret, 2, rCNames);
   }
@@ -463,18 +458,18 @@ SEXP GetMatrixRows( BigMatrix *pMat, double NA_C, double NA_R,
   if (!rowNames.empty())
   {
     ++protectCount;
-    SEXP rRNames = PROTECT(allocVector(STRSXP, numRows));
+    SEXP rRNames = Rf_protect(Rf_allocVector(STRSXP, numRows));
     for (i=0; i < numRows; ++i)
     {
       if (!isna(pRows[i]))
       {
         SET_STRING_ELT( rRNames, i, 
-          mkChar(rowNames[static_cast<index_type>(pRows[i])-1].c_str()) );  
+          Rf_mkChar(rowNames[static_cast<index_type>(pRows[i])-1].c_str()) );  
       }
     }
     SET_VECTOR_ELT(ret, 1, rRNames);
   }
-  UNPROTECT(protectCount);
+  Rf_unprotect(protectCount);
   return ret;
 }
 
@@ -484,29 +479,29 @@ SEXP GetMatrixCols( BigMatrix *pMat, double NA_C, double NA_R,
 {
   VecPtr<RType> vec_ptr; 
   BMAccessorType mat(*pMat);
-  double *pCols=NUMERIC_DATA(col);
-  index_type numCols = GET_LENGTH(col);
+  double *pCols=REAL(col);
+  index_type numCols = Rf_length(col);
   index_type numRows = pMat->nrow();
 /*
   if (TooManyRIndices(numCols*numRows))
   {
-    error("Too many indices (>2^31-1) for extraction.");
+    Rf_error("Too many indices (>2^31-1) for extraction.");
     return R_NilValue;
   }
 */
-  SEXP ret = PROTECT(NEW_LIST(3));
+  SEXP ret = Rf_protect(Rf_allocVector(VECSXP, 3));
   int protectCount = 1;
-  SET_VECTOR_ELT( ret, 1, NULL_USER_OBJECT );
-  SET_VECTOR_ELT( ret, 2, NULL_USER_OBJECT );
+  SET_VECTOR_ELT( ret, 1, R_NilValue );
+  SET_VECTOR_ELT( ret, 2, R_NilValue );
   SEXP retMat;
   if (numCols == 1 || numRows == 1) {
-    retMat = PROTECT( Rf_allocVector(sxpType, numRows*numCols) );
+    retMat = Rf_protect( Rf_allocVector(sxpType, numRows*numCols) );
   } else {
-    retMat = PROTECT( Rf_allocMatrix(sxpType, numRows, numCols) );
+    retMat = Rf_protect( Rf_allocMatrix(sxpType, numRows, numCols) );
   }
   ++protectCount;
   SET_VECTOR_ELT(ret, 0, retMat);
-  //SEXP ret = PROTECT( new_vec(numCols*numRows) );
+  //SEXP ret = Rf_protect( new_vec(numCols*numRows) );
   RType *pRet = vec_ptr(retMat);
   CType *pColumn = NULL;
   index_type k=0;
@@ -535,12 +530,12 @@ SEXP GetMatrixCols( BigMatrix *pMat, double NA_C, double NA_R,
   if (!colNames.empty())
   {
     ++protectCount;
-    SEXP rCNames = PROTECT(allocVector(STRSXP, numCols));
+    SEXP rCNames = Rf_protect(Rf_allocVector(STRSXP, numCols));
     for (i=0; i < numCols; ++i)
     {
       if (!isna(pCols[i]))
         SET_STRING_ELT( rCNames, i, 
-          mkChar(colNames[static_cast<index_type>(pCols[i])-1].c_str()) );
+          Rf_mkChar(colNames[static_cast<index_type>(pCols[i])-1].c_str()) );
     }
     SET_VECTOR_ELT(ret, 2, rCNames);
   }
@@ -548,14 +543,14 @@ SEXP GetMatrixCols( BigMatrix *pMat, double NA_C, double NA_R,
   if (!rowNames.empty())
   {
     ++protectCount;
-    SEXP rRNames = PROTECT(allocVector(STRSXP, numRows));
+    SEXP rRNames = Rf_protect(Rf_allocVector(STRSXP, numRows));
     for (i=0; i < numRows; ++i)
     {
-      SET_STRING_ELT( rRNames, i, mkChar(rowNames[i].c_str()) );  
+      SET_STRING_ELT( rRNames, i, Rf_mkChar(rowNames[i].c_str()) );  
     }
     SET_VECTOR_ELT(ret, 1, rRNames);
   }
-  UNPROTECT(protectCount);
+  Rf_unprotect(protectCount);
   return ret;
 }
 
@@ -570,23 +565,23 @@ SEXP GetMatrixAll( BigMatrix *pMat, double NA_C, double NA_R,
 /*
   if (TooManyRIndices(numCols*numRows))
   {
-    error("Too many indices (>2^31-1) for extraction.");
+    Rf_error("Too many indices (>2^31-1) for extraction.");
     return R_NilValue;
   }
 */
-  SEXP ret = PROTECT(NEW_LIST(3));
+  SEXP ret = Rf_protect(Rf_allocVector(VECSXP, 3));
   int protectCount = 1;
-  SET_VECTOR_ELT( ret, 1, NULL_USER_OBJECT );
-  SET_VECTOR_ELT( ret, 2, NULL_USER_OBJECT );
+  SET_VECTOR_ELT( ret, 1, R_NilValue );
+  SET_VECTOR_ELT( ret, 2, R_NilValue );
   SEXP retMat;
   if (numCols == 1 || numRows == 1) {
-    retMat = PROTECT( Rf_allocVector(sxpType, numRows * numCols) );
+    retMat = Rf_protect( Rf_allocVector(sxpType, numRows * numCols) );
   } else {
-    retMat = PROTECT( Rf_allocMatrix(sxpType, numRows, numCols) );
+    retMat = Rf_protect( Rf_allocMatrix(sxpType, numRows, numCols) );
   }
   ++protectCount;
   SET_VECTOR_ELT(ret, 0, retMat);
-  //SEXP ret = PROTECT( new_vec(numCols*numRows) );
+  //SEXP ret = Rf_protect( new_vec(numCols*numRows) );
   RType *pRet = vec_ptr(retMat);
   CType *pColumn = NULL;
   index_type k=0;
@@ -605,10 +600,10 @@ SEXP GetMatrixAll( BigMatrix *pMat, double NA_C, double NA_R,
   if (!colNames.empty())
   {
     ++protectCount;
-    SEXP rCNames = PROTECT(allocVector(STRSXP, numCols));
+    SEXP rCNames = Rf_protect(Rf_allocVector(STRSXP, numCols));
     for (i=0; i < numCols; ++i)
     {
-      SET_STRING_ELT( rCNames, i, mkChar(colNames[i].c_str()) );
+      SET_STRING_ELT( rCNames, i, Rf_mkChar(colNames[i].c_str()) );
     }
     SET_VECTOR_ELT(ret, 2, rCNames);
   }
@@ -616,14 +611,14 @@ SEXP GetMatrixAll( BigMatrix *pMat, double NA_C, double NA_R,
   if (!rowNames.empty())
   {
     ++protectCount;
-    SEXP rRNames = PROTECT(allocVector(STRSXP, numRows));
+    SEXP rRNames = Rf_protect(Rf_allocVector(STRSXP, numRows));
     for (i=0; i < numRows; ++i)
     {
-      SET_STRING_ELT( rRNames, i, mkChar(rowNames[i].c_str()) );  
+      SET_STRING_ELT( rRNames, i, Rf_mkChar(rowNames[i].c_str()) );  
     }
     SET_VECTOR_ELT(ret, 1, rRNames);
   }
-  UNPROTECT(protectCount);
+  Rf_unprotect(protectCount);
   return ret;
 }
 
@@ -634,10 +629,10 @@ SEXP ReadMatrix(SEXP fileName, BigMatrix *pMat,
                 double negInf, double notANumber)
 {
   BMAccessorType mat(*pMat);
-  SEXP ret = PROTECT(NEW_LOGICAL(1));
-  LOGICAL_DATA(ret)[0] = (Rboolean)0;
-  index_type fl = static_cast<index_type>(NUMERIC_VALUE(firstLine));
-  index_type nl = static_cast<index_type>(NUMERIC_VALUE(numLines));
+  SEXP ret = Rf_protect(Rf_allocVector(LGLSXP, 1));
+  LOGICAL(ret)[0] = (Rboolean)0;
+  index_type fl = static_cast<index_type>(REAL(firstLine)[0]);
+  index_type nl = static_cast<index_type>(REAL(numLines)[0]);
   string sep(CHAR(STRING_ELT(separator,0)));
   index_type i=0,j;
   bool rowSizeReserved = false;
@@ -645,10 +640,10 @@ SEXP ReadMatrix(SEXP fileName, BigMatrix *pMat,
 
   ifstream file;
   string lc, element;
-  file.open(STRING_VALUE(fileName));
+  file.open(CHAR(Rf_asChar(fileName)));
   if (!file.is_open())
   {
-    UNPROTECT(1);
+    Rf_unprotect(1);
     return ret;
   }
   for (i=0; i < fl; ++i)
@@ -656,7 +651,7 @@ SEXP ReadMatrix(SEXP fileName, BigMatrix *pMat,
     std::getline(file, lc);
   }
   Names rn;
-  index_type offset = static_cast<index_type>(LOGICAL_VALUE(hasRowNames));
+  index_type offset = static_cast<index_type>(LOGICAL(hasRowNames)[0]);
   double d;
   int charRead;
   char *pEnd;
@@ -670,9 +665,9 @@ SEXP ReadMatrix(SEXP fileName, BigMatrix *pMat,
     {
       last = lc.find_first_of(sep, first);
       element = lc.substr(first, last-first);
-      if (LOGICAL_VALUE(hasRowNames) && 0==j)
+      if (LOGICAL(hasRowNames)[0] && 0==j)
       {
-        if (LOGICAL_VALUE(useRowNames))
+        if (LOGICAL(useRowNames)[0])
         {
           if (!rowSizeReserved)
           {
@@ -750,7 +745,7 @@ SEXP ReadMatrix(SEXP fileName, BigMatrix *pMat,
         }
         else
         {
-          warning( 
+          Rf_warning( 
             (string("Incorrect number of entries in row ")+ttos(j)).c_str());
         }
       }
@@ -768,8 +763,8 @@ SEXP ReadMatrix(SEXP fileName, BigMatrix *pMat,
   }
   pMat->row_names( rn );
   file.close();
-  LOGICAL_DATA(ret)[0] = (Rboolean)1;
-  UNPROTECT(1);
+  LOGICAL(ret)[0] = (Rboolean)1;
+  Rf_unprotect(1);
   return ret;
 }
 
@@ -778,14 +773,14 @@ void WriteMatrix( BigMatrix *pMat, SEXP fileName, SEXP rowNames,
                   SEXP colNames, SEXP sep, double C_NA )
 {
   BMAccessorType mat(*pMat);
-  FILE *FP = fopen(STRING_VALUE(fileName), "w");
+  FILE *FP = fopen(CHAR(Rf_asChar(fileName)), "w");
   index_type i,j;
   string  s;
   string sepString = string(CHAR(STRING_ELT(sep, 0)));
 
   Names cn = pMat->column_names();
   Names rn = pMat->row_names();
-  if (LOGICAL_VALUE(colNames) == Rboolean(TRUE) && !cn.empty())
+  if (LOGICAL(colNames)[0] == Rboolean(TRUE) && !cn.empty())
   {
     for (i=0; i < (int) cn.size(); ++i)
       s += "\"" + cn[i] + "\"" + (((int)cn.size()-1 == i) ? "\n" : sepString);
@@ -794,7 +789,7 @@ void WriteMatrix( BigMatrix *pMat, SEXP fileName, SEXP rowNames,
   s.clear();
   for (i=0; i < pMat->nrow(); ++i) 
   {
-    if ( LOGICAL_VALUE(rowNames) == Rboolean(TRUE) && !rn.empty())
+    if ( LOGICAL(rowNames)[0] == Rboolean(TRUE) && !rn.empty())
     {
       s += "\"" + rn[i] + "\"" + sepString;
     }
@@ -904,7 +899,7 @@ template<typename MatrixAccessorType>
 void reorder_matrix( MatrixAccessorType m, SEXP orderVec, 
   index_type numColumns, FileBackedBigMatrix *pfbm )
 {
-  double *pov = NUMERIC_DATA(orderVec);
+  double *pov = REAL(orderVec);
   typedef typename MatrixAccessorType::value_type ValueType;
   typedef std::vector<ValueType> Values;
   Values vs(m.nrow());
@@ -927,7 +922,7 @@ template<typename MatrixAccessorType>
 void reorder_matrix2( MatrixAccessorType m, SEXP orderVec, 
   index_type numRows, FileBackedBigMatrix *pfbm )
 {
-  double *pov = NUMERIC_DATA(orderVec);
+  double *pov = REAL(orderVec);
   typedef typename MatrixAccessorType::value_type ValueType;
   typedef std::vector<ValueType> Values;
   Values vs(m.ncol());
@@ -961,12 +956,12 @@ SEXP get_order( MatrixAccessorType m, SEXP columns, SEXP naLast,
   ov.reserve(m.nrow());
   typename OrderVecs::iterator begin, end, it, naIt;
   ValueType val;
-  for (k=GET_LENGTH(columns)-1; k >= 0; --k)
+  for (k=Rf_length(columns)-1; k >= 0; --k)
   {
-    col = static_cast<index_type>(NUMERIC_DATA(columns)[k]-1);
-    if (k==GET_LENGTH(columns)-1)
+    col = static_cast<index_type>(REAL(columns)[k]-1);
+    if (k==Rf_length(columns)-1)
     {
-      if (isna(INTEGER_VALUE(naLast)))
+      if (isna(Rf_asInteger(naLast)))
       {
         for (i=0; i < static_cast<size_t>(m.nrow()); ++i)
         {
@@ -990,7 +985,7 @@ SEXP get_order( MatrixAccessorType m, SEXP columns, SEXP naLast,
     }
     else // not the first column we've looked at
     {
-      if (isna(INTEGER_VALUE(naLast)))
+      if (isna(Rf_asInteger(naLast)))
       {
         i=0;
         while (i < ov.size())
@@ -1014,25 +1009,25 @@ SEXP get_order( MatrixAccessorType m, SEXP columns, SEXP naLast,
         }
       }
     }
-    if (LOGICAL_VALUE(decreasing) == 0)
+    if (LOGICAL(decreasing)[0] == 0)
     {
       std::stable_sort(ov.begin(), ov.end(), 
-        SecondLess<PairType>(INTEGER_VALUE(naLast)) );
+        SecondLess<PairType>(Rf_asInteger(naLast)) );
     }
     else
     {
       std::stable_sort(ov.begin(), ov.end(), 
-        SecondGreater<PairType>(INTEGER_VALUE(naLast)));
+        SecondGreater<PairType>(Rf_asInteger(naLast)));
     }
   }
 
-  SEXP ret = PROTECT(NEW_NUMERIC(ov.size()));
-  double *pret = NUMERIC_DATA(ret);
+  SEXP ret = Rf_protect(Rf_allocVector(REALSXP,ov.size()));
+  double *pret = REAL(ret);
   for (i=0, it=ov.begin(); it < ov.end(); ++it, ++i)
   {
     pret[i] = it->first+1;
   }
-  UNPROTECT(1);
+  Rf_unprotect(1);
   return ret;
 }
 
@@ -1050,12 +1045,12 @@ SEXP get_order2( MatrixAccessorType m, SEXP rows, SEXP naLast,
   ov.reserve(m.ncol());
   typename OrderVecs::iterator begin, end, it, naIt;
   ValueType val;
-  for (k=GET_LENGTH(rows)-1; k >= 0; --k)
+  for (k=Rf_length(rows)-1; k >= 0; --k)
   {
-    row = static_cast<index_type>(NUMERIC_DATA(rows)[k]-1);
-    if (k==GET_LENGTH(rows)-1)
+    row = static_cast<index_type>(REAL(rows)[k]-1);
+    if (k==Rf_length(rows)-1)
     {
-      if (isna(INTEGER_VALUE(naLast)))
+      if (isna(Rf_asInteger(naLast)))
       {
         for (i=0; i < static_cast<size_t>(m.ncol()); ++i)
         {
@@ -1079,7 +1074,7 @@ SEXP get_order2( MatrixAccessorType m, SEXP rows, SEXP naLast,
     }
     else // not the first column we've looked at
     {
-      if (isna(INTEGER_VALUE(naLast)))
+      if (isna(Rf_asInteger(naLast)))
       {
         i=0;
         while (i < ov.size())
@@ -1103,25 +1098,25 @@ SEXP get_order2( MatrixAccessorType m, SEXP rows, SEXP naLast,
         }
       }
     }
-    if (LOGICAL_VALUE(decreasing) == 0)
+    if (LOGICAL(decreasing)[0] == 0)
     {
       std::stable_sort(ov.begin(), ov.end(), 
-        SecondLess<PairType>(INTEGER_VALUE(naLast)) );
+        SecondLess<PairType>(Rf_asInteger(naLast)) );
     }
     else
     {
       std::stable_sort(ov.begin(), ov.end(), 
-        SecondGreater<PairType>(INTEGER_VALUE(naLast)));
+        SecondGreater<PairType>(Rf_asInteger(naLast)));
     }
   }
 
-  SEXP ret = PROTECT(NEW_NUMERIC(ov.size()));
-  double *pret = NUMERIC_DATA(ret);
+  SEXP ret = Rf_protect(Rf_allocVector(REALSXP,ov.size()));
+  double *pret = REAL(ret);
   for (i=0, it=ov.begin(); it < ov.end(); ++it, ++i)
   {
     pret[i] = it->first+1;
   }
-  UNPROTECT(1);
+  Rf_unprotect(1);
   return ret;
 }
 
@@ -1132,9 +1127,9 @@ SEXP get_order2( MatrixAccessorType m, SEXP rows, SEXP naLast,
 void ReorderRIntMatrix( SEXP matrixVector, SEXP nrow, SEXP ncol, SEXP orderVec )
 {
   return reorder_matrix( 
-    MatrixAccessor<int>(INTEGER_DATA(matrixVector), 
-      static_cast<index_type>(INTEGER_VALUE(nrow))), orderVec,
-      static_cast<index_type>(INTEGER_VALUE(ncol)), NULL );
+    MatrixAccessor<int>(INTEGER(matrixVector), 
+      static_cast<index_type>(Rf_asInteger(nrow))), orderVec,
+      static_cast<index_type>(Rf_asInteger(ncol)), NULL );
 }
 
 // [[Rcpp::export]]
@@ -1142,9 +1137,9 @@ void ReorderRNumericMatrix( SEXP matrixVector, SEXP nrow, SEXP ncol,
   SEXP orderVec )
 {
   return reorder_matrix( 
-    MatrixAccessor<double>(NUMERIC_DATA(matrixVector), 
-      static_cast<index_type>(INTEGER_VALUE(nrow))), orderVec,
-      static_cast<index_type>(INTEGER_VALUE(ncol)), NULL );
+    MatrixAccessor<double>(REAL(matrixVector), 
+      static_cast<index_type>(Rf_asInteger(nrow))), orderVec,
+      static_cast<index_type>(Rf_asInteger(ncol)), NULL );
 }
 
 // [[Rcpp::export]]
@@ -1199,10 +1194,10 @@ void ReorderBigMatrix( SEXP address, SEXP orderVec )
 void ReorderRIntMatrixCols( SEXP matrixVector, SEXP nrow, SEXP ncol, SEXP orderVec )
 {
   return reorder_matrix2( 
-    MatrixAccessor<int>(INTEGER_DATA(matrixVector), 
-      static_cast<index_type>(INTEGER_VALUE(nrow)),
-      static_cast<index_type>(INTEGER_VALUE(ncol))), orderVec,
-      static_cast<index_type>(INTEGER_VALUE(nrow)), NULL );
+    MatrixAccessor<int>(INTEGER(matrixVector), 
+      static_cast<index_type>(Rf_asInteger(nrow)),
+      static_cast<index_type>(Rf_asInteger(ncol))), orderVec,
+      static_cast<index_type>(Rf_asInteger(nrow)), NULL );
 }
 
 // [[Rcpp::export]]
@@ -1210,10 +1205,10 @@ void ReorderRNumericMatrixCols( SEXP matrixVector, SEXP nrow, SEXP ncol,
   SEXP orderVec )
 {
   return reorder_matrix2( 
-    MatrixAccessor<double>(NUMERIC_DATA(matrixVector), 
-      static_cast<index_type>(INTEGER_VALUE(nrow)),
-      static_cast<index_type>(INTEGER_VALUE(ncol))), orderVec,
-      static_cast<index_type>(INTEGER_VALUE(nrow)), NULL );
+    MatrixAccessor<double>(REAL(matrixVector), 
+      static_cast<index_type>(Rf_asInteger(nrow)),
+      static_cast<index_type>(Rf_asInteger(ncol))), orderVec,
+      static_cast<index_type>(Rf_asInteger(nrow)), NULL );
 }
 
 // [[Rcpp::export]]
@@ -1269,8 +1264,8 @@ SEXP OrderRIntMatrix( SEXP matrixVector, SEXP nrow, SEXP columns,
   SEXP naLast, SEXP decreasing )
 {
   return get_order<int>( 
-    MatrixAccessor<int>(INTEGER_DATA(matrixVector), 
-      static_cast<index_type>(INTEGER_VALUE(nrow))), 
+    MatrixAccessor<int>(INTEGER(matrixVector), 
+      static_cast<index_type>(Rf_asInteger(nrow))), 
     columns, naLast, decreasing );
 }
 
@@ -1279,8 +1274,8 @@ SEXP OrderRNumericMatrix( SEXP matrixVector, SEXP nrow, SEXP columns,
   SEXP naLast, SEXP decreasing )
 {
   return get_order<double>( 
-    MatrixAccessor<double>(NUMERIC_DATA(matrixVector), 
-      static_cast<index_type>(INTEGER_VALUE(nrow))), 
+    MatrixAccessor<double>(REAL(matrixVector), 
+      static_cast<index_type>(Rf_asInteger(nrow))), 
     columns, naLast, decreasing );
 }
 
@@ -1338,9 +1333,9 @@ SEXP OrderRIntMatrixCols( SEXP matrixVector, SEXP nrow, SEXP ncol,
   SEXP rows, SEXP naLast, SEXP decreasing )
 {
   return get_order2<int>( 
-    MatrixAccessor<int>(INTEGER_DATA(matrixVector), 
-      static_cast<index_type>(INTEGER_VALUE(nrow)),
-      static_cast<index_type>(INTEGER_VALUE(ncol))), 
+    MatrixAccessor<int>(INTEGER(matrixVector), 
+      static_cast<index_type>(Rf_asInteger(nrow)),
+      static_cast<index_type>(Rf_asInteger(ncol))), 
     rows, naLast, decreasing );
 }
 
@@ -1349,9 +1344,9 @@ SEXP OrderRNumericMatrixCols( SEXP matrixVector, SEXP nrow, SEXP ncol,
   SEXP rows, SEXP naLast, SEXP decreasing )
 {
   return get_order2<double>( 
-    MatrixAccessor<double>(NUMERIC_DATA(matrixVector), 
-      static_cast<index_type>(INTEGER_VALUE(nrow)),
-      static_cast<index_type>(INTEGER_VALUE(ncol))), 
+    MatrixAccessor<double>(REAL(matrixVector), 
+      static_cast<index_type>(Rf_asInteger(nrow)),
+      static_cast<index_type>(Rf_asInteger(ncol))), 
     rows, naLast, decreasing );
 }
 
@@ -1410,11 +1405,11 @@ SEXP CCleanIndices(SEXP indices, SEXP rc)
 {
   typedef std::vector<index_type> Indices;
 
-  double *pIndices = NUMERIC_DATA(indices);
-  index_type numIndices = GET_LENGTH(indices);
-  double maxrc = NUMERIC_VALUE(rc);
+  double *pIndices = REAL(indices);
+  index_type numIndices = Rf_length(indices);
+  double maxrc = REAL(rc)[0];
   int protectCount=1;
-  SEXP ret = PROTECT(NEW_LIST(2));
+  SEXP ret = Rf_protect(Rf_allocVector(VECSXP, 2));
   index_type negIndexCount=0;
   index_type posIndexCount=0;
   index_type zeroIndexCount=0;
@@ -1436,9 +1431,9 @@ SEXP CCleanIndices(SEXP indices, SEXP rc)
     }
     if ( labs(static_cast<index_type>(pIndices[i])) > maxrc )
     {
-      SET_VECTOR_ELT(ret, 0, NULL_USER_OBJECT);
-      SET_VECTOR_ELT(ret, 1, NULL_USER_OBJECT);
-      UNPROTECT(protectCount);
+      SET_VECTOR_ELT(ret, 0, R_NilValue);
+      SET_VECTOR_ELT(ret, 1, R_NilValue);
+      Rf_unprotect(protectCount);
       return ret;
     }
   }
@@ -1446,29 +1441,29 @@ SEXP CCleanIndices(SEXP indices, SEXP rc)
   if ( (zeroIndexCount == numIndices) && (numIndices > 0) )
   {
     protectCount += 2;
-    SEXP returnCond = PROTECT(NEW_LOGICAL(1));
-    LOGICAL_DATA(returnCond)[0] = (Rboolean)1;
-    SEXP newIndices = PROTECT(NEW_NUMERIC(0));
+    SEXP returnCond = Rf_protect(Rf_allocVector(LGLSXP,1));
+    LOGICAL(returnCond)[0] = (Rboolean)1;
+    SEXP newIndices = Rf_protect(Rf_allocVector(REALSXP,0));
     SET_VECTOR_ELT(ret, 0, returnCond);
     SET_VECTOR_ELT(ret, 1, newIndices);
-    UNPROTECT(protectCount);
+    Rf_unprotect(protectCount);
     return ret;
   }
 
   if (posIndexCount > 0 && negIndexCount > 0)
   {
-    SET_VECTOR_ELT(ret, 0, NULL_USER_OBJECT);
-    SET_VECTOR_ELT(ret, 1, NULL_USER_OBJECT);
-    UNPROTECT(protectCount);
+    SET_VECTOR_ELT(ret, 0, R_NilValue);
+    SET_VECTOR_ELT(ret, 1, R_NilValue);
+    Rf_unprotect(protectCount);
     return ret;
   }
   if (zeroIndexCount > 0)
   {  
     protectCount += 2;
-    SEXP returnCond = PROTECT(NEW_LOGICAL(1));
-    LOGICAL_DATA(returnCond)[0] = (Rboolean)1;
-    SEXP newIndices = PROTECT(NEW_NUMERIC(posIndexCount));
-    double *newPIndices = NUMERIC_DATA(newIndices);
+    SEXP returnCond = Rf_protect(Rf_allocVector(LGLSXP,1));
+    LOGICAL(returnCond)[0] = (Rboolean)1;
+    SEXP newIndices = Rf_protect(Rf_allocVector(REALSXP,posIndexCount));
+    double *newPIndices = REAL(newIndices);
     j=0;
     for (i=0; i < static_cast<Indices::size_type>(numIndices); ++i)
     {
@@ -1479,7 +1474,7 @@ SEXP CCleanIndices(SEXP indices, SEXP rc)
     }
     SET_VECTOR_ELT(ret, 0, returnCond);
     SET_VECTOR_ELT(ret, 1, newIndices);
-    UNPROTECT(protectCount);
+    Rf_unprotect(protectCount);
     return ret;
   }
   else if (negIndexCount > 0)
@@ -1493,9 +1488,9 @@ SEXP CCleanIndices(SEXP indices, SEXP rc)
     }
     catch(...)
     {
-      SET_VECTOR_ELT(ret, 0, NULL_USER_OBJECT);
-      SET_VECTOR_ELT(ret, 1, NULL_USER_OBJECT);
-      UNPROTECT(protectCount);
+      SET_VECTOR_ELT(ret, 0, R_NilValue);
+      SET_VECTOR_ELT(ret, 1, R_NilValue);
+      Rf_unprotect(protectCount);
       return ret;
     }
     for (i=1; i <= static_cast<Indices::size_type>(maxrc); ++i)
@@ -1515,32 +1510,32 @@ SEXP CCleanIndices(SEXP indices, SEXP rc)
 /*
     if (TooManyRIndices(ind.size()))
     {
-      SET_VECTOR_ELT(ret, 0, NULL_USER_OBJECT);
-      SET_VECTOR_ELT(ret, 1, NULL_USER_OBJECT);
-      UNPROTECT(protectCount);
+      SET_VECTOR_ELT(ret, 0, R_NilValue);
+      SET_VECTOR_ELT(ret, 1, R_NilValue);
+      Rf_unprotect(protectCount);
       return ret;
     }
 */
     protectCount +=2;
-    SEXP returnCond = PROTECT(NEW_LOGICAL(1));
-    LOGICAL_DATA(returnCond)[0] = (Rboolean)1;
-    SEXP newIndices = PROTECT(NEW_NUMERIC(ind.size()));
-    double *newPIndices = NUMERIC_DATA(newIndices);
+    SEXP returnCond = Rf_protect(Rf_allocVector(LGLSXP,1));
+    LOGICAL(returnCond)[0] = (Rboolean)1;
+    SEXP newIndices = Rf_protect(Rf_allocVector(REALSXP,ind.size()));
+    double *newPIndices = REAL(newIndices);
     for (i=0; i < ind.size(); ++i)
     {
       newPIndices[i] = static_cast<double>(ind[i]);
     }
     SET_VECTOR_ELT(ret, 0, returnCond);
     SET_VECTOR_ELT(ret, 1, newIndices);
-    UNPROTECT(protectCount);
+    Rf_unprotect(protectCount);
     return ret;
   }
   protectCount += 1;
-  SEXP returnCond = PROTECT(NEW_LOGICAL(1));
-  LOGICAL_DATA(returnCond)[0] = (Rboolean)0;
+  SEXP returnCond = Rf_protect(Rf_allocVector(LGLSXP,1));
+  LOGICAL(returnCond)[0] = (Rboolean)0;
   SET_VECTOR_ELT(ret, 0, returnCond);
-  SET_VECTOR_ELT(ret, 1, NULL_USER_OBJECT);
-  UNPROTECT(protectCount);
+  SET_VECTOR_ELT(ret, 1, R_NilValue);
+  Rf_unprotect(protectCount);
   return ret;
 }
 
@@ -1548,12 +1543,12 @@ SEXP CCleanIndices(SEXP indices, SEXP rc)
 SEXP HasRowColNames(SEXP address)
 {
   BigMatrix *pMat = (BigMatrix*)R_ExternalPtrAddr(address);
-  SEXP ret = PROTECT(NEW_LOGICAL(2));
-  LOGICAL_DATA(ret)[0] = 
+  SEXP ret = Rf_protect(Rf_allocVector(LGLSXP,2));
+  LOGICAL(ret)[0] = 
     pMat->row_names().empty() ? Rboolean(0) : Rboolean(1);
-  LOGICAL_DATA(ret)[1] = 
+  LOGICAL(ret)[1] = 
     pMat->column_names().empty() ? Rboolean(0) : Rboolean(1);
-  UNPROTECT(1);
+  Rf_unprotect(1);
   return ret;
 }
 
@@ -1606,7 +1601,7 @@ void SetColumnNames(SEXP address, SEXP columnNames)
   BigMatrix *pMat = (BigMatrix*) R_ExternalPtrAddr(address);
   Names cn;
   index_type i;
-  for (i=0; i < GET_LENGTH(columnNames); ++i)
+  for (i=0; i < Rf_length(columnNames); ++i)
     cn.push_back(string(CHAR(STRING_ELT(columnNames, i))));
   pMat->column_names(cn);
 }
@@ -1617,7 +1612,7 @@ void SetRowNames(SEXP address, SEXP rowNames)
   BigMatrix *pMat = (BigMatrix*) R_ExternalPtrAddr(address);
   Names rn;
   index_type i;
-  for (i=0; i < GET_LENGTH(rowNames); ++i)
+  for (i=0; i < Rf_length(rowNames); ++i)
     rn.push_back(string(CHAR(STRING_ELT(rowNames, i))));
   pMat->row_names(rn);
 }
@@ -1626,9 +1621,9 @@ void SetRowNames(SEXP address, SEXP rowNames)
 SEXP IsReadOnly(SEXP bigMatAddr)
 {
   BigMatrix *pMat = reinterpret_cast<BigMatrix*>(R_ExternalPtrAddr(bigMatAddr));
-  SEXP ret = PROTECT(NEW_LOGICAL(1));
-  LOGICAL_DATA(ret)[0] = (pMat->read_only() ? (Rboolean) 1 : (Rboolean) 0);
-  UNPROTECT(1);
+  SEXP ret = Rf_protect(Rf_allocVector(LGLSXP,1));
+  LOGICAL(ret)[0] = (pMat->read_only() ? (Rboolean) 1 : (Rboolean) 0);
+  Rf_unprotect(1);
   return ret;
 }
 
@@ -1636,19 +1631,19 @@ SEXP IsReadOnly(SEXP bigMatAddr)
 SEXP CIsSubMatrix(SEXP bigMatAddr)
 {
   BigMatrix *pMat = reinterpret_cast<BigMatrix*>(R_ExternalPtrAddr(bigMatAddr));
-  SEXP ret = PROTECT(NEW_LOGICAL(1));
+  SEXP ret = Rf_protect(Rf_allocVector(LGLSXP,1));
   if ( pMat->col_offset() > 0 || 
        pMat->row_offset() > 0 ||
        pMat->nrow() < pMat->total_rows() || 
        pMat->ncol() < pMat->total_columns() ) 
   {
-    LOGICAL_DATA(ret)[0] = (Rboolean) 1;
+    LOGICAL(ret)[0] = (Rboolean) 1;
   } 
   else 
   {
-    LOGICAL_DATA(ret)[0] = (Rboolean) 0;
+    LOGICAL(ret)[0] = (Rboolean) 0;
   }
-  UNPROTECT(1);
+  Rf_unprotect(1);
   return ret;
 }
 
@@ -1656,9 +1651,9 @@ SEXP CIsSubMatrix(SEXP bigMatAddr)
 SEXP CGetNrow(SEXP bigMatAddr)
 {
   BigMatrix *pMat = (BigMatrix*)R_ExternalPtrAddr(bigMatAddr);
-  SEXP ret = PROTECT(NEW_NUMERIC(1));
-  NUMERIC_DATA(ret)[0] = (double)pMat->nrow();
-  UNPROTECT(1);
+  SEXP ret = Rf_protect(Rf_allocVector(REALSXP,1));
+  REAL(ret)[0] = (double)pMat->nrow();
+  Rf_unprotect(1);
   return(ret);
 }
 
@@ -1666,9 +1661,9 @@ SEXP CGetNrow(SEXP bigMatAddr)
 SEXP CGetNcol(SEXP bigMatAddr)
 {
   BigMatrix *pMat = (BigMatrix*)R_ExternalPtrAddr(bigMatAddr);
-  SEXP ret = PROTECT(NEW_NUMERIC(1));
-  NUMERIC_DATA(ret)[0] = (double)pMat->ncol();
-  UNPROTECT(1);
+  SEXP ret = Rf_protect(Rf_allocVector(REALSXP,1));
+  REAL(ret)[0] = (double)pMat->ncol();
+  Rf_unprotect(1);
   return(ret);
 }
 
@@ -1685,12 +1680,12 @@ SEXP CGetType(SEXP bigMatAddr)
 SEXP IsSharedMemoryBigMatrix(SEXP bigMatAddr)
 {
   BigMatrix *pMat = (BigMatrix*)R_ExternalPtrAddr(bigMatAddr);
-  SEXP ret = PROTECT(NEW_LOGICAL(1));
-  LOGICAL_DATA(ret)[0] = 
+  SEXP ret = Rf_protect(Rf_allocVector(LGLSXP,1));
+  LOGICAL(ret)[0] = 
     dynamic_cast<SharedMemoryBigMatrix*>(pMat) == NULL ? 
       static_cast<Rboolean>(0) :
       static_cast<Rboolean>(1);
-  UNPROTECT(1);
+  Rf_unprotect(1);
   return ret;
 }
 
@@ -1698,12 +1693,12 @@ SEXP IsSharedMemoryBigMatrix(SEXP bigMatAddr)
 SEXP IsFileBackedBigMatrix(SEXP bigMatAddr)
 {
   BigMatrix *pMat = (BigMatrix*)R_ExternalPtrAddr(bigMatAddr);
-  SEXP ret = PROTECT(NEW_LOGICAL(1));
-  LOGICAL_DATA(ret)[0] = 
+  SEXP ret = Rf_protect(Rf_allocVector(LGLSXP,1));
+  LOGICAL(ret)[0] = 
     dynamic_cast<FileBackedBigMatrix*>(pMat) == NULL ? 
       static_cast<Rboolean>(0) :
       static_cast<Rboolean>(1);
-  UNPROTECT(1);
+  Rf_unprotect(1);
   return ret;
 }
 
@@ -1711,9 +1706,9 @@ SEXP IsFileBackedBigMatrix(SEXP bigMatAddr)
 SEXP IsSeparated(SEXP bigMatAddr)
 {
   BigMatrix *pMat = (BigMatrix*)R_ExternalPtrAddr(bigMatAddr);
-  SEXP ret = PROTECT(NEW_LOGICAL(1));
-  LOGICAL_DATA(ret)[0] = pMat->separated_columns() ? (Rboolean)1 : (Rboolean)0;
-  UNPROTECT(1);
+  SEXP ret = Rf_protect(Rf_allocVector(LGLSXP,1));
+  LOGICAL(ret)[0] = pMat->separated_columns() ? (Rboolean)1 : (Rboolean)0;
+  Rf_unprotect(1);
   return(ret);
 }
 
@@ -1742,15 +1737,15 @@ template<typename T, typename MatrixType>
 SEXP MWhichMatrix( MatrixType mat, index_type nrow, SEXP selectColumn, 
   SEXP minVal, SEXP maxVal, SEXP chkMin, SEXP chkMax, SEXP opVal, double C_NA )
 {
-  index_type numSc = GET_LENGTH(selectColumn);
-  double *sc = NUMERIC_DATA(selectColumn);
-  double *min = NUMERIC_DATA(minVal);
-  double *max = NUMERIC_DATA(maxVal);
-  int *chkmin = INTEGER_DATA(chkMin);
-  int *chkmax = INTEGER_DATA(chkMax);
+  index_type numSc = Rf_length(selectColumn);
+  double *sc = REAL(selectColumn);
+  double *min = REAL(minVal);
+  double *max = REAL(maxVal);
+  int *chkmin = INTEGER(chkMin);
+  int *chkmax = INTEGER(chkMax);
 
   double minV, maxV;
-  int ov = INTEGER_VALUE(opVal);
+  int ov = Rf_asInteger(opVal);
   index_type count = 0;
   index_type i,j;
   double val;
@@ -1798,10 +1793,10 @@ SEXP MWhichMatrix( MatrixType mat, index_type nrow, SEXP selectColumn,
     if (j==numSc && ov == 0) ++count;
   }
 
-  if (count==0) return NEW_INTEGER(0);
+  if (count==0) return Rf_allocVector(INTSXP,0);
 
-  SEXP ret = PROTECT(NEW_NUMERIC(count));
-  double *retVals = NUMERIC_DATA(ret);
+  SEXP ret = Rf_protect(Rf_allocVector(REALSXP,count));
+  double *retVals = REAL(ret);
   index_type k = 0;
   for (i=0; i < nrow; ++i) {
     for (j=0; j < numSc; ++j) {
@@ -1841,7 +1836,7 @@ SEXP MWhichMatrix( MatrixType mat, index_type nrow, SEXP selectColumn,
     } // end j loop
     if (j==numSc && ov == 0) retVals[k++] = i+1;
   } // end i loop
-  UNPROTECT(1);
+  Rf_unprotect(1);
   return(ret);
 }
 
@@ -1854,24 +1849,24 @@ SEXP CreateRAMMatrix(SEXP row, SEXP col, SEXP colnames, SEXP rownames,
   {
     pMat = new T();
 
-    if (!pMat->create( static_cast<index_type>(NUMERIC_VALUE(row)),
-      static_cast<index_type>(NUMERIC_VALUE(col)),
-      INTEGER_VALUE(typeLength),
-      static_cast<bool>(LOGICAL_VALUE(separated))))
+    if (!pMat->create( static_cast<index_type>(REAL(row)[0]),
+      static_cast<index_type>(REAL(col)[0]),
+      Rf_asInteger(typeLength),
+      static_cast<bool>(LOGICAL(separated)[0])))
     {
       delete pMat;
-      return NULL_USER_OBJECT;
+      return R_NilValue;
     }
 
-    if (colnames != NULL_USER_OBJECT)
+    if (colnames != R_NilValue)
     {
       pMat->column_names(RChar2StringVec(colnames));
     }
-    if (rownames != NULL_USER_OBJECT)
+    if (rownames != R_NilValue)
     {
       pMat->row_names(RChar2StringVec(rownames));
     }
-    if (GET_LENGTH(ini) != 0)
+    if (Rf_length(ini) != 0)
     {
       if (pMat->separated_columns())
       {
@@ -1939,7 +1934,7 @@ SEXP CreateRAMMatrix(SEXP row, SEXP col, SEXP colnames, SEXP rownames,
     Rprintf("Exception caught while trying to create shared matrix.");
   }
   delete(pMat); 
-  error("The shared matrix could not be created\n");
+  Rf_error("The shared matrix could not be created\n");
   return(R_NilValue);
 }
 
@@ -1951,8 +1946,8 @@ void SetRowOffsetInfo( SEXP bigMatAddr, SEXP rowOffset, SEXP numRows )
 {
   BigMatrix *pMat = 
     reinterpret_cast<BigMatrix*>(R_ExternalPtrAddr(bigMatAddr));
-  pMat->row_offset(static_cast<index_type>(NUMERIC_VALUE(rowOffset)));
-  pMat->nrow(static_cast<index_type>(NUMERIC_VALUE(numRows)));
+  pMat->row_offset(static_cast<index_type>(REAL(rowOffset)[0]));
+  pMat->nrow(static_cast<index_type>(REAL(numRows)[0]));
   
 }
 
@@ -1961,8 +1956,8 @@ void SetColumnOffsetInfo( SEXP bigMatAddr, SEXP colOffset, SEXP numCols )
 {
   BigMatrix *pMat = 
     reinterpret_cast<BigMatrix*>(R_ExternalPtrAddr(bigMatAddr));
-  pMat->col_offset(static_cast<index_type>(NUMERIC_VALUE(colOffset)));
-  pMat->ncol(static_cast<index_type>(NUMERIC_VALUE(numCols)));
+  pMat->col_offset(static_cast<index_type>(REAL(colOffset)[0]));
+  pMat->ncol(static_cast<index_type>(REAL(numCols)[0]));
 }
 
 // [[Rcpp::export]]
@@ -2115,8 +2110,8 @@ SEXP MWhichBigMatrix( SEXP bigMatAddr, SEXP selectColumn, SEXP minVal,
 SEXP MWhichRIntMatrix( SEXP matrixVector, SEXP nrow, SEXP selectColumn,
   SEXP minVal, SEXP maxVal, SEXP chkMin, SEXP chkMax, SEXP opVal )
 {
-  index_type numRows = static_cast<index_type>(INTEGER_VALUE(nrow));
-  MatrixAccessor<int> mat(INTEGER_DATA(matrixVector), numRows);
+  index_type numRows = static_cast<index_type>(Rf_asInteger(nrow));
+  MatrixAccessor<int> mat(INTEGER(matrixVector), numRows);
   return MWhichMatrix<int, MatrixAccessor<int> >(mat, numRows, 
     selectColumn, minVal, maxVal, chkMin, chkMax, opVal, NA_INTEGER);
 }
@@ -2125,8 +2120,8 @@ SEXP MWhichRIntMatrix( SEXP matrixVector, SEXP nrow, SEXP selectColumn,
 SEXP MWhichRNumericMatrix( SEXP matrixVector, SEXP nrow, SEXP selectColumn,
   SEXP minVal, SEXP maxVal, SEXP chkMin, SEXP chkMax, SEXP opVal )
 {
-  index_type numRows = static_cast<index_type>(INTEGER_VALUE(nrow));
-  MatrixAccessor<double> mat(NUMERIC_DATA(matrixVector), numRows);
+  index_type numRows = static_cast<index_type>(Rf_asInteger(nrow));
+  MatrixAccessor<double> mat(REAL(matrixVector), numRows);
   return MWhichMatrix<double, MatrixAccessor<double> >(mat, numRows,
     selectColumn, minVal, maxVal, chkMin, chkMax, opVal, NA_REAL);
 }
@@ -2137,17 +2132,17 @@ SEXP CCountLines(SEXP fileName)
   FILE *FP;
   double lineCount = 0;
   char readChar;
-  FP = fopen(STRING_VALUE(fileName), "r");
-  SEXP ret = PROTECT(NEW_NUMERIC(1));
-  NUMERIC_DATA(ret)[0] = -1;                   
+  FP = fopen(CHAR(Rf_asChar(fileName)), "r");
+  SEXP ret = Rf_protect(Rf_allocVector(REALSXP,1));
+  REAL(ret)[0] = -1;                   
   if (FP == NULL) return(ret);
   do {
     readChar = fgetc(FP);
     if ('\n' == readChar) ++lineCount;
   } while( readChar != EOF );
   fclose(FP);
-  NUMERIC_DATA(ret)[0] = lineCount; 
-  UNPROTECT(1);                  
+  REAL(ret)[0] = lineCount; 
+  Rf_unprotect(1);                  
   return(ret);
 }
 
@@ -2792,10 +2787,10 @@ SEXP CreateFileBackedBigMatrix(SEXP fileName, SEXP filePath, SEXP row,
   {
     FileBackedBigMatrix *pMat = new FileBackedBigMatrix();
     string fn;
-    string path = ((filePath == NULL_USER_OBJECT) ? 
+    string path = ((filePath == R_NilValue) ? 
       "" : 
       RChar2String(filePath));
-    if (isNull(fileName))
+    if (Rf_isNull(fileName))
     {
       fn=pMat->uuid()+".bin";
     }
@@ -2804,24 +2799,24 @@ SEXP CreateFileBackedBigMatrix(SEXP fileName, SEXP filePath, SEXP row,
       fn = RChar2String(fileName);
     }
     if (!pMat->create( fn, RChar2String(filePath),
-      static_cast<index_type>(NUMERIC_VALUE(row)),
-      static_cast<index_type>(NUMERIC_VALUE(col)),
-      INTEGER_VALUE(typeLength),
-      static_cast<bool>(LOGICAL_VALUE(separated))))
+      static_cast<index_type>(REAL(row)[0]),
+      static_cast<index_type>(REAL(col)[0]),
+      Rf_asInteger(typeLength),
+      static_cast<bool>(LOGICAL(separated)[0])))
     {
       delete pMat;
-      error("Problem creating filebacked matrix.");
-      return NULL_USER_OBJECT;
+      Rf_error("Problem creating filebacked matrix.");
+      return R_NilValue;
     }
-    if (colnames != NULL_USER_OBJECT)
+    if (colnames != R_NilValue)
     {
       pMat->column_names(RChar2StringVec(colnames));
     }
-    if (rownames != NULL_USER_OBJECT)
+    if (rownames != R_NilValue)
     {
       pMat->row_names(RChar2StringVec(rownames));
     }
-    if (GET_LENGTH(ini) != 0)
+    if (Rf_length(ini) != 0)
     {
       if (pMat->separated_columns())
       {
@@ -2899,21 +2894,21 @@ SEXP CAttachSharedBigMatrix(SEXP sharedName, SEXP rows, SEXP cols,
   SharedMemoryBigMatrix *pMat = new SharedMemoryBigMatrix();
   bool connected = pMat->connect( 
     string(CHAR(STRING_ELT(sharedName,0))),
-    static_cast<index_type>(NUMERIC_VALUE(rows)),
-    static_cast<index_type>(NUMERIC_VALUE(cols)),
-    INTEGER_VALUE(typeLength),
-    static_cast<bool>(LOGICAL_VALUE(separated)),
-    static_cast<bool>(LOGICAL_VALUE(readOnly)));
+    static_cast<index_type>(REAL(rows)[0]),
+    static_cast<index_type>(REAL(cols)[0]),
+    Rf_asInteger(typeLength),
+    static_cast<bool>(LOGICAL(separated)[0]),
+    static_cast<bool>(LOGICAL(readOnly)[0]));
   if (!connected)
   {
     delete pMat;
-    return NULL_USER_OBJECT;
+    return R_NilValue;
   }
-  if (GET_LENGTH(colNames) > 0)
+  if (Rf_length(colNames) > 0)
   {
     pMat->column_names(RChar2StringVec(colNames));
   }
-  if (GET_LENGTH(rowNames) > 0)
+  if (Rf_length(rowNames) > 0)
   {
     pMat->row_names(RChar2StringVec(rowNames));
   }
@@ -2933,21 +2928,21 @@ SEXP CAttachFileBackedBigMatrix(SEXP fileName,
   bool connected = pMat->connect( 
     string(CHAR(STRING_ELT(fileName,0))),
     string(CHAR(STRING_ELT(filePath,0))),
-    static_cast<index_type>(NUMERIC_VALUE(rows)),
-    static_cast<index_type>(NUMERIC_VALUE(cols)),
-    INTEGER_VALUE(typeLength),
-    static_cast<bool>(LOGICAL_VALUE(separated)),
-    static_cast<bool>(LOGICAL_VALUE(readOnly)));
+    static_cast<index_type>(REAL(rows)[0]),
+    static_cast<index_type>(REAL(cols)[0]),
+    Rf_asInteger(typeLength),
+    static_cast<bool>(LOGICAL(separated)[0]),
+    static_cast<bool>(LOGICAL(readOnly)[0]));
   if (!connected)
   {
     delete pMat;
-    return NULL_USER_OBJECT;
+    return R_NilValue;
   }
-  if (GET_LENGTH(colNames) > 0)
+  if (Rf_length(colNames) > 0)
   {
     pMat->column_names(RChar2StringVec(colNames));
   }
-  if (GET_LENGTH(rowNames) > 0)
+  if (Rf_length(rowNames) > 0)
   {
     pMat->row_names(RChar2StringVec(rowNames));
   }
@@ -2964,7 +2959,7 @@ SEXP SharedName( SEXP address )
   BigMatrix *pMat = (BigMatrix*)R_ExternalPtrAddr(address);
   SharedMemoryBigMatrix *psmbm = dynamic_cast<SharedMemoryBigMatrix*>(pMat);
   if (psmbm) return String2RChar(psmbm->shared_name());
-  error("Object is not a shared memory big.matrix.");
+  Rf_error("Object is not a shared memory big.matrix.");
   return R_NilValue;
   
 }
@@ -2975,7 +2970,7 @@ SEXP FileName( SEXP address )
   BigMatrix *pMat = (BigMatrix*)R_ExternalPtrAddr(address);
   FileBackedBigMatrix *pfbbm = dynamic_cast<FileBackedBigMatrix*>(pMat);
   if (pfbbm) return String2RChar(pfbbm->file_name());
-  error("Object is not a filebacked big.matrix.");
+  Rf_error("Object is not a filebacked big.matrix.");
   return R_NilValue;
 }
 
@@ -2985,17 +2980,17 @@ SEXP Flush( SEXP address )
   FileBackedBigMatrix *pMat =   
     reinterpret_cast<FileBackedBigMatrix*>(R_ExternalPtrAddr(address));   
   FileBackedBigMatrix *pfbbm = dynamic_cast<FileBackedBigMatrix*>(pMat);
-  SEXP ret = PROTECT(NEW_LOGICAL(1));
+  SEXP ret = Rf_protect(Rf_allocVector(LGLSXP,1));
   if (pfbbm)
   { 
-    LOGICAL_DATA(ret)[0] = pfbbm->flush() ? (Rboolean)TRUE : Rboolean(FALSE);
+    LOGICAL(ret)[0] = pfbbm->flush() ? (Rboolean)TRUE : Rboolean(FALSE);
   }
   else
   {
-    LOGICAL_DATA(ret)[0] = (Rboolean)FALSE;
-    error("Object is not a filebacked big.matrix");
+    LOGICAL(ret)[0] = (Rboolean)FALSE;
+    Rf_error("Object is not a filebacked big.matrix");
   }
-  UNPROTECT(1);
+  Rf_unprotect(1);
   return ret;
 }
 
@@ -3004,9 +2999,9 @@ SEXP IsShared( SEXP address )
 {
   FileBackedBigMatrix *pMat =   
     reinterpret_cast<FileBackedBigMatrix*>(R_ExternalPtrAddr(address));   
-  SEXP ret = PROTECT(NEW_LOGICAL(1));
-  LOGICAL_DATA(ret)[0] = pMat->shared() ? (Rboolean)TRUE : Rboolean(FALSE);
-  UNPROTECT(1);
+  SEXP ret = Rf_protect(Rf_allocVector(LGLSXP,1));
+  LOGICAL(ret)[0] = pMat->shared() ? (Rboolean)TRUE : Rboolean(FALSE);
+  Rf_unprotect(1);
   return ret;
 }
 
@@ -3014,9 +3009,9 @@ SEXP IsShared( SEXP address )
 SEXP isnil(SEXP address)
 {
   void *ptr = R_ExternalPtrAddr(address);
-  SEXP ret = PROTECT(NEW_LOGICAL(1));
-  LOGICAL_DATA(ret)[0] = (ptr==NULL) ? (Rboolean)TRUE : Rboolean(FALSE);
-  UNPROTECT(1);
+  SEXP ret = Rf_protect(Rf_allocVector(LGLSXP,1));
+  LOGICAL(ret)[0] = (ptr==NULL) ? (Rboolean)TRUE : Rboolean(FALSE);
+  Rf_unprotect(1);
   return(ret);
 }
 

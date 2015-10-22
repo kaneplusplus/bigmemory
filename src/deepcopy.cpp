@@ -4,17 +4,11 @@
 #include <algorithm>
 
 #include <boost/lexical_cast.hpp>
+#include <Rcpp.h>
 
 #include "bigmemory/BigMatrix.h"
 #include "bigmemory/MatrixAccessor.hpp"
 #include "bigmemory/isna.hpp"
-
-// undefine length which Rcpp maps to Rf_length and uses as member function
-#undef length
-#include <Rcpp.h>
-// but redefine it to Rf_length for subsequent use below and in util.h
-#define length Rf_length
-
 
 template<typename in_CType, typename in_BMAccessorType, 
   typename out_CType, typename out_BMAccessorType>
@@ -23,10 +17,10 @@ void DeepCopy(BigMatrix *pInMat, BigMatrix *pOutMat, SEXP rowInds, SEXP colInds)
   in_BMAccessorType inMat( *pInMat );
   out_BMAccessorType outMat( *pOutMat );
   
-  double *pRows = NUMERIC_DATA(rowInds);
-  double *pCols = NUMERIC_DATA(colInds);
-  index_type nRows = GET_LENGTH(rowInds);
-  index_type nCols = GET_LENGTH(colInds);
+  double *pRows = REAL(rowInds);
+  double *pCols = REAL(colInds);
+  index_type nRows = Rf_length(rowInds);
+  index_type nCols = Rf_length(colInds);
   
   if (nRows != pOutMat->nrow())
     Rf_error("length of row indices does not equal # of rows in new matrix");
@@ -100,7 +94,7 @@ SEXP CDeepCopy(SEXP inAddr, SEXP outAddr, SEXP rowInds, SEXP colInds,
       R_ExternalPtrAddr(outAddr));
     
     if ((pOutMat->matrix_type() < pInMat->matrix_type()) & 
-      (LOGICAL_VALUE(typecast_warning) == (Rboolean)TRUE))
+      (Rf_asLogical(typecast_warning) == (Rboolean)TRUE))
     {
       string type_names[9] = {
         "", "char", "short", "", "integer", "", "", "", "double"};

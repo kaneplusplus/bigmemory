@@ -1391,9 +1391,14 @@ setMethod('read.big.matrix', signature(filename='character'),
     # has.row.names indicates whether or not there are row names;
     # we take ignore.row.names from the user, but pass (essentially)
     # use.row.names (which is !ignore.row.names) to C:
-    ReadMatrix(filename, bigMat@address, 
-          as.integer(skip+headerOffset), as.double(numRows), 
-          as.double(numCols), as.character(sep), as.logical(has.row.names),
+    ReadMatrix(
+          as.character(filename), 
+          bigMat@address, 
+          as.double(skip+headerOffset), 
+          as.double(numRows), 
+          as.double(numCols), 
+          as.character(sep), 
+          as.logical(has.row.names),
           as.logical(!ignore.row.names))
 
     return(bigMat)
@@ -1670,10 +1675,13 @@ setMethod('attach.resource', signature(obj='big.matrix.descriptor'),
     
     if (info$sharedType == 'SharedMemory')
     {
-      address <- CAttachSharedBigMatrix(info$sharedName, 
-        info$totalRows, info$totalCols, as.character(info$rowNames), 
-        as.character(info$colNames), as.integer(typeLength), info$separated,
-        readOnly)
+      address <- CAttachSharedBigMatrix(as.character(info$sharedName), 
+        as.double(info$totalRows), 
+        as.double(info$totalCols), 
+        as.character(info$rowNames), 
+        as.character(info$colNames), as.integer(typeLength), 
+        as.logical(info$separated),
+        as.logical(readOnly))
     }
     else
     {
@@ -1695,9 +1703,15 @@ setMethod('attach.resource', signature(obj='big.matrix.descriptor'),
         }
       }
       address <- CAttachFileBackedBigMatrix(
-        info$filename, path, info$totalRows, info$totalCols, 
-        as.character(info$rowNames), as.character(info$colNames), 
-        as.integer(typeLength), info$separated, readOnly)
+        as.character(info$filename), 
+        as.character(path), 
+        as.double(info$totalRows), 
+        as.double(info$totalCols), 
+        as.character(info$rowNames), 
+        as.character(info$colNames), 
+        as.integer(typeLength), 
+        as.logical(info$separated), 
+        as.logical(readOnly))
     }
     if (!is.null(address)) 
     {

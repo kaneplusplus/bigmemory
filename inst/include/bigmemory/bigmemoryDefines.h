@@ -19,11 +19,6 @@
   typedef long index_type;
 #endif
 
-extern "C"
-{
-  #include <Rdefines.h>
-}
-
 #define NA_CHAR CHAR_MIN
 #define NA_SHORT SHRT_MIN
 #define R_INT_MIN (1+INT_MIN)

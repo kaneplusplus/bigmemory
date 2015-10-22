@@ -64,7 +64,7 @@ struct VecPtr;
 
 template<>
 struct VecPtr<int>
-{int* operator()(SEXP vec) const {return INTEGER_DATA(vec);};};
+{int* operator()(SEXP vec) const {return INTEGER(vec);};};
 
 template<>
 struct VecPtr<float>
@@ -72,6 +72,6 @@ struct VecPtr<float>
 
 template<>
 struct VecPtr<double>
-{double* operator()(SEXP vec) const {return NUMERIC_DATA(vec);};};
+{double* operator()(SEXP vec) const {return REAL(vec);};};
 
 #endif // BIGMEMORY_UTIL_HPP
