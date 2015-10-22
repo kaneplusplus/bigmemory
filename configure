@@ -7,8 +7,7 @@
 # of the shared counters, but the chance of a problem is very
 # small.  Hopefully BOOST will catch up, soon.
 
-FLAGS="PKG_CPPFLAGS=-I../inst/include -O3 -Wall -pipe -Wno-unused -pedantic"
-
+FLAGS="PKG_CPPFLAGS=-I../inst/include"
 
 LIBS=""
 
@@ -39,4 +38,3 @@ fi
 
 echo "${FLAGS}" > src/Makevars
 echo "${LIBS}" >> src/Makevars
-echo "CXX=g++-4.9" >> src/Makevars
