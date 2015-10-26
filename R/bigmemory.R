@@ -614,7 +614,7 @@ SetElements.bm <- function(x, i, j, value)
                 "options(bigmemory.typecast.warning=FALSE)\n", sep=''))
   }
 
-  totalts <- length(i) * length(j)
+  totalts <- max(as.double(length(i)), as.double(length(j)))
   # If we are assigning from a matrix, make sure the dimensions agree.
   if (is.matrix(value))
   {

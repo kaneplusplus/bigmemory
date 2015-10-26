@@ -30,3 +30,4 @@ x[,]
 2. direct access to a RDBMS (Oracle, Postgresql, etc.)
 3. Additional big.matrix subclasses (e.g. sparse, positive-definite, etc.) 
     -- see bigalgrebra package
+4. big.sparse.matrix.
