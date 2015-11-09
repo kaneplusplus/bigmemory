@@ -299,6 +299,7 @@ bool SharedMemoryBigMatrix::create(const index_type numRow,
         _counter.init( _sharedName+"_counter" );
     #ifndef INTERLOCKED_EXCHANGE_HACK
         mutex.unlock();
+        named_mutex::remove((_sharedName+"_counter_mutex").c_str());
     #endif
         if (_sepCols)
         {
@@ -367,7 +368,6 @@ bool SharedMemoryBigMatrix::create(const index_type numRow,
           throw e;
         }
         _counter.reset();
-        named_mutex::remove((_sharedName+"_counter_mutex").c_str());
  
       }
     } while(++retry < 200);
@@ -461,6 +461,7 @@ bool SharedMemoryBigMatrix::connect( const std::string &uuid,
     _counter.init( _sharedName+"_counter" );
 #ifndef INTERLOCKED_EXCHANGE_HACK
     mutex.unlock();
+    named_mutex::remove((_sharedName+"_counter_mutex").c_str());
 #endif
     if (_sepCols)
     {
