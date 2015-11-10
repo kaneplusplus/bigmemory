@@ -293,13 +293,13 @@ bool SharedMemoryBigMatrix::create(const index_type numRow,
         _sharedName=_uuid;
     #ifndef INTERLOCKED_EXCHANGE_HACK
         // Create the associated mutex and counter;
-        named_mutex mutex(open_or_create, (_sharedName+"_counter_mutex").c_str());
+        named_mutex mutex(create_only, (_sharedName+"_bigmemory_counter_mutex").c_str());
         mutex.lock();
     #endif
         _counter.init( _sharedName+"_counter" );
     #ifndef INTERLOCKED_EXCHANGE_HACK
         mutex.unlock();
-        named_mutex::remove((_sharedName+"_counter_mutex").c_str());
+        named_mutex::remove((_sharedName+"_bigmemory_counter_mutex").c_str());
     #endif
         if (_sepCols)
         {
@@ -365,6 +365,7 @@ bool SharedMemoryBigMatrix::create(const index_type numRow,
             string(e.what()) != string("Die Datei ist vorhanden."))
         {
           // It's a problem. Rethrow.
+          cout << e.what() << endl;
           throw e;
         }
         _counter.reset();
@@ -455,13 +456,13 @@ bool SharedMemoryBigMatrix::connect( const std::string &uuid,
 
 #ifndef INTERLOCKED_EXCHANGE_HACK
     // Attach to the associated mutex and counter;
-    named_mutex mutex(open_or_create, (_sharedName+"_counter_mutex").c_str());
+    named_mutex mutex(open_or_create, (_sharedName+"_bigmemory_counter_mutex").c_str());
     mutex.lock();
 #endif
     _counter.init( _sharedName+"_counter" );
 #ifndef INTERLOCKED_EXCHANGE_HACK
     mutex.unlock();
-    named_mutex::remove((_sharedName+"_counter_mutex").c_str());
+    named_mutex::remove((_sharedName+"_bigmemory_counter_mutex").c_str());
 #endif
     if (_sepCols)
     {
@@ -678,7 +679,7 @@ bool SharedMemoryBigMatrix::destroy()
 {
   using namespace boost::interprocess;
 #ifndef INTERLOCKED_EXCHANGE_HACK
-  named_mutex mutex(open_or_create, (_sharedName+"_counter_mutex").c_str());
+  named_mutex mutex(open_or_create, (_sharedName+"_bigmemory_counter_mutex").c_str());
   mutex.lock();
 #endif
   bool destroyThis = (1==_counter.get()) ? true : false;
@@ -710,7 +711,7 @@ bool SharedMemoryBigMatrix::destroy()
     mutex.unlock();
     if (destroyThis)
     {
-      named_mutex::remove((_sharedName+"_counter_mutex").c_str());
+      named_mutex::remove((_sharedName+"_bigmemory_counter_mutex").c_str());
     }
 #endif
     return true;
@@ -722,7 +723,7 @@ bool SharedMemoryBigMatrix::destroy()
     mutex.unlock();
     if (destroyThis)
     {
-      named_mutex::remove((_sharedName+"_counter_mutex").c_str());
+      named_mutex::remove((_sharedName+"_bigmemory_counter_mutex").c_str());
     }
 #endif
     return false;
