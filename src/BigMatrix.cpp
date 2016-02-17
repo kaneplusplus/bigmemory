@@ -369,7 +369,6 @@ bool SharedMemoryBigMatrix::create(const index_type numRow,
             string(e.what()) != string("Die Datei ist vorhanden."))
         {
           // It's a problem. Rethrow.
-          cout << e.what() << endl;
           throw e;
         }
         _counter.reset();
