@@ -185,7 +185,11 @@ bool SharedBigMatrix::create_uuid()
 {
   try
   {
+#ifdef DARWIN
+    size_t string_len = 10;
+#else
     size_t string_len = 24;
+#endif
     std::string letters("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
     Rcpp::NumericVector inds=
       Rcpp::runif(string_len, -0.49, letters.size()-0.51);

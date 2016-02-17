@@ -8,6 +8,7 @@
 #if __STDC_VERSION__ >= 199901L
   #define HAVE_COMPLEX
   #include <complex.h>
+  #undef I
 #else
   #undef HAVE_COMPLEX
 #endif 
