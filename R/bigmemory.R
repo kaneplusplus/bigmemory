@@ -496,7 +496,8 @@ GetAll.bm <- function(x, drop=TRUE)
   return(mat)
 }
 
-#' @title Extract or Replace big.matrix elements
+#' @title Extract or Replace 
+#' @description Extract or replace big.matrix elements
 #' @name Extract,big.matrix
 #' @param x A \code{big.matrix object}
 #' @param i Indices specifying the rows
@@ -990,6 +991,7 @@ setMethod('typeof', signature(x="big.matrix"),
 # Little function to test if a value is
 # the 'R' representation of float/single value
 #' @title Check if Float
+#' @description Check to see if the elements of a big.matrix object are floats.
 #' @param x An object to be evaluated if float
 #' @export
 setGeneric('is.float', function(x){
