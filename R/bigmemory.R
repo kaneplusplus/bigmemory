@@ -988,8 +988,6 @@ setMethod('typeof', signature(x="big.matrix"),
   )
 
 
-# Little function to test if a value is
-# the 'R' representation of float/single value
 #' @title Check if Float
 #' @description Check to see if the elements of a big.matrix object are floats.
 #' @param x An object to be evaluated if float

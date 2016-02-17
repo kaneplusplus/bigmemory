@@ -9,4 +9,7 @@ is.float(x)
 \arguments{
 \item{x}{An object to be evaluated if float}
 }
+\description{
+Check to see if the elements of a big.matrix object are floats.
+}
 
