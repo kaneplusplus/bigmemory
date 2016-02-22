@@ -25,10 +25,13 @@
 #' @author John W. Emerson and Michael J. Kane
 #' @seealso \code{\link{big.matrix}}
 #' @examples 
-#' x <- big.matrix(10, 5, init=0, type="double")
+#' x <- big.matrix(10, 5, init=0, type="double", backingfile="x.back", 
+#'                 descriptorfile="x.desc")
 #' x[,] <- 1:50
 #' y <- sub.big.matrix(x, 2, 9, 2, 3)
 #' y[,]
 #' y[1,1] <- -99
 #' x[,]
+#' rm(x)
+#' unlink(c("x.desc", "x.back"))
 #' @keywords methods

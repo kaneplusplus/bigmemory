@@ -50,7 +50,8 @@ A descriptor file is automatically created when a new filebacked
 # then the attach of the second R process would give access to the
 # same object in memory.  Please see the package vignette for real examples.
 
-z <- big.matrix(3, 3, type='integer', init=3)
+z <- big.matrix(3, 3, type='integer', init=3, backingfile="z.back",
+                descriptorfile="z.desc")
 z[,]
 dim(z)
 z[1,1] <- 2
@@ -65,6 +66,8 @@ zz <- attach.resource(zdescription)
 zz[1,1] <- -100
 y[,]
 z[,]
+rm("z", "y", "zz")
+unlink(c("z.back", "z.desc"))
 }
 \author{
 Michael J. Kane and John W. Emerson 
