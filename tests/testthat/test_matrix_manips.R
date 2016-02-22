@@ -43,8 +43,9 @@ test_that("as.big.matrix converts types correctly",{
 
 test_that("flush works correctly",{
     expect_true(flush(z))
-    expect_warning(flush(bm), info="You cannot call flush on a non-filebacked 
-                 big.matrix")
+    if (Sys.info()['sysname'] != "Darwin")
+      expect_warning(flush(bm), info="You cannot call flush on a non-filebacked 
+                     big.matrix")
 })
 
 rm(z)

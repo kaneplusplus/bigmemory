@@ -86,9 +86,17 @@ big.matrix <- function(nrow, ncol, type=options()$bigmemory.default.type,
   }
   if (is.null(init)) init <- NA
   if (shared) {
-    address <- CreateSharedMatrix(as.double(nrow),
-                as.double(ncol), as.character(colnames), as.character(rownames),
-                as.integer(typeVal), as.double(init), as.logical(separated))
+    # There seems to be a recent problem with shared memory in OSX.
+    # So, we will create an anonymous filebacked big matrix in place of 
+    # a shared big matrix.
+    if (Sys.info()['sysname'] != "Darwin") {
+      address <- CreateSharedMatrix(as.double(nrow),
+                  as.double(ncol),as.character(colnames),as.character(rownames),
+                  as.integer(typeVal), as.double(init), as.logical(separated))
+    } else {
+      return(filebacked.big.matrix(nrow=nrow, ncol=ncol, type=type, init=init,
+             dimnames=dimnames, separated=separated, backingfile=""))
+    }
   } else {
     address <- CreateLocalMatrix(as.double(nrow),
                 as.double(ncol), as.character(colnames), as.character(rownames),

@@ -12,7 +12,7 @@
 #' \code{big.matrix} and native \code{matrix} objects.
 #' 
 #' \tabular{ll}{ Package: \tab bigmemory\cr Type: \tab Package\cr Version: \tab
-#' 4.5.10\cr Date: \tab 2015-11-09\cr License: \tab LGPL-3 | Apache License 2.0\cr Copyright:
+#' 4.5.11\cr Date: \tab 2016-02-22\cr License: \tab LGPL-3 | Apache License 2.0\cr Copyright:
 #' http://www.bigmemory.org\cr LazyLoad: \tab yes\cr }
 #' 
 #' Index of functions/methods (grouped in a friendly way): \preformatted{
@@ -88,7 +88,7 @@
 #' functions (e.g. \code{\link{lm}}, \code{\link{kmeans}}).  One nice exception
 #' is \code{\link{split}}, because this function only accesses subsets of the
 #' matrix.
-#' @author Michael J. Kane and John W. Emerson
+#' @author Michael J. Kane, John W. Emerson, Peter Haverty, and Charles Determan Jr.
 #' 
 #' Maintainers: Michael J. Kane <bigmemoryauthors@@gmail.com>
 #' @seealso For example, \code{\link{big.matrix}}, \code{\link{mwhich}},

@@ -15,11 +15,12 @@ fbm.data.path = file.path(back.dir,fbm.file)
 bm = big.matrix(3,3,dimnames=list(rownames,colnames))
 
 test_that("test_readonly", {
-    mat = matrix(1:9, ncol = 3, dimnames = list(rownames, colnames))
+  mat = matrix(1:9, ncol = 3, dimnames = list(rownames, colnames))
+  if (Sys.info()['sysname'] != "Darwin") {
     bm = big.matrix(3, 3, dimnames = list(rownames, colnames))
     bm[, ] = mat
-    bm2 = attach.big.matrix(describe(bm), readonly = TRUE)
-    bm3 = attach.big.matrix(describe(bm), readonly = FALSE)
+    bm2 = attach.big.matrix(describe(bm), readonly = TRUE, shared=FALSE)
+    bm3 = attach.big.matrix(describe(bm), readonly = FALSE, shared=FALSE)
     expect_false(is.readonly(bm), info = "bm should not be readonly")
     expect_true(is.readonly(bm2), info = "bm2 should be readonly")
     expect_false(is.readonly(bm3), info = "bm3 should be readonly")
@@ -39,7 +40,7 @@ test_that("test_readonly", {
     expect_error({
         bm2[matrix(c(1, 2, 2, 2), ncol = 2), ] = 100
     }, info = "Writing subset by matrix to a big.matrix made read-only by FS before attached gives error")
-    
+  }    
     # in order to reuse, must remove prior objects
 #     rm(fbm)
 #     gc()

@@ -17,7 +17,7 @@
 \alias{[<-,big.matrix,matrix,missing-method}
 \alias{[<-,big.matrix,missing,ANY-method}
 \alias{[<-,big.matrix,missing,missing-method}
-\title{Extract or Replace big.matrix elements}
+\title{Extract or Replace}
 \usage{
 \S4method{[}{big.matrix,ANY,ANY,missing}(x, i, j, drop)
 
@@ -57,5 +57,8 @@
 \item{drop}{Logical indication if reduce to minimum dimensions}
 
 \item{value}{typically an array-like R object of similar class}
+}
+\description{
+Extract or replace big.matrix elements
 }
 

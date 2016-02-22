@@ -15,8 +15,9 @@ test_that("is.nil works appropriately",{
 })
 
 test_that("file.name works appropriately",{
-    expect_error(file.name(bm), 
-                 info="The argument is not a file backed big.matrix.")
+    if (Sys.info()['sysname'] != "Darwin")
+      expect_error(file.name(bm), 
+                   info="The argument is not a file backed big.matrix.")
     expect_identical(file.name(z), 'example.bin')
 })
 
