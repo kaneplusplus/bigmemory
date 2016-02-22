@@ -119,7 +119,7 @@ Michael J. Kane and John W. Emerson
 Maintainers: Michael J. Kane <bigmemoryauthors@gmail.com>
 }
 \references{
-The Bigmemory Project: \url{http://www.bigmemory.org/}.
+\url{http://www.bigmemory.org}
 }
 \seealso{
 For example, \code{\link{big.matrix}}, \code{\link{mwhich}},

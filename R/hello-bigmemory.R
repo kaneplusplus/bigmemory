@@ -93,7 +93,9 @@
 #' Maintainers: Michael J. Kane <bigmemoryauthors@@gmail.com>
 #' @seealso For example, \code{\link{big.matrix}}, \code{\link{mwhich}},
 #' \code{\link{read.big.matrix}}
-#' @references The Bigmemory Project: \url{http://www.bigmemory.org/}.
+#'
+#' @references \url{http://www.bigmemory.org}
+#' 
 #' @keywords package
 #' @examples
 #' 
