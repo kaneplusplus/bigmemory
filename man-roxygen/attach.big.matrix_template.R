@@ -3,7 +3,7 @@
 #' @aliases describe attach.resource
 #' @title The basic ``big.matrix'' operations for sharing and re-attaching.
 #' @description
-#' The \code{describe} function returns the information needed by 
+#' The \code{describe} function returns the infommation needed by 
 #' \code{attach.big.matrix} to reference a shared or file-backed 
 #' \code{big.matrix} object.
 #' The \code{attach.big.matrix} and \code{attach.resource} functions create a
@@ -36,23 +36,25 @@
 #' # via SNOW, foreach, or even by a simple file read/write,
 #' # then the attach of the second R process would give access to the
 #' # same object in memory.  Please see the package vignette for real examples.
-#' 
-#' z <- big.matrix(3, 3, type='integer', init=3, backingfile="z.back",
-#'                 descriptorfile="z.desc")
+#'
+#' backingfile <- tempfile()
+#' backingpath <- dirname(backingfile)
+#' backingfile <- basename(backingfile)
+#' descriptorfile = basename(tempfile())
+#' z <- big.matrix(3, 3, type='integer', init=3, backingfile=backingfile,
+#'                 descriptorfile=descriptorfile, backingpath=backingpath)
 #' z[,]
 #' dim(z)
 #' z[1,1] <- 2
 #' z[,]
 #' zdescription <- describe(z)
 #' zdescription
-#' y <- attach.big.matrix(zdescription)
+#' y <- attach.big.matrix(zdescription, backingpath=backingpath)
 #' y[,]
 #' y
 #' z
-#' zz <- attach.resource(zdescription)
+#' zz <- attach.resource(zdescription, path=backingpath)
 #' zz[1,1] <- -100
 #' y[,]
 #' z[,]
-#' rm("z", "y", "zz")
-#' unlink(c("z.back", "z.desc"))
 #' @keywords classes methods

@@ -220,39 +220,44 @@ x[,]
 # second R process would give access to the same object in memory.
 # Please see the package vignette for real examples.
 
-z <- big.matrix(3, 3, type='integer', init=3, backingfile="z.back",
-                descriptorfile="z.desc")
+backingfile <- tempfile()
+backingpath <- dirname(backingfile)
+backingfile <- basename(backingfile)
+descriptorfile = basename(tempfile())
+descriptorfile_name = tempfile()
+z <- big.matrix(3, 3, type='integer', init=3, backingfile=backingfile,
+                descriptorfile=descriptorfile, backingpath=backingpath)
 z[,]
 dim(z)
 z[1,1] <- 2
 z[,]
 zdescription <- describe(z)
 zdescription
-y <- attach.big.matrix(zdescription)
+y <- attach.big.matrix(zdescription, backingpath=backingpath)
 y[,]
 y
 z
 y[1,1] <- -100
 y[,]
 z[,]
-rm("z", "y", "zz")
-unlink(c("z.back", "z.desc"))
 # A short filebacked example, showing the creation of associated files:
 
 files <- dir()
 files[grep("example.bin", files)]
+temp_dir = tempdir()
 
 z <- filebacked.big.matrix(3, 3, type='integer', init=123,
                            backingfile="example.bin",
                            descriptorfile="example.desc",
+                           backingpath=temp_dir,
                            dimnames=list(c('a','b','c'), c('d', 'e', 'f')))
 z[,]
 files <- dir()
 files[grep("example.bin", files)]
-zz <- attach.big.matrix("example.desc")
+zz <- attach.big.matrix("example.desc", backingpath=temp_dir)
 zz[,]
 zz[1,1] <- 0
-zzz <- attach.big.matrix(describe(z))
+zzz <- attach.big.matrix(describe(z), backingpath=temp_dir)
 zzz[,]
 }
 \author{

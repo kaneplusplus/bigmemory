@@ -30,7 +30,7 @@ a \code{big.matrix} object.
 corresponding to a shared-memory or file-backed \code{big.matrix}.
 }
 \description{
-The \code{describe} function returns the information needed by 
+The \code{describe} function returns the infommation needed by 
 \code{attach.big.matrix} to reference a shared or file-backed 
 \code{big.matrix} object.
 The \code{attach.big.matrix} and \code{attach.resource} functions create a
@@ -50,24 +50,26 @@ A descriptor file is automatically created when a new filebacked
 # then the attach of the second R process would give access to the
 # same object in memory.  Please see the package vignette for real examples.
 
-z <- big.matrix(3, 3, type='integer', init=3, backingfile="z.back",
-                descriptorfile="z.desc")
+backingfile <- tempfile()
+backingpath <- dirname(backingfile)
+backingfile <- basename(backingfile)
+descriptorfile = basename(tempfile())
+z <- big.matrix(3, 3, type='integer', init=3, backingfile=backingfile,
+                descriptorfile=descriptorfile, backingpath=backingpath)
 z[,]
 dim(z)
 z[1,1] <- 2
 z[,]
 zdescription <- describe(z)
 zdescription
-y <- attach.big.matrix(zdescription)
+y <- attach.big.matrix(zdescription, backingpath=backingpath)
 y[,]
 y
 z
-zz <- attach.resource(zdescription)
+zz <- attach.resource(zdescription, path=backingpath)
 zz[1,1] <- -100
 y[,]
 z[,]
-rm("z", "y", "zz")
-unlink(c("z.back", "z.desc"))
 }
 \author{
 Michael J. Kane and John W. Emerson 

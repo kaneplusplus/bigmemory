@@ -50,15 +50,18 @@ object that references a contiguous set of columns and rows of another
  otherwise.
 }
 \examples{
-x <- big.matrix(10, 5, init=0, type="double", backingfile="x.back", 
-                descriptorfile="x.desc")
+backingfile <- tempfile()
+backingpath <- dirname(backingfile)
+backingfile <- basename(backingfile)
+descriptorfile = basename(tempfile())
+x <- big.matrix(10, 5, init=0, type="double", backingfile=backingfile,
+                descriptorfile=descriptorfile, backingpath=backingpath)
 x[,] <- 1:50
 y <- sub.big.matrix(x, 2, 9, 2, 3)
 y[,]
 y[1,1] <- -99
 x[,]
 rm(x)
-unlink(c("x.desc", "x.back"))
 }
 \author{
 John W. Emerson and Michael J. Kane
