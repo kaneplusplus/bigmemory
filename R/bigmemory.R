@@ -159,15 +159,15 @@ filebacked.big.matrix <- function(nrow, ncol,
     if (is.null(backingpath)) backingpath <- ''
     backingpath <- path.expand(backingpath)
     if (backingpath != "") {
-      backingpath <- file.path(backingpath, '')
+      backingpath <- paste(backingpath, '', sep=.Platform$file.sep)
     }
     
-    if(file.exists(file.path(backingpath, backingfile))){
+    if(file.exists(paste(backingpath, backingfile, sep=.Platform$file.sep))){
         stop("Backing file already exists! Either remove or specify
              different backing file")
     }
     if (backingpath == "" && dirname(backingfile) == ".") 
-      backingpath = file.path(getwd(), "")
+      backingpath = paste(getwd(), "", sep=.Platform$file.sep)
 
     address <- CreateFileBackedBigMatrix(as.character(backingfile), 
                      as.character(backingpath), as.double(nrow), 
@@ -192,7 +192,8 @@ filebacked.big.matrix <- function(nrow, ncol,
     }
     if (!anon.backing)
     {
-        descriptorfilepath <- file.path(backingpath, descriptorfile) 
+        descriptorfilepath <- paste(backingpath, descriptorfile, 
+                                    sep=.Platform$file.sep)
         if(binarydescriptor)
         {
             saveRDS(describe(x), file=descriptorfilepath)
@@ -1620,7 +1621,8 @@ setMethod('attach.resource', signature(obj='character'),
   function(obj, ...)
   {
     path <- list(...)[['path']]
-    if (!is.null(path) && path != "") path = file.path(path.expand(path), "")
+    if (!is.null(path) && path != "") 
+      path = paste(path.expand(path), "", sep=.Platform$file.sep)
     else path = ""
     if (basename(obj) != obj)
     {
@@ -1632,7 +1634,7 @@ setMethod('attach.resource', signature(obj='character'),
       if (path == "")
         fileWithPath <- obj
       else
-        fileWithPath = file.path(path, obj)
+        fileWithPath = paste(path, obj, sep=.Platform$file.sep)
     }
     fi = file.info(fileWithPath)
     if (is.na(fi$isdir))
@@ -1683,14 +1685,14 @@ setMethod('attach.resource', signature(obj='big.matrix.descriptor'),
       if (is.null(path) && dirname(info$filename) == ".") {
         path <- getwd()  
         path <- path.expand(path)
-        path <- file.path(path, '')
+        path <- paste(path, '', sep=.Platform$file.sep)
       } else if (is.null(path)) {
         path = ""
       } else {
-        path = file.path(path, "")
+        path = paste(path, "", sep=.Platform$file.sep)
       }
       if (!info$separated) {
-        if (!file.exists(file.path(path, info$filename)))
+        if (!file.exists(paste(path, info$filename, sep=.Platform$file.sep)))
         {
           stop(paste("The backing file", paste(path, info$filename, sep=''),
             "could not be found"))
@@ -1699,9 +1701,10 @@ setMethod('attach.resource', signature(obj='big.matrix.descriptor'),
         # It's separated and we need to check for each column.
         for (i in 1:info$ncol) {
           fn <- paste(info$filename, "_column_", (i-1), sep='')
-          if (!file.exists(file.path(path, fn)))
+          if (!file.exists(paste(path, fn, sep=.Platform$file.sep)))
           {
-            stop(paste("The backing file", file.path(path, fn), 
+            stop(paste("The backing file", 
+                       paste(path, fn, sep=.Platform$file.sep), 
               "could not be found"))
           }
         }
