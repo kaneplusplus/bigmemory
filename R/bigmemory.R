@@ -1640,8 +1640,10 @@ setMethod('attach.resource', signature(obj='character'),
     if (fi$isdir)
       stop( fileWithPath, "is a directory" )
     info <- tryCatch(readRDS(file=fileWithPath), error=function(er){return(dget(fileWithPath))})
-    new_path = getwd()
+    
     if (dirname(obj) != ".") new_path = dirname(obj)
+    else if (path != "") new_path = path
+    else path = getwd()
     return(attach.resource(info, path=new_path, ...))
   })
 
