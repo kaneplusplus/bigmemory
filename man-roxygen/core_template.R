@@ -139,20 +139,14 @@
 #' # second R process would give access to the same object in memory.
 #' # Please see the package vignette for real examples.
 #' 
-#' backingfile <- tempfile()
-#' backingpath <- dirname(backingfile)
-#' backingfile <- basename(backingfile)
-#' descriptorfile = basename(tempfile())
-#' descriptorfile_name = tempfile()
-#' z <- big.matrix(3, 3, type='integer', init=3, backingfile=backingfile,
-#'                 descriptorfile=descriptorfile, backingpath=backingpath)
+#' z <- big.matrix(3, 3, type='integer', init=3)
 #' z[,]
 #' dim(z)
 #' z[1,1] <- 2
 #' z[,]
 #' zdescription <- describe(z)
 #' zdescription
-#' y <- attach.big.matrix(zdescription, backingpath=backingpath)
+#' y <- attach.big.matrix(zdescription)
 #' y[,]
 #' y
 #' z
@@ -164,6 +158,7 @@
 #' files <- dir()
 #' files[grep("example.bin", files)]
 #' temp_dir = tempdir()
+#' if (!file.exists(temp_dir)) dir.create(temp_dir)
 #' 
 #' z <- filebacked.big.matrix(3, 3, type='integer', init=123,
 #'                            backingfile="example.bin",

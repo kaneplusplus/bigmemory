@@ -743,7 +743,7 @@ void* ConnectFileBackedSepMatrix( const std::string &sharedName,
   dataRegionPtrs.resize(ncol);
   for (i=0; i < ncol; ++i)
   {
-    std::string columnName = filePath + "/" + sharedName + "_column_" + ttos(i);
+    std::string columnName = filePath + sharedName + "_column_" + ttos(i);
     // Map the file to this process.
     try
     {
@@ -820,9 +820,10 @@ void* ConnectFileBackedMatrix( const std::string &fileName,
   const std::string &filePath, MappedRegionPtrs &dataRegionPtrs, 
   const bool readOnly=false )
 {
+  COND_PRINT(DEBUG, "Connecting to file %s\n", (filePath + fileName).c_str())
   try
   {
-    file_mapping mFile((filePath+"/"+fileName).c_str(), 
+    file_mapping mFile((filePath+fileName).c_str(), 
       (readOnly ? read_only : read_write));
     dataRegionPtrs.push_back(
       MappedRegionPtr(new MappedRegion(mFile, 
@@ -844,6 +845,7 @@ void* CreateFileBackedMatrix(const std::string &fileName,
 {
   // Create the file.
   std::string fullFileName = filePath+fileName;
+  COND_PRINT(DEBUG, "Writing %s\n", fullFileName.c_str())
 #ifdef LINUX
   FILE *fp = fopen( fullFileName.c_str(), "wb");
   if (!fp)
@@ -885,6 +887,7 @@ bool FileBackedBigMatrix::create(const std::string &fileName,
   }
   try
   {
+    COND_PRINT(DEBUG, "create %s\n", (filePath + fileName).c_str())
     _fileName = fileName;
     _filePath = filePath;
     _nrow = numRow;
