@@ -11,7 +11,7 @@
 
 2014-04-15 Mike and Charles <bigmemoryauthors@bigmemory.org>
 * Enabled use of Rcpp package to simply code and create
-  smaller barrier to adding additonal extensions.
+  smaller barrier to adding additional extensions.
 * Added new method to big.matrix objects, allocation_size, to
   easily check the size of the object in memory.
 * Float type matrices have now been added to enable single
