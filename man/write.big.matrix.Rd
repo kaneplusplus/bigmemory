@@ -115,10 +115,12 @@ to numeric values.  Would you use such features?  Email us and let us know!
 x <- as.big.matrix(matrix(1:10, 5, 2))
 x[2,2] <- NA
 x[,]
-write.big.matrix(x, "foo.txt")
+temp_dir = tempdir()
+if (!dir.exists(temp_dir)) dir.create(temp_dir)
+write.big.matrix(x, file.path(temp_dir, "foo.txt"))
 
 # Just for fun, I'll read it back in as character (1-byte integers):
-y <- read.big.matrix("foo.txt", type="char")
+y <- read.big.matrix(file.path(temp_dir, "foo.txt"), type="char")
 y[,]
 
 # Other examples:
@@ -128,22 +130,25 @@ w[2,2] <- -Inf
 w[3,2] <- Inf
 w[4,2] <- NaN
 w[,]
-write.big.matrix(w, "bar.txt")
-w <- read.big.matrix("bar.txt", type="double")
+write.big.matrix(w, file.path(temp_dir, "bar.txt"))
+w <- read.big.matrix(file.path(temp_dir, "bar.txt"), type="double")
 w[,]
-w <- read.big.matrix("bar.txt", type="short")
+w <- read.big.matrix(file.path(temp_dir, "bar.txt"), type="short")
 w[,]
 
 # Another example using row names (which we don't like).
 x <- as.big.matrix(as.matrix(iris), type='double')
 rownames(x) <- as.character(1:nrow(x))
 head(x)
-write.big.matrix(x, 'IrisData.txt', col.names=TRUE, row.names=TRUE)
-y <- read.big.matrix("IrisData.txt", header=TRUE, has.row.names=TRUE)
+write.big.matrix(x, file.path(temp_dir, 'IrisData.txt'), col.names=TRUE, 
+                 row.names=TRUE)
+y <- read.big.matrix(file.path(temp_dir, "IrisData.txt"), header=TRUE, 
+                     has.row.names=TRUE)
 head(y)
 
 # The following would fail with a dimension mismatch:
-if (FALSE) y <- read.big.matrix("IrisData.txt", header=TRUE)
+if (FALSE) y <- read.big.matrix(file.path(temp_dir, "IrisData.txt"), 
+                                header=TRUE)
 }
 \author{
 John W. Emerson and Michael J. Kane 

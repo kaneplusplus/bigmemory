@@ -12,8 +12,11 @@
 #' @return \code{TRUE} or \code{FALSE} (invisible), indicating whether or not the flush was successful.
 #' @author John W. Emerson and Michael J. Kane
 #' @examples 
+#' temp_dir = tempdir()
+#' if (!dir.exists(temp_dir)) dir.create(temp_dir)
 #' x <- big.matrix(nrow=3, ncol=3, backingfile='flushtest.bin',
-#'                 descriptorfile='flushtest.desc', type='integer')
+#'                 descriptorfile='flushtest.desc', backingpath=temp_dir,
+#'                 type='integer')
 #' x[1,1] <- 0
 #' flush(x)
 #' @docType methods
