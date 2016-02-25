@@ -1619,27 +1619,28 @@ attach.big.matrix = function(obj, ...)
 setMethod('attach.resource', signature(obj='character'),
   function(obj, ...)
   {
-    path <- list(...)[['path']]
-    if (is.null(path)) path = getwd()
-    path <- file.path(path, '')
-    path <- path.expand(path)
+    old_path = path <- list(...)[['path']]
+    if (!is.null(path) && path != "") path = file.path(path.expand(path), "")
+    else path = ""
     if (basename(obj) != obj)
     {
       if (path != "")
         warning(paste("Two paths were specified in attach.resource.",
           "The one associated with the file will be used.", sep="  "))
-      path <- dirname(obj)
-      obj <- basename(obj) 
+      fileWithPath = obj
+    } else {
+      if (path == "")
+        fileWithPath <- obj
+      else
+        fileWithPath = file.path(path, obj)
     }
-    
-    fileWithPath <- file.path(path, obj)
     fi = file.info(fileWithPath)
     if (is.na(fi$isdir))
       stop( paste("The file", fileWithPath, "could not be found") )
     if (fi$isdir)
       stop( fileWithPath, "is a directory" )
     info <- tryCatch(readRDS(file=fileWithPath), error=function(er){return(dget(fileWithPath))})
-    return(attach.resource(info, path=path, ...))
+    return(attach.resource(info, path=old_path, ...))
   })
 
 #' @rdname big.matrix.descriptor-class
