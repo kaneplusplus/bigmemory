@@ -1649,15 +1649,6 @@ setMethod('attach.resource', signature(obj='big.matrix.descriptor'),
   {
     path <- list(...)[['path']]
     info <- description(obj)
-    if (is.null(path) && dirname(info$filename) == ".") {
-      path <- getwd()  
-      path <- path.expand(path)
-      path <- file.path(path, '')
-    } else if (is.null(path)) {
-      path = ""
-    } else {
-      path = file.path(path, "")
-    }
     typeLength <- NULL
     if (info$type == 'char') typeLength <- 1
     if (info$type == 'short') typeLength <- 2
@@ -1684,9 +1675,16 @@ setMethod('attach.resource', signature(obj='big.matrix.descriptor'),
     }
     else
     {
+      if (is.null(path) && dirname(info$filename) == ".") {
+        path <- getwd()  
+        path <- path.expand(path)
+        path <- file.path(path, '')
+      } else if (is.null(path)) {
+        path = ""
+      } else {
+        path = file.path(path, "")
+      }
       if (!info$separated) {
-        print(path)
-        print(info)
         if (!file.exists(file.path(path, info$filename)))
         {
           stop(paste("The backing file", paste(path, info$filename, sep=''),
