@@ -153,24 +153,4 @@
 #' y[1,1] <- -100
 #' y[,]
 #' z[,]
-#' # A short filebacked example, showing the creation of associated files:
-#' 
-#' files <- dir()
-#' files[grep("example.bin", files)]
-#' temp_dir = tempdir()
-#' if (!file.exists(temp_dir)) dir.create(temp_dir)
-#' 
-#' z <- filebacked.big.matrix(3, 3, type='integer', init=123,
-#'                            backingfile="example.bin",
-#'                            descriptorfile="example.desc",
-#'                            backingpath=temp_dir,
-#'                            dimnames=list(c('a','b','c'), c('d', 'e', 'f')))
-#' z[,]
-#' files <- dir()
-#' files[grep("example.bin", files)]
-#' zz <- attach.big.matrix("example.desc", backingpath=temp_dir)
-#' zz[,]
-#' zz[1,1] <- 0
-#' zzz <- attach.big.matrix(describe(z), backingpath=temp_dir)
-#' zzz[,]
 #' @keywords classes methods
