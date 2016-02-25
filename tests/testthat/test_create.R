@@ -36,11 +36,9 @@ test_that("attach methods successful",{
     expect_false(identical(z@address, y@address))
     expect_identical(z[,], y[,])
     
-    if (Sys.info()['sysname'] != "Darwin") { 
-      x <- attach.big.matrix(bmdescription)
-      expect_false(identical(z@address, y@address))
-      expect_identical(bm[,], x[,])
-    }
+    x <- attach.big.matrix(bmdescription)
+    expect_false(identical(z@address, y@address))
+    expect_identical(bm[,], x[,])
 })
 
 rm(z)

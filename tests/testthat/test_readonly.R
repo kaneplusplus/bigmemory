@@ -16,40 +16,38 @@ bm = big.matrix(3,3,dimnames=list(rownames,colnames))
 
 test_that("test_readonly", {
   mat = matrix(1:9, ncol = 3, dimnames = list(rownames, colnames))
-  if (Sys.info()['sysname'] != "Darwin") {
-    bm = big.matrix(3, 3, dimnames = list(rownames, colnames))
-    bm[, ] = mat
-    bm2 = attach.big.matrix(describe(bm), readonly = TRUE, shared=FALSE)
-    bm3 = attach.big.matrix(describe(bm), readonly = FALSE, shared=FALSE)
-    expect_false(is.readonly(bm), info = "bm should not be readonly")
-    expect_true(is.readonly(bm2), info = "bm2 should be readonly")
-    expect_false(is.readonly(bm3), info = "bm3 should be readonly")
-    expect_equal(mat[2, 2], bm2[2, 2], info = "Read big.matrix attached as read-only is OK")
-    expect_error({
-        bm2[1, 1] = 100
-    }, info = "Writing to a big.matrix made read-only by FS before attached gives error")
-    expect_error({
-        bm2[1, ] = 100
-    }, info = "Writing row to a big.matrix made read-only by FS before attached gives error")
-    expect_error({
-        bm2[, 1] = 100
-    }, info = "Writing column to a big.matrix made read-only by FS before attached gives error")
-    expect_error({
-        bm2[, ] = 100
-    }, info = "Writing to full matrix a big.matrix made read-only by FS before attached gives error")
-    expect_error({
-        bm2[matrix(c(1, 2, 2, 2), ncol = 2), ] = 100
-    }, info = "Writing subset by matrix to a big.matrix made read-only by FS before attached gives error")
-  }    
+  bm = big.matrix(3, 3, dimnames = list(rownames, colnames))
+  bm[, ] = mat
+  bm2 = attach.big.matrix(describe(bm), readonly = TRUE, shared=FALSE)
+  bm3 = attach.big.matrix(describe(bm), readonly = FALSE, shared=FALSE)
+  expect_false(is.readonly(bm), info = "bm should not be readonly")
+  expect_true(is.readonly(bm2), info = "bm2 should be readonly")
+  expect_false(is.readonly(bm3), info = "bm3 should be readonly")
+  expect_equal(mat[2, 2], bm2[2, 2], info = "Read big.matrix attached as read-only is OK")
+  expect_error({
+      bm2[1, 1] = 100
+  }, info = "Writing to a big.matrix made read-only by FS before attached gives error")
+  expect_error({
+      bm2[1, ] = 100
+  }, info = "Writing row to a big.matrix made read-only by FS before attached gives error")
+  expect_error({
+      bm2[, 1] = 100
+  }, info = "Writing column to a big.matrix made read-only by FS before attached gives error")
+  expect_error({
+      bm2[, ] = 100
+  }, info = "Writing to full matrix a big.matrix made read-only by FS before attached gives error")
+  expect_error({
+      bm2[matrix(c(1, 2, 2, 2), ncol = 2), ] = 100
+  }, info = "Writing subset by matrix to a big.matrix made read-only by FS before attached gives error")
     # in order to reuse, must remove prior objects
 #     rm(fbm)
 #     gc()
 #     file.remove(file.path(back.dir, fbm.file))
 #     file.remove(file.path(back.dir, fbm.desc.file))
     
-    fbm = filebacked.big.matrix(3, 3, dimnames = list(rownames, 
-                                                      colnames), backingpath = back.dir, backingfile = fbm.file, 
-                                descriptorfile = fbm.desc.file)
+    fbm = filebacked.big.matrix(3, 3, dimnames=list(rownames, colnames), 
+                                backingpath=back.dir, backingfile=fbm.file, 
+                                descriptorfile=fbm.desc.file)
     fbm[, ] = mat[, ] = 1:9
     fbm2 = attach.big.matrix(describe(fbm), path = back.dir, 
                              readonly = TRUE)

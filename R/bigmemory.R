@@ -1619,7 +1619,7 @@ attach.big.matrix = function(obj, ...)
 setMethod('attach.resource', signature(obj='character'),
   function(obj, ...)
   {
-    old_path = path <- list(...)[['path']]
+    path <- list(...)[['path']]
     if (!is.null(path) && path != "") path = file.path(path.expand(path), "")
     else path = ""
     if (basename(obj) != obj)
@@ -1640,7 +1640,9 @@ setMethod('attach.resource', signature(obj='character'),
     if (fi$isdir)
       stop( fileWithPath, "is a directory" )
     info <- tryCatch(readRDS(file=fileWithPath), error=function(er){return(dget(fileWithPath))})
-    return(attach.resource(info, path=old_path, ...))
+    new_path = getwd()
+    if (dirname(obj) != ".") new_path = dirname(obj)
+    return(attach.resource(info, path=new_path, ...))
   })
 
 #' @rdname big.matrix.descriptor-class
