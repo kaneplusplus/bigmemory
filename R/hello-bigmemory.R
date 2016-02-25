@@ -12,7 +12,7 @@
 #' \code{big.matrix} and native \code{matrix} objects.
 #' 
 #' \tabular{ll}{ Package: \tab bigmemory\cr Type: \tab Package\cr Version: \tab
-#' 4.5.16\cr Date: \tab 2016-02-25\cr License: \tab LGPL-3 | Apache License 2.0\cr Copyright:
+#' 4.5.17\cr Date: \tab 2016-02-25\cr License: \tab LGPL-3 | Apache License 2.0\cr Copyright:
 #' http://www.bigmemory.org\cr LazyLoad: \tab yes\cr }
 #' 
 #' Index of functions/methods (grouped in a friendly way): \preformatted{
