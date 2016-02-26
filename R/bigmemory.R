@@ -1623,18 +1623,19 @@ setMethod('attach.resource', signature(obj='character'),
     path <- list(...)[['path']]
     if (!is.null(path) && path != "") 
       path = paste(path.expand(path), "", sep=.Platform$file.sep)
-    else path = ""
     if (basename(obj) != obj)
     {
-      if (path != "")
+      if (!is.null(path) != "")
         warning(paste("Two paths were specified in attach.resource.",
           "The one associated with the file will be used.", sep="  "))
       fileWithPath = obj
     } else {
-      if (path == "")
+      if (!is.null(path) && path == "")
         fileWithPath <- obj
-      else
+      else if (!is.null(path))
         fileWithPath = paste(path, obj, sep=.Platform$file.sep)
+      else
+        fileWithPath = obj
     }
     fi = file.info(fileWithPath)
     if (is.na(fi$isdir))
@@ -1643,9 +1644,17 @@ setMethod('attach.resource', signature(obj='character'),
       stop( fileWithPath, "is a directory" )
     info <- tryCatch(readRDS(file=fileWithPath), error=function(er){return(dget(fileWithPath))})
     
-    if (dirname(obj) != ".") new_path = dirname(obj)
-    else if (path != "") new_path = path
-    else path = getwd()
+    if (dirname(obj) != ".") {
+      new_path = dirname(obj)
+      if (Sys.info()['sysname'] == "Darwin") {
+        if (file.exists(info@description$filename)) {
+          new_path = dirname(info@description$filename)
+          info@description$filename = basename(info@description$filename)
+        }
+      }
+    }
+    else if (!is.null(path) && path != "") new_path = path
+    else new_path = path
     return(attach.resource(info, path=new_path, ...))
   })
 
@@ -1686,9 +1695,10 @@ setMethod('attach.resource', signature(obj='big.matrix.descriptor'),
         path <- getwd()  
         path <- path.expand(path)
         path <- paste(path, '', sep=.Platform$file.sep)
-      } else if (is.null(path)) {
-        path = ""
-      } else {
+      } else if (is.null(path) && dirname(info$filename) != ".") {
+        path = paste(dirname(info$filename), "", sep=.Platform$file.sep)
+        info$filename = basename(info$filename)
+      } else if(nchar(path) > 0) {
         path = paste(path, "", sep=.Platform$file.sep)
       }
       if (!info$separated) {
