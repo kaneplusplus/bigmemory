@@ -1645,7 +1645,7 @@ setMethod('attach.resource', signature(obj='character'),
     
     if (dirname(obj) != ".") new_path = dirname(obj)
     else if (path != "") new_path = path
-    else path = getwd()
+    else new_path = getwd()
     return(attach.resource(info, path=new_path, ...))
   })
 
