@@ -183,13 +183,7 @@ bool LocalBigMatrix::destroy()
 
 bool SharedBigMatrix::create_uuid()
 {
-  try
-  {
-#ifdef DARWIN
-    size_t string_len = 10;
-#else
     size_t string_len = 24;
-#endif
     std::string letters("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
     Rcpp::NumericVector inds=
       Rcpp::runif(string_len, -0.49, letters.size()-0.51);
@@ -200,15 +194,9 @@ bool SharedBigMatrix::create_uuid()
 
     #ifdef DARWIN
     // Darwin has a limit on the size of share memory names.
-    _uuid.resize(15);
+    _uuid.resize(5);
     #endif
     return true;
-  }
-  catch(std::exception &e)
-  {
-    COND_EXCEPTION_PRINT(DEBUG);
-    return false;
-  }
 }
 
 template<typename T>
@@ -303,7 +291,7 @@ bool SharedMemoryBigMatrix::create(const index_type numRow,
         _counter.init( _sharedName+"_counter" );
     #ifndef INTERLOCKED_EXCHANGE_HACK
         mutex.unlock();
-        //named_mutex::remove((_sharedName+"_bigmemory_counter_mutex").c_str());
+        named_mutex::remove((_sharedName+"_bigmemory_counter_mutex").c_str());
     #endif
         if (_sepCols)
         {
@@ -820,7 +808,7 @@ void* ConnectFileBackedMatrix( const std::string &fileName,
   const std::string &filePath, MappedRegionPtrs &dataRegionPtrs, 
   const bool readOnly=false )
 {
-  COND_PRINT(DEBUG, "Connecting to file %s\n", (filePath + fileName).c_str())
+  //COND_PRINT(DEBUG, "Connecting to file %s\n", (filePath + fileName).c_str())
   try
   {
     file_mapping mFile((filePath+fileName).c_str(), 
@@ -845,7 +833,7 @@ void* CreateFileBackedMatrix(const std::string &fileName,
 {
   // Create the file.
   std::string fullFileName = filePath+fileName;
-  COND_PRINT(DEBUG, "Writing %s\n", fullFileName.c_str())
+  //COND_PRINT(DEBUG, "Writing %s\n", fullFileName.c_str())
 #ifdef LINUX
   FILE *fp = fopen( fullFileName.c_str(), "wb");
   if (!fp)
@@ -887,7 +875,7 @@ bool FileBackedBigMatrix::create(const std::string &fileName,
   }
   try
   {
-    COND_PRINT(DEBUG, "create %s\n", (filePath + fileName).c_str())
+    //COND_PRINT(DEBUG, "create %s\n", (filePath + fileName).c_str())
     _fileName = fileName;
     _filePath = filePath;
     _nrow = numRow;
