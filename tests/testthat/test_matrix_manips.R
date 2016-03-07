@@ -1,6 +1,20 @@
 library("bigmemory")
 context("Matrix Manipulations")
 
+test_that("assignment across columns", {
+  N <- 1000
+  K <- 26
+  x <- big.matrix(N, K, type="char", backingfile="toy.bin", 
+                  descriptorfile="toy.desc")
+  # Some interesting points, here...
+  options(bigmemory.typecast.warning=FALSE)
+  options(bigmemory.allow.dimnames=TRUE)
+  # The do some basic things with the natural R syntax:
+  x[1:2, 1:2] <- 1:4 # Simple assignment
+  rm(x)
+  unlink(c("toy.bin", "toy.desc"))
+})
+
 z <- filebacked.big.matrix(3, 3, type='integer', init=123,
                            backingfile="example.bin",
                            descriptorfile="example.desc",
