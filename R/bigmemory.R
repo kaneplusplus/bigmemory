@@ -623,7 +623,7 @@ SetElements.bm <- function(x, i, j, value)
                 "options(bigmemory.typecast.warning=FALSE)\n", sep=''))
   }
 
-  totalts <- max(as.double(length(i)), as.double(length(j)))
+  totalts <- as.double(length(i)) * as.double(length(j))
   # If we are assigning from a matrix, make sure the dimensions agree.
   if (is.matrix(value))
   {
@@ -765,7 +765,7 @@ SetCols.bm <- function(x, j, value)
                 "options(bigmemory.typecast.warning=FALSE)\n", sep=''))
   }
 
-  totalts <- nrow(x) * length(j)
+  totalts <- as.double(nrow(x)) * as.double(length(j))
   # If we are assigning from a matrix, make sure the dimensions agree.
   if (is.matrix(value)){
     if (ncol(value) != length(j) | nrow(value) != nrow(x)) 
@@ -844,7 +844,7 @@ SetRows.bm <- function(x, i, value)
   # that we disable read locking before it is evaluated or we will
   # have a race condition.  - Jay and Mike.
 
-  totalts <- length(i) * ncol(x)
+  totalts <- as.double(length(i)) * as.double(ncol(x))
   # If we are assigning from a matrix, make sure the dimensions agree.
   if (is.matrix(value))
   {
@@ -906,7 +906,7 @@ SetAll.bm <- function(x, value)
                 "options(bigmemory.typecast.warning=FALSE)\n", sep=''))
   }
 
-  totalts <- nrow(x) * ncol(x)
+  totalts <- as.double(nrow(x)) * as.double(ncol(x))
   # If we are assigning from a matrix, make sure the dimensions agree.
   if (is.matrix(value))
   {

@@ -44,7 +44,11 @@ test_that("test_readonly", {
 #     gc()
 #     file.remove(file.path(back.dir, fbm.file))
 #     file.remove(file.path(back.dir, fbm.desc.file))
-    
+   
+    if (file.exists(file.path(back.dir, fbm.file))) {
+      unlink(c(file.path(back.dir, fbm.file), 
+               file.path(back.dir, fbm.desc.file)))
+    } 
     fbm = filebacked.big.matrix(3, 3, dimnames=list(rownames, colnames), 
                                 backingpath=back.dir, backingfile=fbm.file, 
                                 descriptorfile=fbm.desc.file)
