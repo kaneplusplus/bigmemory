@@ -58,8 +58,6 @@ big.matrix <- function(nrow, ncol, type=options()$bigmemory.default.type,
                        backingfile=NULL, backingpath=NULL, descriptorfile=NULL,
                        binarydescriptor=FALSE, shared=TRUE)
 {
-  if (shared && is.null(backingfile) && (Sys.info()['sysname'] == "Darwin")) 
-    backingfile = ""
   if (!is.null(backingfile))
   {
     if (!shared) warning("All filebacked objects are shared.")
@@ -1646,12 +1644,6 @@ setMethod('attach.resource', signature(obj='character'),
     
     if (dirname(obj) != ".") {
       new_path = dirname(obj)
-      if (Sys.info()['sysname'] == "Darwin") {
-        if (file.exists(info@description$filename)) {
-          new_path = dirname(info@description$filename)
-          info@description$filename = basename(info@description$filename)
-        }
-      }
     }
     else if (!is.null(path) && path != "") new_path = path
     else new_path = path
