@@ -1928,13 +1928,20 @@ mpermuteCols <- function(x, order=NULL, rows=NULL, allow.duplicates=FALSE, ...)
     order = morderCols(x, rows, ...)
   
   switch(class(x),
-         "big.matrix" = ReorderBigMatrixCols(x@address, order),
-         "matrix" = switch(typeof(x),
-                           'integer' = ReorderRIntMatrixCols(x, nrow(x), ncol(x), order),
-                           'double' = ReorderRNumericMatrixCols(x, nrow(x), ncol(x), order),
-                           stop("Unsupported matrix value type.")),
+         "big.matrix" = {
+           ReorderBigMatrixCols(x@address, order)
+           SetColumnNames(x@address, colnames(x)[order])
+         },
+         "matrix" = {
+           switch(typeof(x),
+                  'integer' = ReorderRIntMatrixCols(x, nrow(x), ncol(x), order),
+                  'double' = ReorderRNumericMatrixCols(x, nrow(x), ncol(x), order),
+                  stop("Unsupported matrix value type."))
+         },
          stop("unimplemented class")
-         )
+  )
+  
+  
   
   return(invisible(TRUE))
   

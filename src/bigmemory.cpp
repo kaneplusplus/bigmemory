@@ -919,10 +919,10 @@ void reorder_matrix( MatrixAccessorType m, SEXP orderVec,
 // It likely could use improvement as it just goes element by element
 // Added 9-17-2015 by Charles Determan
 template<typename MatrixAccessorType>
-void reorder_matrix2( MatrixAccessorType m, SEXP orderVec, 
+void reorder_matrix2( MatrixAccessorType m, Rcpp::IntegerVector pov, 
   index_type numRows, FileBackedBigMatrix *pfbm )
 {
-  double *pov = REAL(orderVec);
+  // double *pov = REAL(orderVec);
   typedef typename MatrixAccessorType::value_type ValueType;
   typedef std::vector<ValueType> Values;
   Values vs(m.ncol());
@@ -1191,24 +1191,39 @@ void ReorderBigMatrix( SEXP address, SEXP orderVec )
 }
 
 // [[Rcpp::export]]
-void ReorderRIntMatrixCols( SEXP matrixVector, SEXP nrow, SEXP ncol, SEXP orderVec )
+void ReorderRIntMatrixCols( 
+    Rcpp::IntegerMatrix matrixVector, 
+    SEXP nrow, 
+    SEXP ncol, 
+    Rcpp::IntegerVector orderVec )
 {
-  return reorder_matrix2( 
+  reorder_matrix2( 
     MatrixAccessor<int>(INTEGER(matrixVector), 
       static_cast<index_type>(Rf_asInteger(nrow)),
       static_cast<index_type>(Rf_asInteger(ncol))), orderVec,
       static_cast<index_type>(Rf_asInteger(nrow)), NULL );
+  
+  Rcpp::CharacterVector cols = colnames(matrixVector);
+  colnames(matrixVector) = cols[orderVec - 1];
+  
+  return;
 }
 
 // [[Rcpp::export]]
-void ReorderRNumericMatrixCols( SEXP matrixVector, SEXP nrow, SEXP ncol, 
-  SEXP orderVec )
+void ReorderRNumericMatrixCols( Rcpp::NumericMatrix matrixVector, SEXP nrow, SEXP ncol, 
+  Rcpp::IntegerVector orderVec )
 {
-  return reorder_matrix2( 
+  reorder_matrix2( 
     MatrixAccessor<double>(REAL(matrixVector), 
       static_cast<index_type>(Rf_asInteger(nrow)),
       static_cast<index_type>(Rf_asInteger(ncol))), orderVec,
       static_cast<index_type>(Rf_asInteger(nrow)), NULL );
+  
+  
+  Rcpp::CharacterVector cols = colnames(matrixVector);
+  colnames(matrixVector) = cols[orderVec - 1];
+  
+  return;
 }
 
 // [[Rcpp::export]]
