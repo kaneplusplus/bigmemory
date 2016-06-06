@@ -31,6 +31,9 @@ test_that("test_read", {
     expect_identical(bmnull[1:2, 2:3], matnull[1:2, 2:3], info = "partial matrix without names")
     expect_identical(bm[, ], mat[, ], info = "full matrix with names")
     expect_identical(bmnull[, ], matnull[, ], info = "full matrix without names")
+    expect_identical(bm[2:5], mat[2:5], info = "continous element specific access")
+    expect_identical(bm[c(2,4,5)], mat[c(2,4,5)], info = "non-continous element specific access")
+    
     mat.list = list(mat[2, , drop = FALSE], mat[, 2, drop = FALSE])
     for (mat in mat.list) {
         matnull = unname(mat)
@@ -57,5 +60,4 @@ test_that("test_read", {
         expect_identical(bm[, ], mat[, ], info = "full matrix with names")
         expect_identical(bmnull[, ], matnull[, ], info = "full matrix without names")
     }
-    return(TRUE)
 })

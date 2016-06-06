@@ -451,6 +451,18 @@ GetIndivElements.bm <- function(x,i) {
 }
 
 
+# Function contributed by Charles Determan Jr.
+GetIndivVectorElements.bm <- function(x,i) {
+  # Check i
+  if (is.logical(i)) {
+    stop("Logical indices not allowed when subsetting by a matrix.")
+  }
+  if(any(i > length(x))){
+    stop("indices out of range.")
+  }
+  return(GetIndivVectorMatrixElements(x@address, as.integer(i)))
+}
+
 GetCols.bm <- function(x, j, drop=TRUE)
 {
   if (!is.numeric(j) & !is.character(j) & !is.logical(j))
@@ -544,7 +556,14 @@ setMethod("[",
 #' @export
 setMethod("[",
   signature(x = "big.matrix", j="missing", drop = "missing"),
-  function(x, i, j, drop) return(GetRows.bm(x, i)))
+  function(x, i, j, ..., drop){
+    # print(nargs())
+    if(nargs() == 2){
+      return(GetIndivVectorElements.bm(x,i))
+    }else{
+      return(GetRows.bm(x, i))  
+    }
+  })
 
 
 #' @rdname extract-methods
@@ -616,7 +635,7 @@ SetElements.bm <- function(x, i, j, value)
        (typeof(value) == "double" && (typeof(x) == "float")) 
        )) 
   {
-    warning(cat("Assignment will down cast from ", typeof(value), " to ",
+    warning(paste0("Assignment will down cast from ", typeof(value), " to ",
                 typeof(x), "\nHint: To remove this warning type:  ",
                 "options(bigmemory.typecast.warning=FALSE)\n", sep=''))
   }
@@ -727,6 +746,36 @@ SetIndivElements.bm <- function(x, i, value) {
          SetIndivMatrixElements(x@address, as.double(i[,2]),
                                 as.double(i[,1]), as.integer(value))
   )
+  
+  return(x)
+}
+
+
+# Function contributed by Charles Determan Jr.
+SetIndivVectorElements.bm <- function(x, i, value) {
+  # Check i
+  if (is.logical(i)) {
+    stop("Logical indices not allowed when subsetting by a matrix.")
+  }
+  if(any(i > length(x))){
+    stop("indices out of range.")
+  }
+  
+  if(length(value) > length(i)){
+    stop("value elements longer than indices")
+  }
+  
+  if(length(value) < length(i)){
+    if(length(value) != 1){
+      stop("value must be of length equal to 'i' or 1")
+    }
+  }
+  
+  if(length(value) == 1){
+    value <- rep(value, length(i))
+  }
+  
+  SetIndivVectorMatrixElements(x@address, as.integer(i), value)
   
   return(x)
 }
@@ -954,32 +1003,51 @@ SetAll.bm <- function(x, value)
 #' @rdname extract-methods
 #' @export
 setMethod('[<-',
-  signature(x = "big.matrix"),
+  signature(x = "big.matrix", i = "numeric", j = "numeric"),
   function(x, i, j, value) return(SetElements.bm(x, i, j, value)))
+
 
 #' @rdname extract-methods
 #' @export
 setMethod('[<-',
-  signature(x = "big.matrix", i="missing"),
+          signature(x = "big.matrix", i = "missing", j = "missing"),
+          function(x, i, j, value){
+            i <- seq(nrow(x))
+            j <- seq(ncol(x))
+            return(SetElements.bm(x, i, j, value))
+          })
+
+#' @rdname extract-methods
+#' @export
+setMethod('[<-',
+  signature(x = "big.matrix", i="missing", j = "numeric", value = "numeric"),
   function(x, i, j, value) return(SetCols.bm(x, j, value)))
 
 #' @rdname extract-methods
 #' @export
 setMethod('[<-',
-  signature(x = "big.matrix", j="missing"),
-  function(x, i, j, value) return(SetRows.bm(x, i, value)))
+  signature(x = "big.matrix", i = "numeric", j="missing", value = "numeric"),
+  function(x, i, j, ..., value){
+    
+    if(nargs() == 3){
+      return(SetIndivVectorElements.bm(x, i, value))
+    }else{
+      return(SetRows.bm(x, i, value))
+    }
+  })
+
 
 #' @rdname extract-methods
 #' @export
 setMethod('[<-',
-  signature(x = "big.matrix", i="missing", j="missing"),
+  signature(x = "big.matrix", i="missing", j="missing", value = "numeric"),
   function(x, i, j, value) return(SetAll.bm(x, value)))
 
 # Function contributed by Peter Haverty at Genentech.
 #' @rdname extract-methods
 #' @export
 setMethod('[<-',
-  signature(x = "big.matrix",i="matrix",j="missing"),
+  signature(x = "big.matrix",i="matrix",j="missing", value = "numeric"),
   function(x, i, j, value) return(SetIndivElements.bm(x, i, value)))
 
 #' @title The Type of a big.matrix Object

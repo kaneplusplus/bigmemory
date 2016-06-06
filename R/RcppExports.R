@@ -5,6 +5,10 @@ GetIndivMatrixElements <- function(bigMatAddr, col, row) {
     .Call('bigmemory_GetIndivMatrixElements', PACKAGE = 'bigmemory', bigMatAddr, col, row)
 }
 
+GetIndivVectorMatrixElements <- function(bigMatAddr, elems) {
+    .Call('bigmemory_GetIndivVectorMatrixElements', PACKAGE = 'bigmemory', bigMatAddr, elems)
+}
+
 ReorderRIntMatrix <- function(matrixVector, nrow, ncol, orderVec) {
     invisible(.Call('bigmemory_ReorderRIntMatrix', PACKAGE = 'bigmemory', matrixVector, nrow, ncol, orderVec))
 }
@@ -195,6 +199,10 @@ GetMatrixAll <- function(bigMatAddr) {
 
 SetMatrixElements <- function(bigMatAddr, col, row, values) {
     invisible(.Call('bigmemory_SetMatrixElements', PACKAGE = 'bigmemory', bigMatAddr, col, row, values))
+}
+
+SetIndivVectorMatrixElements <- function(bigMatAddr, elems, inVec) {
+    invisible(.Call('bigmemory_SetIndivVectorMatrixElements', PACKAGE = 'bigmemory', bigMatAddr, elems, inVec))
 }
 
 SetIndivMatrixElements <- function(bigMatAddr, col, row, values) {
