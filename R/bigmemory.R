@@ -522,6 +522,7 @@ GetAll.bm <- function(x, drop=TRUE)
 #' @param j Indices specifying the columns
 #' @param drop Logical indication if reduce to minimum dimensions
 #' @param value typically an array-like R object of similar class
+#' @param ... Additional arguments
 #' @docType methods
 #' @rdname extract-methods
 #' @aliases [,big.matrix,ANY,ANY,missing-method

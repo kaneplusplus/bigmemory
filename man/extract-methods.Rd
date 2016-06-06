@@ -59,6 +59,8 @@
 
 \item{drop}{Logical indication if reduce to minimum dimensions}
 
+\item{...}{Additional arguments}
+
 \item{value}{typically an array-like R object of similar class}
 }
 \description{
