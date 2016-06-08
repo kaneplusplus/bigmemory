@@ -19,10 +19,13 @@ test_that("Able to assign individual elements", {
   # element assign
   bm[1,3] <- 15.123
   z[1,3] <- 15.123
-  tmp[1,3] <- 15.123
+  mat[1,3] <- 15.123
   
   expect_equivalent(bm[1,3], 15.123)
   expect_equivalent(z[1,3], 15.123)
+  
+  bm[] <- tmp
+  z[] <- tmp
 })
 
 test_that("Able to assign non-contiguous individual elements", {
@@ -32,10 +35,13 @@ test_that("Able to assign non-contiguous individual elements", {
   # element assign
   bm[c(1,3,5)] <- 15.123
   z[c(1,3,5)] <- 15.123
-  tmp[c(1,3,5)] <- 15.123
+  mat[c(1,3,5)] <- 15.123
   
-  expect_equivalent(bm[], tmp)
-  expect_equivalent(z[], tmp)
+  expect_equivalent(bm[], mat)
+  expect_equivalent(z[], mat)
+  
+  bm[] <- tmp
+  z[] <- tmp
 })
 
 test_that("Able to assign rowwise elements", {
@@ -46,26 +52,48 @@ test_that("Able to assign rowwise elements", {
   # row assign
   bm[2,] <- row
   z[2,] <- row
-  tmp[2,] <- row
+  mat[2,] <- row
   
-  expect_equivalent(bm[], tmp)
-  expect_equivalent(z[], tmp)
+  expect_equivalent(bm[], mat)
+  expect_equivalent(z[], mat)
+  
+  bm[] <- tmp
+  z[] <- tmp
 })
 
 test_that("Able to assign columnwise elements", {
   
-  col <- rnorm(3)  
+  col <- rnorm(3)
   tmp <- bm[]
   
   # column assign
   bm[,3] <- col
   z[,3] <- col
-  tmp[,3] <- col
+  mat[,3] <- col
   
-  expect_equivalent(bm[], tmp)
-  expect_equivalent(z[], tmp)
+  expect_equivalent(bm[], mat)
+  expect_equivalent(z[], mat)
+  
+  bm[] <- tmp
+  z[] <- tmp
 })
 
+
+test_that("Able to assign non-contiguous columns", {
+  
+  tmp <- bm[]
+  
+  # column assign
+  bm[,c(1,3)] <- mat[,c(1,3)]
+  z[,c(1,3)] <- mat[,c(1,3)]
+  mat[,c(1,3)] <- mat[,c(1,3)]
+  
+  expect_equivalent(bm[], mat)
+  expect_equivalent(z[], mat)
+  
+  bm[] <- tmp
+  z[] <- tmp
+})
 
 rm(z)
 gc()

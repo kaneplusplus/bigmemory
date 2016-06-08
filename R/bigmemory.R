@@ -526,6 +526,7 @@ GetAll.bm <- function(x, drop=TRUE)
 #' @docType methods
 #' @rdname extract-methods
 #' @aliases [,big.matrix,ANY,ANY,missing-method
+#' @aliases [<-,big.matrix,ANY,ANY,missing-method
 #' @export
 setMethod("[",
   signature(x = "big.matrix", drop = "missing"),
@@ -1021,7 +1022,7 @@ setMethod('[<-',
 #' @rdname extract-methods
 #' @export
 setMethod('[<-',
-  signature(x = "big.matrix", i="missing", j = "numeric", value = "numeric"),
+  signature(x = "big.matrix", i="missing", j = "numeric"),
   function(x, i, j, value) return(SetCols.bm(x, j, value)))
 
 #' @rdname extract-methods
