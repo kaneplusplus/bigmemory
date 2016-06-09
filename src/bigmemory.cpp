@@ -9,6 +9,8 @@
 
 #include "bigmemory/util.h"
 
+using namespace Rcpp;
+
 /* Notes
  * R does not natively contain float type objects
  * Therefore, every time you pass object to see they will initially be
@@ -79,32 +81,62 @@ void SetMatrixElements( BigMatrix *pMat, SEXP col, SEXP row, SEXP values,
 }
 
 // Function contributed by Peter Haverty at Genentech.
-template<typename CType, typename RType, typename BMAccessorType>
-SEXP GetIndivMatrixElements( BigMatrix *pMat, double NA_C, double NA_R,
-  SEXP col, SEXP row, SEXPTYPE sxpType)
+template<typename CType, typename RType, typename BMAccessorType, typename RcppType>
+SEXP 
+GetIndivMatrixElements( 
+  BigMatrix *pMat, double NA_C, double NA_R,
+  NumericVector col, NumericVector row)
 {
-  VecPtr<RType> vec_ptr;
   BMAccessorType mat(*pMat);
-  double *pCols = REAL(col);
-  double *pRows = REAL(row);
-  index_type numCols = Rf_length(col);
-  int protectCount = 0;
-  SEXP retVec = Rf_protect( Rf_allocVector(sxpType, numCols) );
-  ++protectCount;
-  RType *pRet = vec_ptr(retVec);
-  CType *pColumn;
+  index_type numCols = col.size();
+  RcppType retVec(numCols);
   index_type i;
   for (i=0; i < numCols; ++i)
   {
-    pColumn = mat[static_cast<index_type>(pCols[i])-1];
-    pRet[i] = (pColumn[static_cast<index_type>(pRows[i])-1] ==
-      static_cast<CType>(NA_C)) ?
-        static_cast<RType>(NA_R) :
-        (static_cast<RType>(pColumn[static_cast<index_type>(pRows[i])-1]));
+    CType element = mat[static_cast<index_type>(col[i])-1][static_cast<index_type>(row[i])-1];
+    retVec[i] = element == static_cast<CType>(NA_C) ? static_cast<RType>(NA_R) : element;
   }
-  Rf_unprotect(protectCount);
   return(retVec);
 }
+
+// Function contributed by Charles Detemran Jr.
+template<typename CType, typename RType, typename BMAccessorType, typename RcppType>
+SEXP 
+  GetIndivVectorMatrixElements( 
+    BigMatrix *pMat, double NA_C, double NA_R,
+    NumericVector elems)
+  {
+    BMAccessorType mat(*pMat);
+    index_type numElems = elems.size();
+    RcppType retVec(numElems);
+    index_type i;
+    int col_end = mat.nrow();
+    int idx = 0;
+    
+    for (index_type j = 0; j < elems.size(); j++){
+      CType element = mat[i][static_cast<index_type>(elems[j])-1];
+      retVec[idx] = element == static_cast<CType>(NA_C) ? static_cast<RType>(NA_R) : element;
+      idx += 1;
+    }
+    
+    return(retVec);
+  }
+
+// Function contributed by Charles Detemran Jr.
+template<typename CType, typename RType, typename BMAccessorType, typename RcppType>
+void
+  SetIndivVectorMatrixElements( 
+    BigMatrix *pMat, double NA_C, double NA_R,
+    NumericVector elems, NumericVector inVec)
+  {
+    BMAccessorType mat(*pMat);
+    index_type numElems = elems.size();
+    index_type i;
+    
+    for (index_type j = 0; j < elems.size(); j++){
+      mat[i][static_cast<index_type>(elems[j])-1] = inVec[j];
+    }
+  }
 
 
 
@@ -353,20 +385,20 @@ SEXP GetIndivMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row)
     switch(pMat->matrix_type())
     {
       case 1:
-        return GetIndivMatrixElements<char, int, SepMatrixAccessor<char> >(
-          pMat, NA_CHAR, NA_INTEGER, col, row, INTSXP);
+        return GetIndivMatrixElements<char, int, SepMatrixAccessor<char>, IntegerVector >(
+          pMat, NA_CHAR, NA_INTEGER, col, row);
       case 2:
-        return GetIndivMatrixElements<short,int, SepMatrixAccessor<short> >(
-          pMat, NA_SHORT, NA_INTEGER, col, row, INTSXP);
+        return GetIndivMatrixElements<short,int, SepMatrixAccessor<short>, IntegerVector >(
+          pMat, NA_SHORT, NA_INTEGER, col, row);
       case 4:
-        return GetIndivMatrixElements<int, int, SepMatrixAccessor<int> >(
-          pMat, NA_INTEGER, NA_INTEGER, col, row, INTSXP);
+        return GetIndivMatrixElements<int, int, SepMatrixAccessor<int>, IntegerVector >(
+          pMat, NA_INTEGER, NA_INTEGER, col, row);
       case 6:
-        return GetIndivMatrixElements<float, double, SepMatrixAccessor<float> >(
-          pMat, NA_FLOAT, NA_FLOAT, col, row, REALSXP);
+        return GetIndivMatrixElements<float, double, SepMatrixAccessor<float>, NumericVector >(
+          pMat, NA_FLOAT, NA_FLOAT, col, row);
       case 8:
-        return GetIndivMatrixElements<double,double,SepMatrixAccessor<double> >(
-          pMat, NA_REAL, NA_REAL, col, row, REALSXP);
+        return GetIndivMatrixElements<double,double,SepMatrixAccessor<double>, NumericVector >(
+          pMat, NA_REAL, NA_REAL, col, row);
     }
   }
   else
@@ -374,20 +406,71 @@ SEXP GetIndivMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row)
     switch(pMat->matrix_type())
     {
       case 1:
-        return GetIndivMatrixElements<char, int, MatrixAccessor<char> >(
-          pMat, NA_CHAR, NA_INTEGER, col, row, INTSXP);
+        return GetIndivMatrixElements<char, int, MatrixAccessor<char>, IntegerVector >(
+          pMat, NA_CHAR, NA_INTEGER, col, row);
       case 2:
-        return GetIndivMatrixElements<short, int, MatrixAccessor<short> >(
-          pMat, NA_SHORT, NA_INTEGER, col, row, INTSXP);
+        return GetIndivMatrixElements<short, int, MatrixAccessor<short>, IntegerVector >(
+          pMat, NA_SHORT, NA_INTEGER, col, row);
       case 4:
-        return GetIndivMatrixElements<int, int, MatrixAccessor<int> >(
-          pMat, NA_INTEGER, NA_INTEGER, col, row, INTSXP);
+        return GetIndivMatrixElements<int, int, MatrixAccessor<int>, IntegerVector >(
+          pMat, NA_INTEGER, NA_INTEGER, col, row);
       case 6:
-        return GetIndivMatrixElements<float, double, MatrixAccessor<float> >(
-          pMat, NA_FLOAT, NA_FLOAT, col, row, REALSXP);
+        return GetIndivMatrixElements<float, double, MatrixAccessor<float>, NumericVector >(
+          pMat, NA_FLOAT, NA_FLOAT, col, row);
       case 8:
-        return GetIndivMatrixElements<double, double, MatrixAccessor<double> >(
-          pMat, NA_REAL, NA_REAL, col, row, REALSXP);
+        return GetIndivMatrixElements<double, double, MatrixAccessor<double>, NumericVector >(
+          pMat, NA_REAL, NA_REAL, col, row);
+    }
+  }
+  return R_NilValue;
+}
+
+// Function contributed by Charles Determan Jr.
+// [[Rcpp::export]]
+SEXP GetIndivVectorMatrixElements(SEXP bigMatAddr, NumericVector elems)
+{
+  BigMatrix *pMat =
+    reinterpret_cast<BigMatrix*>(R_ExternalPtrAddr(bigMatAddr));
+  if (pMat->separated_columns())
+  {
+    switch(pMat->matrix_type())
+    {
+    case 1:
+      return GetIndivVectorMatrixElements<char, int, SepMatrixAccessor<char>, IntegerVector >(
+          pMat, NA_CHAR, NA_INTEGER, elems);
+    case 2:
+      return GetIndivVectorMatrixElements<short,int, SepMatrixAccessor<short>, IntegerVector >(
+          pMat, NA_SHORT, NA_INTEGER, elems);
+    case 4:
+      return GetIndivVectorMatrixElements<int, int, SepMatrixAccessor<int>, IntegerVector >(
+          pMat, NA_INTEGER, NA_INTEGER, elems);
+    case 6:
+      return GetIndivVectorMatrixElements<float, double, SepMatrixAccessor<float>, NumericVector >(
+          pMat, NA_FLOAT, NA_FLOAT, elems);
+    case 8:
+      return GetIndivVectorMatrixElements<double,double,SepMatrixAccessor<double>, NumericVector >(
+          pMat, NA_REAL, NA_REAL, elems);
+    }
+  }
+  else
+  {
+    switch(pMat->matrix_type())
+    {
+    case 1:
+      return GetIndivVectorMatrixElements<char, int, MatrixAccessor<char>, IntegerVector >(
+          pMat, NA_CHAR, NA_INTEGER, elems);
+    case 2:
+      return GetIndivVectorMatrixElements<short, int, MatrixAccessor<short>, IntegerVector >(
+          pMat, NA_SHORT, NA_INTEGER, elems);
+    case 4:
+      return GetIndivVectorMatrixElements<int, int, MatrixAccessor<int>, IntegerVector >(
+          pMat, NA_INTEGER, NA_INTEGER, elems);
+    case 6:
+      return GetIndivVectorMatrixElements<float, double, MatrixAccessor<float>, NumericVector >(
+          pMat, NA_FLOAT, NA_FLOAT, elems);
+    case 8:
+      return GetIndivVectorMatrixElements<double, double, MatrixAccessor<double>, NumericVector >(
+          pMat, NA_REAL, NA_REAL, elems);
     }
   }
   return R_NilValue;
@@ -2542,6 +2625,70 @@ void SetMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row, SEXP values)
       case 8:
         SetMatrixElements<double, double, MatrixAccessor<double> >( 
           pMat, col, row, values, NA_REAL, R_DOUBLE_MIN, R_DOUBLE_MAX, NA_REAL);
+    }
+  }
+}
+
+// Function contributed by Charles Determan Jr.
+// [[Rcpp::export]]
+void 
+SetIndivVectorMatrixElements(
+    SEXP bigMatAddr, 
+    NumericVector elems, 
+    NumericVector inVec)
+{
+  BigMatrix *pMat =
+    reinterpret_cast<BigMatrix*>(R_ExternalPtrAddr(bigMatAddr));
+  if (pMat->separated_columns())
+  {
+    switch(pMat->matrix_type())
+    {
+    case 1:
+      SetIndivVectorMatrixElements<char, int, SepMatrixAccessor<char>, IntegerVector >(
+          pMat, NA_CHAR, NA_INTEGER, elems, inVec);
+      break;
+    case 2:
+      SetIndivVectorMatrixElements<short,int, SepMatrixAccessor<short>, IntegerVector >(
+          pMat, NA_SHORT, NA_INTEGER, elems, inVec);
+      break;
+    case 4:
+      SetIndivVectorMatrixElements<int, int, SepMatrixAccessor<int>, IntegerVector >(
+          pMat, NA_INTEGER, NA_INTEGER, elems, inVec);
+      break;
+    case 6:
+      SetIndivVectorMatrixElements<float, double, SepMatrixAccessor<float>, NumericVector >(
+          pMat, NA_FLOAT, NA_FLOAT, elems, inVec);
+      break;
+    case 8:
+      SetIndivVectorMatrixElements<double,double,SepMatrixAccessor<double>, NumericVector >(
+          pMat, NA_REAL, NA_REAL, elems, inVec);
+      break;
+    }
+  }
+  else
+  {
+    switch(pMat->matrix_type())
+    {
+    case 1:
+      SetIndivVectorMatrixElements<char, int, MatrixAccessor<char>, IntegerVector >(
+          pMat, NA_CHAR, NA_INTEGER, elems, inVec);
+      break;
+    case 2:
+      SetIndivVectorMatrixElements<short, int, MatrixAccessor<short>, IntegerVector >(
+          pMat, NA_SHORT, NA_INTEGER, elems, inVec);
+      break;
+    case 4:
+      SetIndivVectorMatrixElements<int, int, MatrixAccessor<int>, IntegerVector >(
+          pMat, NA_INTEGER, NA_INTEGER, elems, inVec);
+      break;
+    case 6:
+      SetIndivVectorMatrixElements<float, double, MatrixAccessor<float>, NumericVector >(
+          pMat, NA_FLOAT, NA_FLOAT, elems, inVec);
+      break;
+    case 8:
+      SetIndivVectorMatrixElements<double, double, MatrixAccessor<double>, NumericVector >(
+          pMat, NA_REAL, NA_REAL, elems, inVec);
+      break;
     }
   }
 }
