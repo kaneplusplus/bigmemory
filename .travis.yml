@@ -18,4 +18,4 @@ r_github_packages:
   - jimhester/covr
 
 after_success:
-  - Rscript --default-packages='datasets,utils,grDevices,graphics,stats,methods' -e 'library(covr);coveralls()'
+  - Rscript -e 'library(covr);coveralls()'
