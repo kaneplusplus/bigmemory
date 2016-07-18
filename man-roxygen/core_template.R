@@ -113,7 +113,7 @@
 #' other functions.
 #' @author John W. Emerson and Michael J. Kane 
 #' \email{<bigmemoryauthors@@gmail.com>}
-#' @references The Bigmemory Project: \url{http://www.bigmemory.org/}.\
+#' @references The Bigmemory Project: \url{http://www.bigmemory.org/}.
 #' @seealso \code{\link{bigmemory}}, and perhaps the class documentation of
 #' \code{\linkS4class{big.matrix}}; \code{\link{attach.big.matrix}} and
 #' \code{\link{describe}}.  Sister packages \pkg{biganalytics}, \pkg{bigtabulate},

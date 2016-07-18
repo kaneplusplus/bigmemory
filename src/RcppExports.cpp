@@ -18,6 +18,18 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// GetIndivVectorMatrixElements
+SEXP GetIndivVectorMatrixElements(SEXP bigMatAddr, NumericVector elems);
+RcppExport SEXP bigmemory_GetIndivVectorMatrixElements(SEXP bigMatAddrSEXP, SEXP elemsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< SEXP >::type bigMatAddr(bigMatAddrSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type elems(elemsSEXP);
+    __result = Rcpp::wrap(GetIndivVectorMatrixElements(bigMatAddr, elems));
+    return __result;
+END_RCPP
+}
 // ReorderRIntMatrix
 void ReorderRIntMatrix(SEXP matrixVector, SEXP nrow, SEXP ncol, SEXP orderVec);
 RcppExport SEXP bigmemory_ReorderRIntMatrix(SEXP matrixVectorSEXP, SEXP nrowSEXP, SEXP ncolSEXP, SEXP orderVecSEXP) {
@@ -56,27 +68,27 @@ BEGIN_RCPP
 END_RCPP
 }
 // ReorderRIntMatrixCols
-void ReorderRIntMatrixCols(SEXP matrixVector, SEXP nrow, SEXP ncol, SEXP orderVec);
+void ReorderRIntMatrixCols(Rcpp::IntegerMatrix matrixVector, SEXP nrow, SEXP ncol, Rcpp::IntegerVector orderVec);
 RcppExport SEXP bigmemory_ReorderRIntMatrixCols(SEXP matrixVectorSEXP, SEXP nrowSEXP, SEXP ncolSEXP, SEXP orderVecSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< SEXP >::type matrixVector(matrixVectorSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerMatrix >::type matrixVector(matrixVectorSEXP);
     Rcpp::traits::input_parameter< SEXP >::type nrow(nrowSEXP);
     Rcpp::traits::input_parameter< SEXP >::type ncol(ncolSEXP);
-    Rcpp::traits::input_parameter< SEXP >::type orderVec(orderVecSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type orderVec(orderVecSEXP);
     ReorderRIntMatrixCols(matrixVector, nrow, ncol, orderVec);
     return R_NilValue;
 END_RCPP
 }
 // ReorderRNumericMatrixCols
-void ReorderRNumericMatrixCols(SEXP matrixVector, SEXP nrow, SEXP ncol, SEXP orderVec);
+void ReorderRNumericMatrixCols(Rcpp::NumericMatrix matrixVector, SEXP nrow, SEXP ncol, Rcpp::IntegerVector orderVec);
 RcppExport SEXP bigmemory_ReorderRNumericMatrixCols(SEXP matrixVectorSEXP, SEXP nrowSEXP, SEXP ncolSEXP, SEXP orderVecSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< SEXP >::type matrixVector(matrixVectorSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type matrixVector(matrixVectorSEXP);
     Rcpp::traits::input_parameter< SEXP >::type nrow(nrowSEXP);
     Rcpp::traits::input_parameter< SEXP >::type ncol(ncolSEXP);
-    Rcpp::traits::input_parameter< SEXP >::type orderVec(orderVecSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type orderVec(orderVecSEXP);
     ReorderRNumericMatrixCols(matrixVector, nrow, ncol, orderVec);
     return R_NilValue;
 END_RCPP
@@ -605,6 +617,18 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< SEXP >::type row(rowSEXP);
     Rcpp::traits::input_parameter< SEXP >::type values(valuesSEXP);
     SetMatrixElements(bigMatAddr, col, row, values);
+    return R_NilValue;
+END_RCPP
+}
+// SetIndivVectorMatrixElements
+void SetIndivVectorMatrixElements(SEXP bigMatAddr, NumericVector elems, NumericVector inVec);
+RcppExport SEXP bigmemory_SetIndivVectorMatrixElements(SEXP bigMatAddrSEXP, SEXP elemsSEXP, SEXP inVecSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< SEXP >::type bigMatAddr(bigMatAddrSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type elems(elemsSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type inVec(inVecSEXP);
+    SetIndivVectorMatrixElements(bigMatAddr, elems, inVec);
     return R_NilValue;
 END_RCPP
 }

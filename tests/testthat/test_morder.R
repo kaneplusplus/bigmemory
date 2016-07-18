@@ -21,7 +21,9 @@ test_that("mpermute changes elements order",{
 test_that("column reording works", {
   mpermuteCols(bm, order = c(3,4,1,2))
   expect_equivalent(bm[], mm[,c('c','d','a','b')])
+  expect_equivalent(colnames(bm), c('c','d','a','b'))
   mpermuteCols(mm, order = c(3,4,1,2))
+  expect_equivalent(colnames(mm), c('c','d','a','b'))
   expect_equivalent(bm[], mm)
   mpermuteCols(bm, rows = 1)
   mpermuteCols(mm, rows = 1)
