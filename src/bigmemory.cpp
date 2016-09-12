@@ -9,6 +9,11 @@
 
 #include "bigmemory/util.h"
 
+#define R_BYTE_MIN (0)
+#define R_BYTE_MAX (255)
+#define NA_BYTE (0)
+
+
 using namespace Rcpp;
 
 /* Notes
@@ -38,7 +43,7 @@ string ttos(T i)
 }
 
 template<>
-string ttos<char>(char i)
+string ttos<unsigned char>(unsigned char i)
 {
   stringstream s;
   s << static_cast<short>(i);
@@ -94,6 +99,7 @@ GetIndivMatrixElements(
   for (i=0; i < numCols; ++i)
   {
     CType element = mat[static_cast<index_type>(col[i])-1][static_cast<index_type>(row[i])-1];
+
     retVec[i] = element == static_cast<CType>(NA_C) ? static_cast<RType>(NA_R) : element;
   }
   return(retVec);
@@ -385,8 +391,8 @@ SEXP GetIndivMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row)
     switch(pMat->matrix_type())
     {
       case 1:
-        return GetIndivMatrixElements<char, int, SepMatrixAccessor<char>, IntegerVector >(
-          pMat, NA_CHAR, NA_INTEGER, col, row);
+        return GetIndivMatrixElements<char, int, SepMatrixAccessor<unsigned char>, IntegerVector >(
+          pMat, NA_BYTE, NA_INTEGER, col, row);
       case 2:
         return GetIndivMatrixElements<short,int, SepMatrixAccessor<short>, IntegerVector >(
           pMat, NA_SHORT, NA_INTEGER, col, row);
@@ -406,8 +412,8 @@ SEXP GetIndivMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row)
     switch(pMat->matrix_type())
     {
       case 1:
-        return GetIndivMatrixElements<char, int, MatrixAccessor<char>, IntegerVector >(
-          pMat, NA_CHAR, NA_INTEGER, col, row);
+        return GetIndivMatrixElements<char, int, MatrixAccessor<unsigned char>, IntegerVector >(
+          pMat, NA_BYTE, NA_INTEGER, col, row);
       case 2:
         return GetIndivMatrixElements<short, int, MatrixAccessor<short>, IntegerVector >(
           pMat, NA_SHORT, NA_INTEGER, col, row);
@@ -436,8 +442,8 @@ SEXP GetIndivVectorMatrixElements(SEXP bigMatAddr, NumericVector elems)
     switch(pMat->matrix_type())
     {
     case 1:
-      return GetIndivVectorMatrixElements<char, int, SepMatrixAccessor<char>, IntegerVector >(
-          pMat, NA_CHAR, NA_INTEGER, elems);
+      return GetIndivVectorMatrixElements<char, int, SepMatrixAccessor<unsigned char>, IntegerVector >(
+          pMat, NA_BYTE, NA_INTEGER, elems);
     case 2:
       return GetIndivVectorMatrixElements<short,int, SepMatrixAccessor<short>, IntegerVector >(
           pMat, NA_SHORT, NA_INTEGER, elems);
@@ -457,8 +463,8 @@ SEXP GetIndivVectorMatrixElements(SEXP bigMatAddr, NumericVector elems)
     switch(pMat->matrix_type())
     {
     case 1:
-      return GetIndivVectorMatrixElements<char, int, MatrixAccessor<char>, IntegerVector >(
-          pMat, NA_CHAR, NA_INTEGER, elems);
+      return GetIndivVectorMatrixElements<char, int, MatrixAccessor<unsigned char>, IntegerVector >(
+          pMat, NA_BYTE, NA_INTEGER, elems);
     case 2:
       return GetIndivVectorMatrixElements<short, int, MatrixAccessor<short>, IntegerVector >(
           pMat, NA_SHORT, NA_INTEGER, elems);
@@ -905,8 +911,8 @@ template<typename T>
 struct NAMaker;
 
 template<>
-struct NAMaker<char>
-{char operator()() const {return NA_CHAR;}};
+struct NAMaker<unsigned char>
+{char operator()() const {return NA_BYTE;}};
 
 template<>
 struct NAMaker<short>
@@ -1234,7 +1240,7 @@ void ReorderBigMatrix( SEXP address, SEXP orderVec )
     switch (pMat->matrix_type())
     {
       case 1:
-        return reorder_matrix( SepMatrixAccessor<char>(*pMat), orderVec,
+        return reorder_matrix( SepMatrixAccessor<unsigned char>(*pMat), orderVec,
           pMat->ncol(), dynamic_cast<FileBackedBigMatrix*>(pMat) );
       case 2:
         return reorder_matrix( SepMatrixAccessor<short>(*pMat), orderVec,
@@ -1255,7 +1261,7 @@ void ReorderBigMatrix( SEXP address, SEXP orderVec )
     switch (pMat->matrix_type())
     {
       case 1:
-        return reorder_matrix( MatrixAccessor<char>(*pMat),orderVec,
+        return reorder_matrix( MatrixAccessor<unsigned char>(*pMat),orderVec,
           pMat->ncol(), dynamic_cast<FileBackedBigMatrix*>(pMat) );
       case 2:
         return reorder_matrix( MatrixAccessor<short>(*pMat),orderVec,
@@ -1318,7 +1324,7 @@ void ReorderBigMatrixCols( SEXP address, SEXP orderVec )
     switch (pMat->matrix_type())
     {
       case 1:
-        return reorder_matrix2( SepMatrixAccessor<char>(*pMat), orderVec,
+        return reorder_matrix2( SepMatrixAccessor<unsigned char>(*pMat), orderVec,
           pMat->nrow(), dynamic_cast<FileBackedBigMatrix*>(pMat) );
       case 2:
         return reorder_matrix2( SepMatrixAccessor<short>(*pMat), orderVec,
@@ -1339,7 +1345,7 @@ void ReorderBigMatrixCols( SEXP address, SEXP orderVec )
     switch (pMat->matrix_type())
     {
       case 1:
-        return reorder_matrix2( MatrixAccessor<char>(*pMat),orderVec,
+        return reorder_matrix2( MatrixAccessor<unsigned char>(*pMat),orderVec,
           pMat->nrow(), dynamic_cast<FileBackedBigMatrix*>(pMat) );
       case 2:
         return reorder_matrix2( MatrixAccessor<short>(*pMat),orderVec,
@@ -1386,7 +1392,7 @@ SEXP OrderBigMatrix(SEXP address, SEXP columns, SEXP naLast, SEXP decreasing)
     switch (pMat->matrix_type())
     {
       case 1:
-        return get_order<char>( SepMatrixAccessor<char>(*pMat), 
+        return get_order<unsigned char>( SepMatrixAccessor<unsigned char>(*pMat),
           columns, naLast, decreasing );
       case 2:
         return get_order<short>( SepMatrixAccessor<short>(*pMat), 
@@ -1407,7 +1413,7 @@ SEXP OrderBigMatrix(SEXP address, SEXP columns, SEXP naLast, SEXP decreasing)
     switch (pMat->matrix_type())
     {
       case 1:
-        return get_order<char>( MatrixAccessor<char>(*pMat),
+        return get_order<unsigned char>( MatrixAccessor<unsigned char>(*pMat),
           columns, naLast, decreasing );
       case 2:
         return get_order<short>( MatrixAccessor<short>(*pMat),
@@ -1458,7 +1464,7 @@ SEXP naLast, SEXP decreasing)
     switch (pMat->matrix_type())
     {
       case 1:
-        return get_order2<char>( SepMatrixAccessor<char>(*pMat), 
+        return get_order2<unsigned char>( SepMatrixAccessor<unsigned char>(*pMat),
           rows, naLast, decreasing );
       case 2:
         return get_order2<short>( SepMatrixAccessor<short>(*pMat), 
@@ -1479,7 +1485,7 @@ SEXP naLast, SEXP decreasing)
     switch (pMat->matrix_type())
     {
       case 1:
-        return get_order2<char>( MatrixAccessor<char>(*pMat),
+        return get_order2<unsigned char>( MatrixAccessor<unsigned char>(*pMat),
           rows, naLast, decreasing );
       case 2:
         return get_order2<short>( MatrixAccessor<short>(*pMat),
@@ -1971,8 +1977,8 @@ SEXP CreateRAMMatrix(SEXP row, SEXP col, SEXP colnames, SEXP rownames,
         switch (pMat->matrix_type())
         {
           case 1:
-            SetAllMatrixElements<char, SepMatrixAccessor<char> >(
-              pMat, ini, NA_CHAR, R_CHAR_MIN, R_CHAR_MAX, NA_REAL);
+            SetAllMatrixElements<unsigned char, SepMatrixAccessor<unsigned char> >(
+              pMat, ini, NA_BYTE, R_BYTE_MIN, R_BYTE_MAX, NA_REAL);
             break;
           case 2:
             SetAllMatrixElements<short, SepMatrixAccessor<short> >(
@@ -1996,8 +2002,8 @@ SEXP CreateRAMMatrix(SEXP row, SEXP col, SEXP colnames, SEXP rownames,
         switch (pMat->matrix_type())
         {
           case 1:
-            SetAllMatrixElements<char, MatrixAccessor<char> >(
-              pMat, ini, NA_CHAR, R_CHAR_MIN, R_CHAR_MAX, NA_REAL );
+            SetAllMatrixElements<unsigned char, MatrixAccessor<unsigned char> >(
+              pMat, ini, NA_BYTE, R_BYTE_MIN, R_BYTE_MAX, NA_REAL );
             break;
           case 2:
             SetAllMatrixElements<short, MatrixAccessor<short> >(
@@ -2154,9 +2160,9 @@ SEXP MWhichBigMatrix( SEXP bigMatAddr, SEXP selectColumn, SEXP minVal,
         switch (pMat->matrix_type())
         {
           case 1:
-            return MWhichMatrix<char>( SepMatrixAccessor<char>(*pMat),
+            return MWhichMatrix<unsigned char>( SepMatrixAccessor<unsigned char>(*pMat),
               pMat->nrow(), selectColumn, minVal, maxVal, chkMin, chkMax, 
-              opVal, NA_CHAR);
+              opVal, NA_BYTE);
           case 2:
             return MWhichMatrix<short>( SepMatrixAccessor<short>(*pMat),
               pMat->nrow(), selectColumn, minVal, maxVal, chkMin, chkMax, 
@@ -2180,9 +2186,9 @@ SEXP MWhichBigMatrix( SEXP bigMatAddr, SEXP selectColumn, SEXP minVal,
         switch (pMat->matrix_type())
         {
           case 1:
-            return MWhichMatrix<char>( MatrixAccessor<char>(*pMat),
+            return MWhichMatrix<unsigned char>( MatrixAccessor<unsigned char>(*pMat),
               pMat->nrow(), selectColumn, minVal, maxVal, chkMin, chkMax, 
-              opVal, NA_CHAR);
+              opVal, NA_BYTE);
           case 2:
             return MWhichMatrix<short>( MatrixAccessor<short>(*pMat),
               pMat->nrow(), selectColumn, minVal, maxVal, chkMin, chkMax, 
@@ -2255,10 +2261,10 @@ SEXP ReadMatrix(SEXP fileName, SEXP bigMatAddr,
         switch (pMat->matrix_type())
         {
           case 1:
-            return ReadMatrix<char, SepMatrixAccessor<char> >(
+            return ReadMatrix<char, SepMatrixAccessor<unsigned char> >(
               fileName, pMat, firstLine, numLines, numCols, 
-              separator, hasRowNames, useRowNames, NA_CHAR, NA_CHAR, NA_CHAR, 
-              NA_CHAR);
+              separator, hasRowNames, useRowNames, NA_BYTE, NA_BYTE, NA_BYTE,
+              NA_BYTE);
           case 2:
             return ReadMatrix<short, SepMatrixAccessor<short> >(
               fileName, pMat, firstLine, numLines, numCols, 
@@ -2286,10 +2292,10 @@ SEXP ReadMatrix(SEXP fileName, SEXP bigMatAddr,
         switch (pMat->matrix_type())
         {
           case 1:
-            return ReadMatrix<char, MatrixAccessor<char> >(
+            return ReadMatrix<char, MatrixAccessor<unsigned char> >(
               fileName, pMat, firstLine, numLines, numCols, 
-              separator, hasRowNames, useRowNames, NA_CHAR, NA_CHAR, NA_CHAR, 
-              NA_CHAR);
+              separator, hasRowNames, useRowNames, NA_BYTE, NA_BYTE, NA_BYTE,
+              NA_BYTE);
           case 2:
             return ReadMatrix<short, MatrixAccessor<short> >(
               fileName, pMat, firstLine, numLines, numCols, 
@@ -2325,8 +2331,8 @@ void WriteMatrix( SEXP bigMatAddr, SEXP fileName, SEXP rowNames,
         switch (pMat->matrix_type())
         {
           case 1:
-            WriteMatrix<char, SepMatrixAccessor<char> >(
-              pMat, fileName, rowNames, colNames, sep, NA_CHAR);
+            WriteMatrix<char, SepMatrixAccessor<unsigned char> >(
+              pMat, fileName, rowNames, colNames, sep, NA_BYTE);
             break;
           case 2:
             WriteMatrix<short, SepMatrixAccessor<short> >(
@@ -2350,8 +2356,8 @@ void WriteMatrix( SEXP bigMatAddr, SEXP fileName, SEXP rowNames,
         switch (pMat->matrix_type())
         {
           case 1:
-            WriteMatrix<char, MatrixAccessor<char> >(
-              pMat, fileName, rowNames, colNames, sep, NA_CHAR);
+            WriteMatrix<char, MatrixAccessor<unsigned char> >(
+              pMat, fileName, rowNames, colNames, sep, NA_BYTE);
             break;
           case 2:
             WriteMatrix<short, MatrixAccessor<short> >(
@@ -2381,8 +2387,8 @@ SEXP GetMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row)
     switch(pMat->matrix_type())
     {
       case 1:
-        return GetMatrixElements<char, int, SepMatrixAccessor<char> >
-          (pMat, NA_CHAR, NA_INTEGER, col, row, INTSXP);
+        return GetMatrixElements<unsigned char, int, SepMatrixAccessor<unsigned char> >
+          (pMat, NA_BYTE, NA_INTEGER, col, row, INTSXP);
       case 2:
         return GetMatrixElements<short,int, SepMatrixAccessor<short> >
           (pMat, NA_SHORT, NA_INTEGER, col, row, INTSXP);
@@ -2403,8 +2409,8 @@ SEXP GetMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row)
     switch(pMat->matrix_type())
     {
       case 1:
-        return GetMatrixElements<char, int, MatrixAccessor<char> >(
-          pMat, NA_CHAR, NA_INTEGER, col, row, INTSXP);
+        return GetMatrixElements<unsigned char, int, MatrixAccessor<unsigned char> >(
+          pMat, NA_BYTE, NA_INTEGER, col, row, INTSXP);
       case 2:
         return GetMatrixElements<short, int, MatrixAccessor<short> >(
           pMat, NA_SHORT, NA_INTEGER, col, row, INTSXP);
@@ -2431,8 +2437,8 @@ SEXP GetMatrixRows(SEXP bigMatAddr, SEXP row)
     switch(pMat->matrix_type())
     {
       case 1:
-        return GetMatrixRows<char, int, SepMatrixAccessor<char> >
-          (pMat, NA_CHAR, NA_INTEGER, row, INTSXP);
+        return GetMatrixRows<unsigned char, int, SepMatrixAccessor<unsigned char> >
+          (pMat, NA_BYTE, NA_INTEGER, row, INTSXP);
       case 2:
         return GetMatrixRows<short,int, SepMatrixAccessor<short> >
           (pMat, NA_SHORT, NA_INTEGER, row, INTSXP);
@@ -2452,8 +2458,8 @@ SEXP GetMatrixRows(SEXP bigMatAddr, SEXP row)
     switch(pMat->matrix_type())
     {
       case 1:
-        return GetMatrixRows<char, int, MatrixAccessor<char> >(
-          pMat, NA_CHAR, NA_INTEGER, row, INTSXP);
+        return GetMatrixRows<unsigned char, int, MatrixAccessor<unsigned char> >(
+          pMat, NA_BYTE, NA_INTEGER, row, INTSXP);
       case 2:
         return GetMatrixRows<short, int, MatrixAccessor<short> >(
           pMat, NA_SHORT, NA_INTEGER, row, INTSXP);
@@ -2480,8 +2486,8 @@ SEXP GetMatrixCols(SEXP bigMatAddr, SEXP col)
     switch(pMat->matrix_type())
     {
       case 1:
-        return GetMatrixCols<char, int, SepMatrixAccessor<char> >
-          (pMat, NA_CHAR, NA_INTEGER, col, INTSXP);
+        return GetMatrixCols<unsigned char, int, SepMatrixAccessor<unsigned char> >
+          (pMat, NA_BYTE, NA_INTEGER, col, INTSXP);
       case 2:
         return GetMatrixCols<short,int, SepMatrixAccessor<short> >
           (pMat, NA_SHORT, NA_INTEGER, col, INTSXP);
@@ -2501,8 +2507,8 @@ SEXP GetMatrixCols(SEXP bigMatAddr, SEXP col)
     switch(pMat->matrix_type())
     {
       case 1:
-        return GetMatrixCols<char, int, MatrixAccessor<char> >(
-          pMat, NA_CHAR, NA_INTEGER, col, INTSXP);
+        return GetMatrixCols<unsigned char, int, MatrixAccessor<unsigned char> >(
+          pMat, NA_BYTE, NA_INTEGER, col, INTSXP);
       case 2:
         return GetMatrixCols<short, int, MatrixAccessor<short> >(
           pMat, NA_SHORT, NA_INTEGER, col, INTSXP);
@@ -2530,8 +2536,8 @@ SEXP GetMatrixAll(SEXP bigMatAddr)
     switch(pMat->matrix_type())
     {
       case 1:
-        return GetMatrixAll<char, int, SepMatrixAccessor<char> >
-          (pMat, NA_CHAR, NA_INTEGER, INTSXP);
+        return GetMatrixAll<unsigned char, int, SepMatrixAccessor<unsigned char> >
+          (pMat, NA_BYTE, NA_INTEGER, INTSXP);
       case 2:
         return GetMatrixAll<short,int, SepMatrixAccessor<short> >
           (pMat, NA_SHORT, NA_INTEGER, INTSXP);
@@ -2551,8 +2557,8 @@ SEXP GetMatrixAll(SEXP bigMatAddr)
     switch(pMat->matrix_type())
     {
       case 1:
-        return GetMatrixAll<char, int, MatrixAccessor<char> >(
-          pMat, NA_CHAR, NA_INTEGER, INTSXP);
+        return GetMatrixAll<unsigned char, int, MatrixAccessor<unsigned char> >(
+          pMat, NA_BYTE, NA_INTEGER, INTSXP);
       case 2:
         return GetMatrixAll<short, int, MatrixAccessor<short> >(
           pMat, NA_SHORT, NA_INTEGER, INTSXP);
@@ -2580,8 +2586,8 @@ void SetMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row, SEXP values)
     switch (pMat->matrix_type())
     {
       case 1:
-        SetMatrixElements<char, int, SepMatrixAccessor<char> >( 
-          pMat, col, row, values, NA_CHAR, R_CHAR_MIN, R_CHAR_MAX, NA_INTEGER);
+        SetMatrixElements<unsigned char, int, SepMatrixAccessor<unsigned char> >(
+          pMat, col, row, values, NA_BYTE, R_BYTE_MIN, R_BYTE_MAX, NA_INTEGER);
         break;
       case 2:
         SetMatrixElements<short, int, SepMatrixAccessor<short> >( 
@@ -2606,8 +2612,8 @@ void SetMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row, SEXP values)
     switch (pMat->matrix_type())
     {
       case 1:
-        SetMatrixElements<char, int, MatrixAccessor<char> >( 
-          pMat, col, row, values, NA_CHAR, R_CHAR_MIN, R_CHAR_MAX, NA_INTEGER);
+        SetMatrixElements<unsigned char, int, MatrixAccessor<unsigned char> >(
+          pMat, col, row, values, NA_BYTE, R_BYTE_MIN, R_BYTE_MAX, NA_INTEGER);
         break;
       case 2:
         SetMatrixElements<short, int, MatrixAccessor<short> >( 
@@ -2644,8 +2650,8 @@ SetIndivVectorMatrixElements(
     switch(pMat->matrix_type())
     {
     case 1:
-      SetIndivVectorMatrixElements<char, int, SepMatrixAccessor<char>, IntegerVector >(
-          pMat, NA_CHAR, NA_INTEGER, elems, inVec);
+      SetIndivVectorMatrixElements<unsigned char, int, SepMatrixAccessor<unsigned char>, IntegerVector >(
+          pMat, NA_BYTE, NA_INTEGER, elems, inVec);
       break;
     case 2:
       SetIndivVectorMatrixElements<short,int, SepMatrixAccessor<short>, IntegerVector >(
@@ -2670,8 +2676,8 @@ SetIndivVectorMatrixElements(
     switch(pMat->matrix_type())
     {
     case 1:
-      SetIndivVectorMatrixElements<char, int, MatrixAccessor<char>, IntegerVector >(
-          pMat, NA_CHAR, NA_INTEGER, elems, inVec);
+      SetIndivVectorMatrixElements<unsigned char, int, MatrixAccessor<unsigned char>, IntegerVector >(
+          pMat, NA_BYTE, NA_INTEGER, elems, inVec);
       break;
     case 2:
       SetIndivVectorMatrixElements<short, int, MatrixAccessor<short>, IntegerVector >(
@@ -2703,8 +2709,8 @@ void SetIndivMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row, SEXP values)
     switch (pMat->matrix_type())
     {
     case 1:
-      SetIndivMatrixElements<char, int, SepMatrixAccessor<char> >(
-        pMat, col, row, values, NA_CHAR, R_CHAR_MIN, R_CHAR_MAX, NA_INTEGER);
+      SetIndivMatrixElements<unsigned char, int, SepMatrixAccessor<unsigned char> >(
+        pMat, col, row, values, NA_BYTE, R_BYTE_MIN, R_BYTE_MAX, NA_INTEGER);
       break;
     case 2:
       SetIndivMatrixElements<short, int, SepMatrixAccessor<short> >(
@@ -2728,8 +2734,8 @@ void SetIndivMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row, SEXP values)
     switch (pMat->matrix_type())
     {
     case 1:
-      SetIndivMatrixElements<char, int, MatrixAccessor<char> >(
-        pMat, col, row, values, NA_CHAR, R_CHAR_MIN, R_CHAR_MAX, NA_INTEGER);
+      SetIndivMatrixElements<unsigned char, int, MatrixAccessor<unsigned char> >(
+        pMat, col, row, values, NA_BYTE, R_BYTE_MIN, R_BYTE_MAX, NA_INTEGER);
       break;
     case 2:
       SetIndivMatrixElements<short, int, MatrixAccessor<short> >(
@@ -2759,8 +2765,8 @@ void SetMatrixAll(SEXP bigMatAddr, SEXP values)
     switch (pMat->matrix_type())
     {
       case 1:
-        SetMatrixAll<char, int, SepMatrixAccessor<char> >( 
-          pMat, values, NA_CHAR, R_CHAR_MIN, R_CHAR_MAX, NA_INTEGER);
+        SetMatrixAll<unsigned char, int, SepMatrixAccessor<unsigned char> >(
+          pMat, values, NA_BYTE, R_BYTE_MIN, R_BYTE_MAX, NA_INTEGER);
         break;
       case 2:
         SetMatrixAll<short, int, SepMatrixAccessor<short> >( 
@@ -2785,8 +2791,8 @@ void SetMatrixAll(SEXP bigMatAddr, SEXP values)
     switch (pMat->matrix_type())
     {
       case 1:
-        SetMatrixAll<char, int, MatrixAccessor<char> >( 
-          pMat, values, NA_CHAR, R_CHAR_MIN, R_CHAR_MAX, NA_INTEGER);
+        SetMatrixAll<unsigned char, int, MatrixAccessor<unsigned char> >(
+          pMat, values, NA_BYTE, R_BYTE_MIN, R_BYTE_MAX, NA_INTEGER);
         break;
       case 2:
         SetMatrixAll<short, int, MatrixAccessor<short> >( 
@@ -2817,8 +2823,8 @@ void SetMatrixCols(SEXP bigMatAddr, SEXP col, SEXP values)
     switch (pMat->matrix_type())
     {
       case 1:
-        SetMatrixCols<char, int, SepMatrixAccessor<char> >( 
-          pMat, col, values, NA_CHAR, R_CHAR_MIN, R_CHAR_MAX, NA_INTEGER);
+        SetMatrixCols<unsigned char, int, SepMatrixAccessor<unsigned char> >(
+          pMat, col, values, NA_BYTE, R_BYTE_MIN, R_BYTE_MAX, NA_INTEGER);
         break;
       case 2:
         SetMatrixCols<short, int, SepMatrixAccessor<short> >( 
@@ -2843,8 +2849,8 @@ void SetMatrixCols(SEXP bigMatAddr, SEXP col, SEXP values)
     switch (pMat->matrix_type())
     {
       case 1:
-        SetMatrixCols<char, int, MatrixAccessor<char> >( 
-          pMat, col, values, NA_CHAR, R_CHAR_MIN, R_CHAR_MAX, NA_INTEGER);
+        SetMatrixCols<unsigned char, int, MatrixAccessor<unsigned char> >(
+          pMat, col, values, NA_BYTE, R_BYTE_MIN, R_BYTE_MAX, NA_INTEGER);
         break;
       case 2:
         SetMatrixCols<short, int, MatrixAccessor<short> >( 
@@ -2875,8 +2881,8 @@ void SetMatrixRows(SEXP bigMatAddr, SEXP row, SEXP values)
     switch (pMat->matrix_type())
     {
       case 1:
-        SetMatrixRows<char, int, SepMatrixAccessor<char> >( 
-          pMat, row, values, NA_CHAR, R_CHAR_MIN, R_CHAR_MAX, NA_INTEGER);
+        SetMatrixRows<unsigned char, int, SepMatrixAccessor<unsigned char> >(
+          pMat, row, values, NA_BYTE, R_BYTE_MIN, R_BYTE_MAX, NA_INTEGER);
         break;
       case 2:
         SetMatrixRows<short, int, SepMatrixAccessor<short> >( 
@@ -2901,8 +2907,8 @@ void SetMatrixRows(SEXP bigMatAddr, SEXP row, SEXP values)
     switch (pMat->matrix_type())
     {
       case 1:
-        SetMatrixRows<char, int, MatrixAccessor<char> >( 
-          pMat, row, values, NA_CHAR, R_CHAR_MIN, R_CHAR_MAX, NA_INTEGER);
+        SetMatrixRows<unsigned char, int, MatrixAccessor<unsigned char> >(
+          pMat, row, values, NA_BYTE, R_BYTE_MIN, R_BYTE_MAX, NA_INTEGER);
         break;
       case 2:
         SetMatrixRows<short, int, MatrixAccessor<short> >( 
@@ -2985,8 +2991,8 @@ SEXP CreateFileBackedBigMatrix(SEXP fileName, SEXP filePath, SEXP row,
         switch (pMat->matrix_type())
         {
           case 1:
-            SetAllMatrixElements<char, SepMatrixAccessor<char> >(
-              pMat, ini, NA_CHAR, R_CHAR_MIN, R_CHAR_MAX, NA_REAL);
+            SetAllMatrixElements<unsigned char, SepMatrixAccessor<unsigned char> >(
+              pMat, ini, NA_BYTE, R_BYTE_MIN, R_BYTE_MAX, NA_REAL);
             break;
           case 2:
             SetAllMatrixElements<short, SepMatrixAccessor<short> >(
@@ -3010,8 +3016,8 @@ SEXP CreateFileBackedBigMatrix(SEXP fileName, SEXP filePath, SEXP row,
         switch (pMat->matrix_type())
         {
           case 1:
-            SetAllMatrixElements<char, MatrixAccessor<char> >(
-              pMat, ini, NA_CHAR, R_CHAR_MIN, R_CHAR_MAX, NA_REAL);
+            SetAllMatrixElements<unsigned char, MatrixAccessor<unsigned char> >(
+              pMat, ini, NA_BYTE, R_BYTE_MIN, R_BYTE_MAX, NA_REAL);
             break;
           case 2:
             SetAllMatrixElements<short, MatrixAccessor<short> >(
@@ -3193,8 +3199,8 @@ void SetAllMatrixElements(SEXP bigMatAddr, SEXP value)
         switch (pMat->matrix_type())
         {
           case 1:
-            SetAllMatrixElements<char, SepMatrixAccessor<char> >( 
-              pMat, value, NA_CHAR, R_CHAR_MIN, R_CHAR_MAX, NA_REAL);
+            SetAllMatrixElements<unsigned char, SepMatrixAccessor<unsigned char> >(
+              pMat, value, NA_BYTE, R_BYTE_MIN, R_BYTE_MAX, NA_REAL);
             break;
           case 2:
             SetAllMatrixElements<short, SepMatrixAccessor<short> >( 
@@ -3218,8 +3224,8 @@ void SetAllMatrixElements(SEXP bigMatAddr, SEXP value)
         switch (pMat->matrix_type())
         {
           case 1:
-            SetAllMatrixElements<char, MatrixAccessor<char> >( 
-              pMat, value, NA_CHAR, R_CHAR_MIN, R_CHAR_MAX, NA_REAL);
+            SetAllMatrixElements<unsigned char, MatrixAccessor<unsigned char> >(
+              pMat, value, NA_BYTE, R_BYTE_MIN, R_BYTE_MAX, NA_REAL);
             break;
           case 2:
             SetAllMatrixElements<short, MatrixAccessor<short> >( 
