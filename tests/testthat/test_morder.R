@@ -1,5 +1,7 @@
 library("bigmemory")
 context("morder/mpermute")
+data(iris,package='datasets')
+
 
 m = matrix(as.double(as.matrix(iris[,1:4])), nrow=nrow(iris[,1:4]))
 n = m

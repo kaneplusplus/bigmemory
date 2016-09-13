@@ -228,7 +228,7 @@ void CreateSharedSepMatrix( const std::string &sharedName,
       {
         shared_memory_object::remove( (sharedName+"_column_"+ttos(j)).c_str());
       }
-      delete pMat;
+      delete[] pMat;
       fail = true;
     }
   }
@@ -399,7 +399,7 @@ void* ConnectSharedSepMatrix(const std::string &uuid,
   {
     COND_EXCEPTION_PRINT(DEBUG);
     dataRegionPtrs.resize(0);
-    delete pMat;
+    delete[] pMat;
     return NULL;
   }
 }
