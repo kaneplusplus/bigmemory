@@ -9,6 +9,13 @@
 # Mike Kane <michael.kane@yale.edu>
 # Charles Determan <cdetermanjr@gmail.com>
 
+2016-09-21 Adam Ryczkowski <adam@statystyka.net> 
+* Fixed a bug with handling raw bytes. Now it is possible to
+  use big.matrix to store arbitrary R object (using serialization).
+  If you want to make sure that bigmemory big.matrix handles raw
+  data, add "bigmemory (>=4.5.21)" to the Depends stanza in 
+  the Description.
+  
 2014-04-15 Mike and Charles <bigmemoryauthors@bigmemory.org>
 * Enabled use of Rcpp package to simply code and create
   smaller barrier to adding additional extensions.
