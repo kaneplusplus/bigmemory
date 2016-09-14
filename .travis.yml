@@ -18,4 +18,5 @@ r_github_packages:
   - jimhester/covr
 
 after_success:
+  - Rscript -e 'devtools::install();library(bigmemory);library(methods);devtools::test()'
   - Rscript -e 'library(covr);coveralls()'
