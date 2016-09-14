@@ -93,6 +93,19 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// ReorderRRawMatrixCols
+void ReorderRRawMatrixCols(Rcpp::RawMatrix matrixVector, SEXP nrow, SEXP ncol, Rcpp::IntegerVector orderVec);
+RcppExport SEXP bigmemory_ReorderRRawMatrixCols(SEXP matrixVectorSEXP, SEXP nrowSEXP, SEXP ncolSEXP, SEXP orderVecSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::RawMatrix >::type matrixVector(matrixVectorSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type nrow(nrowSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type ncol(ncolSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type orderVec(orderVecSEXP);
+    ReorderRRawMatrixCols(matrixVector, nrow, ncol, orderVec);
+    return R_NilValue;
+END_RCPP
+}
 // ReorderBigMatrixCols
 void ReorderBigMatrixCols(SEXP address, SEXP orderVec);
 RcppExport SEXP bigmemory_ReorderBigMatrixCols(SEXP addressSEXP, SEXP orderVecSEXP) {

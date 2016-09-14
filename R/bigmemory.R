@@ -76,6 +76,8 @@ big.matrix <- function(nrow, ncol, type=options()$bigmemory.default.type,
   if (type == 'double') typeVal <- 8
   if (type == 'short') typeVal <- 2
   if (type == 'char') typeVal <- 1
+  if (type == 'raw' || type == 'byte') typeVal <- 3
+  
   if (is.null(typeVal)) stop('invalid type')
   if (!is.null(dimnames)) {
     rownames <- dimnames[[1]]
@@ -122,6 +124,8 @@ filebacked.big.matrix <- function(nrow, ncol,
     if (type == 'double') typeVal <- 8
     if (type == 'short') typeVal <- 2
     if (type == 'char') typeVal <- 1
+    if (type == 'raw' || type == 'byte') typeVal <- 3
+    
     if (is.null(typeVal)) stop('invalid type')
     if (!is.null(dimnames)) {
         rownames <- dimnames[[1]]
@@ -235,7 +239,7 @@ setMethod('as.big.matrix', signature(x='matrix'),
               if (is.null(type)) type <- typeof(x)
               
 #               if (type=="integer" | type=="double" | type=="short" | type=="char") 
-              if (type %in% c("integer","double", "short", "char", "float"))
+              if (type %in% c("integer","double", "short", "char", "float", "raw"))
               {
                   y <- big.matrix(nrow=nrow(x), ncol=ncol(x), type=type, 
                                   init=NULL, dimnames=dimnames(x), separated=separated,
@@ -257,7 +261,7 @@ setMethod('as.big.matrix', signature(x='data.frame'),
               warning("Coercing data.frame to matrix via factor level numberings.")
               if (is.null(type)) type <- options()$bigmemory.default.type
 #               if (type=="integer" | type=="double" | type=="short" | type=="char") 
-              if (type %in% c("integer","double", "short", "char", "float"))
+              if (type %in% c("integer","double", "short", "char", "raw", "float"))
               {
                   y <- big.matrix(nrow=nrow(x), ncol=ncol(x), type=type, 
                                   init=NULL, dimnames=dimnames(x), separated=separated,
@@ -634,7 +638,8 @@ SetElements.bm <- function(x, i, j, value)
        (typeof(value) == "integer" && (typeof(x) != "double" && 
                                            typeof(x) != "float" &&
                                            typeof(x) != "integer")) || 
-       (typeof(value) == "double" && (typeof(x) == "float")) 
+       (typeof(value) == "double" && (typeof(x) == "float")) ||
+       (typeof(value) == "raw" && (typeof(x) != "raw"))
        )) 
   {
     warning(paste0("Assignment will down cast from ", typeof(value), " to ",
@@ -682,6 +687,9 @@ SetElements.bm <- function(x, i, j, value)
                                       as.double(value))},
          'float' = {SetMatrixElements(x@address, as.double(j), as.double(i), 
                                      as.double(value))},
+  			 #Don't convert raw before assigning them
+  			 'raw' = {SetMatrixElements(x@address, as.double(j), as.double(i), 
+  			 													 value)},
          SetMatrixElements(x@address, as.double(j), as.double(i), 
                            as.integer(value))
          )
@@ -723,7 +731,8 @@ SetIndivElements.bm <- function(x, i, value) {
        ((typeof(value) == "double") && (typeof(x) != "double") ||
        (typeof(value) == "integer" &&
         (typeof(x) != "double" && typeof(x) != "integer"))) ||
-       (typeof(value) == "double" && (typeof(x) == "float"))
+       (typeof(value) == "double" && (typeof(x) == "float")) ||
+  		 (typeof(value) == "raw" && (typeof(x) != "raw"))
        )
   {
     warning(cat("Assignment will down cast from ", typeof(value), " to ",
@@ -745,6 +754,9 @@ SetIndivElements.bm <- function(x, i, value) {
                                             as.double(i[,1]), as.double(value))},
          'float' = {SetIndivMatrixElements(x@address, as.double(i[,2]),
                                            as.double(i[,1]), as.single(value))},
+  			 #Don't convert raw before assigning them
+  			 'raw' = {SetIndivMatrixElements(x@address, as.double(i[,2]),
+  			 																	as.double(i[,1]), value)}, 
          SetIndivMatrixElements(x@address, as.double(i[,2]),
                                 as.double(i[,1]), as.integer(value))
   )
@@ -806,8 +818,9 @@ SetCols.bm <- function(x, j, value)
        ((typeof(value) == "double") && (typeof(x) != "double") ||
        (typeof(value) == "integer" &&
         (typeof(x) != "double" && typeof(x) != "integer")) || 
-       (typeof(value) == "double" && (typeof(x) == "float"))) 
-       )
+       (typeof(value) == "double" && (typeof(x) == "float"))) ||
+  		 (typeof(value) == "raw" && (typeof(x) != "raw"))
+  )
   {
     warning(cat("Assignment will down cast from ", typeof(value), " to ",
                 typeof(x), "\nHint: To remove this warning type:  ",
@@ -852,7 +865,9 @@ SetCols.bm <- function(x, j, value)
   switch(typeof(x),
          'double' = {SetMatrixCols(x@address, as.double(j), as.double(value))},
          'float' = {SetMatrixCols(x@address, as.double(j), as.single(value))},
-         SetMatrixCols(x@address, as.double(j), as.integer(value))
+  			 #Don't convert raw before assigning them
+  			 'raw' = {SetMatrixCols(x@address, as.double(j), value)},
+  			 SetMatrixCols(x@address, as.double(j), as.integer(value))
   )
   
   return(x)
@@ -881,7 +896,8 @@ SetRows.bm <- function(x, i, value)
        ((typeof(value) == "double") && (typeof(x) != "double") ||
        (typeof(value) == "integer" &&
         (typeof(x) != "double" && typeof(x) != "integer"))  || 
-       (typeof(value) == "double" && (typeof(x) == "float")))
+       (typeof(value) == "double" && (typeof(x) == "float"))) ||
+  		 (typeof(value) == "raw" && (typeof(x) != "raw"))
   )
   {
     warning(cat("Assignment will down cast from ", typeof(value), " to ",
@@ -933,6 +949,8 @@ SetRows.bm <- function(x, i, value)
   switch(typeof(x),
          'double' = {SetMatrixRows(x@address, as.double(i), as.double(value))},
          'float' = {SetMatrixRows(x@address, as.double(i), as.single(value))},
+  			 #Don't convert raw before assigning them
+  			 'raw' = {SetMatrixRows(x@address, as.double(i), value)},
          SetMatrixRows(x@address, as.double(i), as.integer(value))
   )
   
@@ -947,7 +965,8 @@ SetAll.bm <- function(x, value)
        ((typeof(value) == "double") && (typeof(x) != "double") ||
        (typeof(value) == "integer" &&
         (typeof(x) != "double" && typeof(x) != "integer"))  || 
-       (typeof(value) == "double" && (typeof(x) == "float")))
+       (typeof(value) == "double" && (typeof(x) == "float"))) ||
+  		 (typeof(value) == "raw" && (typeof(x) != "raw"))
   )
   {
     warning(cat("Assignment will down cast from ", typeof(value), " to ",
@@ -996,7 +1015,9 @@ SetAll.bm <- function(x, value)
   switch(typeof(x),
          'double' = {SetMatrixAll(x@address, as.double(value))},
          'float' = {SetMatrixAll(x@address, as.single(value))},
-         SetMatrixAll(x@address, as.integer(value))
+  			 #Don't convert raw before assigning them
+  			 'raw' = {SetMatrixAll(x@address, value)},
+  			 SetMatrixAll(x@address, as.integer(value))
   )
   
   return(x)
@@ -1733,6 +1754,8 @@ setMethod('attach.resource', signature(obj='big.matrix.descriptor'),
     if (info$type == 'integer') typeLength <- 4
     if (info$type == 'float') typeLength <- 6
     if (info$type == 'double') typeLength <- 8
+    if (info$type == 'raw' ) typeLength <- 1
+    
     if (is.null(typeLength)) 
       stop('invalid type')
 
@@ -1925,6 +1948,8 @@ morderCols <- function(x, rows, na.last=TRUE, decreasing = FALSE)
                                                            as.integer(na.last), as.logical(decreasing) ),
                            'double' = OrderRNumericMatrixCols(x, nrow(x), ncol(x), as.double(rows), 
                                                               as.integer(na.last), as.logical(decreasing) ),
+         									'raw' = OrderRIntMatrixCols(x, nrow(x), ncol(x), as.double(rows), 
+         																							as.integer(na.last), as.logical(decreasing) ),
                            stop("Unsupported matrix value type.")),
          stop("unsupported matrix type")
   )
@@ -1962,7 +1987,8 @@ mpermute <- function(x, order=NULL, cols=NULL, allow.duplicates=FALSE, ...)
          "matrix" = switch(typeof(x),
                            'integer' = ReorderRIntMatrix(x, nrow(x), ncol(x), order),
                            'double' = ReorderRNumericMatrix(x, nrow(x), ncol(x), order),
-                           stop("Unsupported matrix value type.")),
+         									 'raw' = ReorderRIntMatrix(x, nrow(x), ncol(x), order),
+         									stop("Unsupported matrix value type.")),
          stop("invalid class")
   )
 
@@ -2005,6 +2031,7 @@ mpermuteCols <- function(x, order=NULL, rows=NULL, allow.duplicates=FALSE, ...)
          "matrix" = {
            switch(typeof(x),
                   'integer' = ReorderRIntMatrixCols(x, nrow(x), ncol(x), order),
+           			  'raw' = ReorderRRawMatrixCols(x, nrow(x), ncol(x), order),
                   'double' = ReorderRNumericMatrixCols(x, nrow(x), ncol(x), order),
                   stop("Unsupported matrix value type."))
          },
