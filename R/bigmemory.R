@@ -1754,7 +1754,7 @@ setMethod('attach.resource', signature(obj='big.matrix.descriptor'),
     if (info$type == 'integer') typeLength <- 4
     if (info$type == 'float') typeLength <- 6
     if (info$type == 'double') typeLength <- 8
-    if (info$type == 'raw' ) typeLength <- 1
+    if (info$type == 'raw' ) typeLength <- 3
     
     if (is.null(typeLength)) 
       stop('invalid type')
