@@ -13,9 +13,11 @@ r_binary_packages:
   - bigmemory.sri
   - BH
   - devtools
+  - roxygen2
 
 r_github_packages:
   - jimhester/covr
 
 after_success:
-  - Rscript --default-packages='utils,stats,methods' -e 'library(covr);coveralls()'
+  - Rscript -e 'devtools::install();library(bigmemory);library(methods);devtools::test()'
+  - Rscript -e 'library(covr);codecov()'

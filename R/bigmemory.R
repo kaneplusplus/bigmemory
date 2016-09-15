@@ -1042,6 +1042,20 @@ setMethod('[<-',
 #' @rdname extract-methods
 #' @export
 setMethod('[<-',
+          signature(x = "big.matrix", i = "numeric", j="missing", value = "matrix"),
+          function(x, i, j, ..., value){
+            
+            if(nargs() == 3){
+              return(SetIndivVectorElements.bm(x, i, value))
+            }else{
+              return(SetRows.bm(x, i, value))
+            }
+          })
+
+
+#' @rdname extract-methods
+#' @export
+setMethod('[<-',
   signature(x = "big.matrix", i="missing", j="missing", value = "numeric"),
   function(x, i, j, value) return(SetAll.bm(x, value)))
 

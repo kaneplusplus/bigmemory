@@ -95,6 +95,24 @@ test_that("Able to assign non-contiguous columns", {
   z[] <- tmp
 })
 
+test_that("Able to assign matrix to rows", {
+  tmp <- bm[]
+  
+  newmat <- matrix(1:6, 2, 3)
+  
+  bm[1:2,] <- newmat[1:2,]
+  z[1:2,] <- newmat[1:2,]
+  mat[1:2,] <- newmat[1:2,]
+  
+  expect_equivalent(bm[], mat)
+  expect_equivalent(z[], mat)
+  
+  bm[] <- tmp
+  z[] <- tmp
+  mat <- tmp
+  
+})
+
 rm(z)
 gc()
 file.remove('example.bin')
