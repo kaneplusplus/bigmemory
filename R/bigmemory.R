@@ -232,7 +232,7 @@ setMethod('as.big.matrix', signature(x='matrix'),
           function(x, type, separated, backingfile, backingpath, descriptorfile,
                    binarydescriptor, shared)
           {
-              if (!is.numeric(x)) {
+              if (!is.numeric(x) && !is.raw(x)) {
                   warning("Casting to numeric type")
                   x <- matrix(as.numeric(x), nrow=nrow(x), dimnames=dimnames(x))
               }
@@ -681,7 +681,6 @@ SetElements.bm <- function(x, i, j, value)
 #     SetMatrixElements(x@address, as.double(j), as.double(i), 
 #           as.integer(value))
 #   }
-  
   switch(typeof(x),
          'double' = {SetMatrixElements(x@address, as.double(j), as.double(i), 
                                       as.double(value))},
@@ -1754,7 +1753,7 @@ setMethod('attach.resource', signature(obj='big.matrix.descriptor'),
     if (info$type == 'integer') typeLength <- 4
     if (info$type == 'float') typeLength <- 6
     if (info$type == 'double') typeLength <- 8
-    if (info$type == 'raw' ) typeLength <- 1
+    if (info$type == 'raw' ) typeLength <- 3
     
     if (is.null(typeLength)) 
       stop('invalid type')
