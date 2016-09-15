@@ -63,6 +63,10 @@ template<typename T>
 struct VecPtr;
 
 template<>
+struct VecPtr<unsigned char>
+{Rbyte* operator()(SEXP vec) const {return RAW(vec);};};
+
+template<>
 struct VecPtr<int>
 {int* operator()(SEXP vec) const {return INTEGER(vec);};};
 

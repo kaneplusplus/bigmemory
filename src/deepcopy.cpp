@@ -61,7 +61,11 @@ SEXP CDeepCopy(SEXP inAddr, SEXP outAddr, SEXP rowInds, SEXP colInds,
         DeepCopy<IN_CTYPE, IN_ACCESSOR<IN_CTYPE>, short, OUT_ACCESSOR<short> >( \
           pInMat, pOutMat, rowInds, colInds); \
         break; \
-      case 4: \
+	  case 3:                                                                \
+	    DeepCopy<IN_CTYPE, IN_ACCESSOR<IN_CTYPE>, unsigned char, OUT_ACCESSOR<unsigned char> >( \
+	      pInMat, pOutMat, rowInds, colInds);                                 \
+	    break;                                                                \
+	  case 4:                                                                \
         DeepCopy<IN_CTYPE, IN_ACCESSOR<IN_CTYPE>, int, OUT_ACCESSOR<int> >( \
           pInMat, pOutMat, rowInds, colInds); \
         break; \
@@ -80,7 +84,10 @@ SEXP CDeepCopy(SEXP inAddr, SEXP outAddr, SEXP rowInds, SEXP colInds,
       case 2: \
         CALL_DEEP_COPY_2(short, IN_ACCESSOR, OUT_ACCESSOR) \
         break; \
-      case 4: \
+	  case 3:                                            \
+	    CALL_DEEP_COPY_2(unsigned char, IN_ACCESSOR, OUT_ACCESSOR) \
+	    break;                                            \
+	  case 4:                                            \
         CALL_DEEP_COPY_2(int, IN_ACCESSOR, OUT_ACCESSOR) \
         break; \
       case 8: \
@@ -97,7 +104,7 @@ SEXP CDeepCopy(SEXP inAddr, SEXP outAddr, SEXP rowInds, SEXP colInds,
       (Rf_asLogical(typecast_warning) == (Rboolean)TRUE))
     {
       string type_names[9] = {
-        "", "char", "short", "", "integer", "", "", "", "double"};
+        "", "char", "short", "raw", "integer", "", "", "", "double"};
       
       std::string warnMsg = string("Assignment will down cast from ") + 
         type_names[pInMat->matrix_type()] + string(" to ") + 
