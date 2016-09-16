@@ -123,8 +123,7 @@ SEXP
     BMAccessorType mat(*pMat);
     index_type numElems = elems.size();
     RcppType retVec(numElems);
-    index_type i;
-    int col_end = mat.nrow();
+    index_type i = 0;
     int idx = 0;
     
     for (index_type j = 0; j < elems.size(); j++){
@@ -144,8 +143,7 @@ void
     NumericVector elems, NumericVector inVec)
   {
     BMAccessorType mat(*pMat);
-    index_type numElems = elems.size();
-    index_type i;
+    index_type i = 0;
     
     for (index_type j = 0; j < elems.size(); j++){
       mat[i][static_cast<index_type>(elems[j])-1] = inVec[j];
