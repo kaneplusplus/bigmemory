@@ -20,4 +20,4 @@ r_github_packages:
 
 after_success:
   - Rscript -e 'devtools::install();library(bigmemory);library(methods);devtools::test()'
-  - Rscript -e 'library(covr);codecov()'
+  - Rscript -e 'library(covr);coveralls()'
