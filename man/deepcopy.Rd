@@ -6,7 +6,8 @@
 \usage{
 deepcopy(x, cols = NULL, rows = NULL, y = NULL, type = NULL,
   separated = NULL, backingfile = NULL, backingpath = NULL,
-  descriptorfile = NULL, binarydescriptor = FALSE, shared = TRUE)
+  descriptorfile = NULL, binarydescriptor = FALSE,
+  shared = options()$bigmemory.default.shared)
 }
 \arguments{
 \item{x}{a \code{\link{big.matrix}}.}
