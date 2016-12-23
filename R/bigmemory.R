@@ -56,7 +56,7 @@ setMethod('describe', signature(x='big.matrix'),
 big.matrix <- function(nrow, ncol, type=options()$bigmemory.default.type,
                        init=NULL, dimnames=NULL, separated=FALSE,
                        backingfile=NULL, backingpath=NULL, descriptorfile=NULL,
-                       binarydescriptor=FALSE, shared=TRUE)
+                       binarydescriptor=FALSE, shared=options()$bigmemory.default.shared)
 {
   if (!is.null(backingfile))
   {
@@ -212,7 +212,7 @@ filebacked.big.matrix <- function(nrow, ncol,
 setGeneric('as.big.matrix', 
            function(x, type=NULL, separated=FALSE,
                     backingfile=NULL, backingpath=NULL,
-                    descriptorfile=NULL, binarydescriptor=FALSE, shared=TRUE) standardGeneric('as.big.matrix'))
+                    descriptorfile=NULL, binarydescriptor=FALSE, shared=options()$bigmemory.default.shared) standardGeneric('as.big.matrix'))
 
 
 #' @title Convert to base R matrix
@@ -1399,7 +1399,7 @@ setGeneric('read.big.matrix',
            has.row.names=FALSE, ignore.row.names=FALSE, type=NA, skip=0, 
            separated=FALSE, backingfile=NULL, backingpath=NULL, 
            descriptorfile=NULL, binarydescriptor=FALSE, extraCols=NULL,
-           shared=TRUE) 
+           shared=options()$bigmemory.default.shared) 
   standardGeneric('read.big.matrix'))
 
 #' @@importFrom stats na.omit
@@ -1407,7 +1407,7 @@ setGeneric('read.big.matrix',
 setMethod('read.big.matrix', signature(filename='character'),
   function(filename, sep, header, col.names, row.names, has.row.names, 
            ignore.row.names, type, skip, separated, backingfile, backingpath, 
-           descriptorfile, binarydescriptor, extraCols, shared=TRUE)
+           descriptorfile, binarydescriptor, extraCols, shared=options()$bigmemory.default.shared)
   {
     if (!is.logical(header))
       stop("header argument must be logical")
@@ -1496,7 +1496,7 @@ setMethod('read.big.matrix', signature(filename='character'),
                          separated=separated, backingfile=backingfile,
                          backingpath=backingpath,
                          descriptorfile=descriptorfile,
-                         binarydescriptor=binarydescriptor, shared=TRUE)
+                         binarydescriptor=binarydescriptor, shared=options()$bigmemory.default.shared)
 
     # has.row.names indicates whether or not there are row names;
     # we take ignore.row.names from the user, but pass (essentially)
@@ -1572,7 +1572,7 @@ deepcopy <- function(x, cols=NULL, rows=NULL,
                      y=NULL, type=NULL, separated=NULL,
                      backingfile=NULL, backingpath=NULL,
                      descriptorfile=NULL, binarydescriptor=FALSE,
-                     shared=TRUE)
+                     shared=options()$bigmemory.default.shared)
 {
   cols <- cleanupcols(cols, ncol(x), colnames(x))
   rows <- cleanuprows(rows, nrow(x), rownames(x))
@@ -1881,12 +1881,12 @@ setMethod('file.name', signature(x='big.matrix'),
 
 t.big.matrix <- function(x, backingfile=NULL,
                      backingpath=NULL, descriptorfile=NULL,
-                     binarydescriptor=FALSE, shared=TRUE) {
+                     binarydescriptor=FALSE, shared=options()$bigmemory.default.shared) {
   temp <- big.matrix(nrow=ncol(x), ncol=nrow(x), type=typeof(x),
     dimnames=dimnames(x)[[2:1]], separated=is.separated(x),
     backingfile=backingfile, backingpath=backingpath, 
     descriptorfile=descriptorfile, binarydescriptor=binarydescriptor,
-    shared=TRUE)
+    shared=options()$bigmemory.default.shared)
 
   for (i in 1:nrow(x)) {
     temp[,i] <- x[i,]

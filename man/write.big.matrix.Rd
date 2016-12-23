@@ -18,13 +18,14 @@ read.big.matrix(filename, sep = ",", header = FALSE, col.names = NULL,
   row.names = NULL, has.row.names = FALSE, ignore.row.names = FALSE,
   type = NA, skip = 0, separated = FALSE, backingfile = NULL,
   backingpath = NULL, descriptorfile = NULL, binarydescriptor = FALSE,
-  extraCols = NULL, shared = TRUE)
+  extraCols = NULL, shared = options()$bigmemory.default.shared)
 
 \S4method{read.big.matrix}{character}(filename, sep = ",", header = FALSE,
   col.names = NULL, row.names = NULL, has.row.names = FALSE,
   ignore.row.names = FALSE, type = NA, skip = 0, separated = FALSE,
   backingfile = NULL, backingpath = NULL, descriptorfile = NULL,
-  binarydescriptor = FALSE, extraCols = NULL, shared = TRUE)
+  binarydescriptor = FALSE, extraCols = NULL,
+  shared = options()$bigmemory.default.shared)
 }
 \arguments{
 \item{x}{a \code{\link{big.matrix}}.}

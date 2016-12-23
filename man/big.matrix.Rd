@@ -26,7 +26,7 @@
 big.matrix(nrow, ncol, type = options()$bigmemory.default.type, init = NULL,
   dimnames = NULL, separated = FALSE, backingfile = NULL,
   backingpath = NULL, descriptorfile = NULL, binarydescriptor = FALSE,
-  shared = TRUE)
+  shared = options()$bigmemory.default.shared)
 
 filebacked.big.matrix(nrow, ncol, type = options()$bigmemory.default.type,
   init = NULL, dimnames = NULL, separated = FALSE, backingfile = NULL,
@@ -34,7 +34,7 @@ filebacked.big.matrix(nrow, ncol, type = options()$bigmemory.default.type,
 
 as.big.matrix(x, type = NULL, separated = FALSE, backingfile = NULL,
   backingpath = NULL, descriptorfile = NULL, binarydescriptor = FALSE,
-  shared = TRUE)
+  shared = options()$bigmemory.default.shared)
 
 is.big.matrix(x)
 
