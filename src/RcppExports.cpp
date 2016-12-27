@@ -864,3 +864,14 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// transpose3
+void transpose3(SEXP pBigMat, SEXP pBigMat2);
+RcppExport SEXP bigmemory_transpose3(SEXP pBigMatSEXP, SEXP pBigMat2SEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type pBigMat(pBigMatSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type pBigMat2(pBigMat2SEXP);
+    transpose3(pBigMat, pBigMat2);
+    return R_NilValue;
+END_RCPP
+}

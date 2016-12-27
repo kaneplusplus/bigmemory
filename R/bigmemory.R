@@ -1894,22 +1894,6 @@ setMethod('dir.name', signature(x='big.matrix'),
 
 
 
-t.big.matrix <- function(x, backingfile=NULL,
-                     backingpath=NULL, descriptorfile=NULL,
-                     binarydescriptor=FALSE, shared=options()$bigmemory.default.shared) {
-  temp <- big.matrix(nrow=ncol(x), ncol=nrow(x), type=typeof(x),
-    dimnames=dimnames(x)[[2:1]], separated=is.separated(x),
-    backingfile=backingfile, backingpath=backingpath, 
-    descriptorfile=descriptorfile, binarydescriptor=binarydescriptor,
-    shared=options()$bigmemory.default.shared)
-
-  for (i in 1:nrow(x)) {
-    temp[,i] <- x[i,]
-  }
-
-  return(temp)
-}
-
 #' @template flush_template
 #' @export
 setGeneric('flush', function(con) standardGeneric('flush'))

@@ -93,26 +93,26 @@ matrix.
 \section{Memory considerations}{
 
 
-For obvious reasons memory that the \code{big.matrix} uses is managed outside 
-the R memory pool available to the garbage collector and the memory occupied 
+For obvious reasons memory that the \code{big.matrix} uses is managed outside
+the R memory pool available to the garbage collector and the memory occupied
 by the \code{big.matrix} is not visible to the R.
 This has subtle implications:
 
 \itemize{
 \item Memory usage is not visible via general R functions (e.g. the \code{gc()} function)
 \item Garbage collector is mislead by the very small memory footprint of the \code{big.matrix}
-      object (which acts merely as a pointer to the external memory structure), which can result
-      in much less eagerness to garbage-collect the unused \code{big.memory} objects. 
-      After removing a last reference to a big \code{big.matrix}, user should manually run 
-      \code{gc()} to reclaim the memeory.
+object (which acts merely as a pointer to the external memory structure), which can result
+in much less eagerness to garbage-collect the unused \code{big.memory} objects.
+After removing a last reference to a big \code{big.matrix}, user should manually run
+\code{gc()} to reclaim the memeory.
 \item Attaching the description of already finalized \code{big.matrix} and accessing this object
-      will result in undefined behaviour, which simply means it will crash the current R session
-      with no hope of saving the data in it. To prevent R from de-allocating (finalizing) the 
-      matrices, user should keep at least one \code{big.memory} object somewhere in R memory in at
-      least one R session on the current machine.
-\item Abruptly closed R (using e.g. task mamanger) will not have a chance to finalize the 
-      \code{big.matrix} objects, which will result in a memory leak, as the \code{big.matrices} 
-      will remain in the memory (perhaps under obfuscated names) with no easy way to reconnect R to them. 
+will result in undefined behaviour, which simply means it will crash the current R session
+with no hope of saving the data in it. To prevent R from de-allocating (finalizing) the
+matrices, user should keep at least one \code{big.memory} object somewhere in R memory in at
+least one R session on the current machine.
+\item Abruptly closed R (using e.g. task mamanger) will not have a chance to finalize the
+\code{big.matrix} objects, which will result in a memory leak, as the \code{big.matrices}
+will remain in the memory (perhaps under obfuscated names) with no easy way to reconnect R to them.
 
 }
 }
@@ -146,6 +146,6 @@ For example, \code{\link{big.matrix}}, \code{\link{mwhich}},
 \author{
 Michael J. Kane, John W. Emerson, Peter Haverty, and Charles Determan Jr.
 
-Maintainers: Michael J. Kane <bigmemoryauthors@gmail.com>
+Maintainers: Michael J. Kane \href{mailto:bigmemoryauthors@gmail.com}{bigmemoryauthors@gmail.com}
 }
 \keyword{package}
