@@ -1690,8 +1690,9 @@ DescribeBigMatrix = function(x)
   }
   else
   {
-    ret = list(sharedType='FileBacked',
-               filename=file.name(x),
+    ret = list(sharedType = 'FileBacked',
+               filename = file.name(x),
+               dirname = dir.name(x),
                totalRows = GetTotalRows(x@address),
                totalCols = GetTotalColumns(x@address),
                rowOffset = GetRowOffset(x@address),
@@ -1717,9 +1718,9 @@ attach.big.matrix = function(obj, ...)
 #' @param obj The filename of the descriptor for a filebacked matrix,
 #' assumed ot be in the directory specified
 #' @param ... possibly \code{path} which gives the path where the descriptor
-#' and/or filebacking can be found.
+#' and/or filebacking can be found. 
 #' @export
-setMethod('attach.resource', signature(obj='character'),
+setMethod('attach.resource', signature(obj = 'character'),
   function(obj, ...)
   {
     path <- list(...)[['path']]
@@ -1745,6 +1746,9 @@ setMethod('attach.resource', signature(obj='character'),
     if (fi$isdir)
       stop( fileWithPath, "is a directory" )
     info <- tryCatch(readRDS(file=fileWithPath), error=function(er){return(dget(fileWithPath))})
+    if (info@description$sharedType == "FileBacked") {
+      info@description$dirname <- file.path(dirname(fileWithPath), "")
+    }
     
     if (dirname(obj) != ".") {
       new_path = dirname(obj)
@@ -1759,7 +1763,7 @@ setMethod('attach.resource', signature(obj='character'),
 setMethod('attach.resource', signature(obj='big.matrix.descriptor'),
   function(obj, ...)
   {
-    path <- list(...)[['path']]
+    # path <- list(...)[['path']]
     info <- description(obj)
     typeLength <- NULL
     if (info$type == 'char') typeLength <- 1
@@ -1789,37 +1793,33 @@ setMethod('attach.resource', signature(obj='big.matrix.descriptor'),
     }
     else
     {
-      if (is.null(path) && dirname(info$filename) == ".") {
-        path <- getwd()  
-        path <- path.expand(path)
-        path <- paste(path, '', sep=.Platform$file.sep)
-      } else if (is.null(path) && dirname(info$filename) != ".") {
-        path = paste(dirname(info$filename), "", sep=.Platform$file.sep)
-        info$filename = basename(info$filename)
-      } else if(nchar(path) > 0) {
-        path = paste(path, "", sep=.Platform$file.sep)
-      }
+      # if (is.null(path) && dirname(info$filename) == ".") {
+      #   path <- getwd()  
+      #   path <- path.expand(path)
+      #   path <- paste(path, '', sep=.Platform$file.sep)
+      # } else if (is.null(path) && dirname(info$filename) != ".") {
+      #   path = paste(dirname(info$filename), "", sep=.Platform$file.sep)
+      #   info$filename = basename(info$filename)
+      # } else if(nchar(path) > 0) {
+      #   path = paste(path, "", sep=.Platform$file.sep)
+      # }
+      file <- file.path(info$dirname, info$filename)
       if (!info$separated) {
-        if (!file.exists(paste(path, info$filename, sep=.Platform$file.sep)))
+        if (!file.exists(file))
         {
-          stop(paste("The backing file", paste(path, info$filename, sep=''),
-            "could not be found"))
+          stop(paste("The backing file", file, "could not be found"))
         }
       } else { 
         # It's separated and we need to check for each column.
-        for (i in 1:info$ncol) {
-          fn <- paste(info$filename, "_column_", (i-1), sep='')
-          if (!file.exists(paste(path, fn, sep=.Platform$file.sep)))
-          {
-            stop(paste("The backing file", 
-                       paste(path, fn, sep=.Platform$file.sep), 
-              "could not be found"))
-          }
-        }
+        fn <- paste0(file, "_column_", 1:info$ncol - 1)
+        noexists <- which(!file.exists(fn))
+        if (length(noexists)) # report the first non-existing
+          stop(paste("The backing file", fn[noexists[1]], 
+                     "could not be found"))
       }
       address <- CAttachFileBackedBigMatrix(
         as.character(info$filename), 
-        as.character(path), 
+        as.character(info$dirname), 
         as.double(info$totalRows), 
         as.double(info$totalCols), 
         as.character(info$rowNames), 
