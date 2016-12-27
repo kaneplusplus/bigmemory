@@ -2,6 +2,11 @@
 #' @import methods bigmemory.sri Rcpp
 #' @importFrom utils head tail
 
+# puts an '/' at the end if there isn't
+format_path <- function(path) {
+  paste0(sub(file.path("", "$"), "", path), .Platform$file.sep)
+}
+
 #############################################################################
 # This function is used to match up a vector of column names to the
 # entire set of column names, providing the proper column indices.
@@ -1672,34 +1677,35 @@ setMethod('description', signature(x='big.matrix.descriptor'),
 
 DescribeBigMatrix = function(x)
 {
-  if (!is.filebacked(x))
-  {
+  if (!is.filebacked(x)) {
     if (is.shared(x)) {
-      ret <- list(sharedType = 'SharedMemory',
-                  sharedName = shared.name(x), 
-                  totalRows = GetTotalRows(x@address),
-                  totalCols = GetTotalColumns(x@address),
-                  rowOffset = GetRowOffset(x@address),
-                  colOffset = GetColOffset(x@address),
-                  nrow=nrow(x), ncol=ncol(x),
-                  rowNames=rownames(x), colNames=colnames(x), type=typeof(x), 
-                  separated=is.separated(x))
+      list(sharedType = 'SharedMemory',
+           sharedName = shared.name(x), 
+           totalRows = GetTotalRows(x@address),
+           totalCols = GetTotalColumns(x@address),
+           rowOffset = GetRowOffset(x@address),
+           colOffset = GetColOffset(x@address),
+           nrow=nrow(x), ncol=ncol(x),
+           rowNames=rownames(x), 
+           colNames=colnames(x), 
+           type=typeof(x), 
+           separated=is.separated(x))
     } else {
       stop("you can't describe a non-shared big.matrix.")
     }
-  }
-  else
-  {
-    ret = list(sharedType = 'FileBacked',
-               filename = file.name(x),
-               dirname = dir.name(x),
-               totalRows = GetTotalRows(x@address),
-               totalCols = GetTotalColumns(x@address),
-               rowOffset = GetRowOffset(x@address),
-               colOffset = GetColOffset(x@address),
-               nrow=nrow(x), ncol=ncol(x),
-               rowNames=rownames(x), colNames=colnames(x), type=typeof(x), 
-               separated=is.separated(x))
+  } else {
+    list(sharedType = 'FileBacked',
+         filename = file.name(x),
+         dirname = format_path(dir.name(x)), # need extra '/' on Windows 
+         totalRows = GetTotalRows(x@address),
+         totalCols = GetTotalColumns(x@address),
+         rowOffset = GetRowOffset(x@address),
+         colOffset = GetColOffset(x@address),
+         nrow=nrow(x), ncol=ncol(x),
+         rowNames=rownames(x), 
+         colNames=colnames(x), 
+         type=typeof(x), 
+         separated=is.separated(x))
   }
 }
 
@@ -1709,9 +1715,12 @@ DescribeBigMatrix = function(x)
 #' @export
 attach.big.matrix = function(obj, ...)
 {
-  if (!is.null( list(...)[['backingpath']]))
-    return(attach.resource(obj, path=list(...)[['backingpath']], ...))
-  return(attach.resource(obj, ...))
+  back <- list(...)[['backingpath']]
+  if (is.null(back)) {
+    attach.resource(obj, ...)
+  } else {
+    attach.resource(obj, path = back, ...)
+  }
 }
 
 #' @rdname big.matrix.descriptor-class
@@ -1724,38 +1733,32 @@ setMethod('attach.resource', signature(obj = 'character'),
   function(obj, ...)
   {
     path <- list(...)[['path']]
-    if (!is.null(path) && path != "") 
-      path = paste(path.expand(path), "", sep=.Platform$file.sep)
-    if (basename(obj) != obj)
-    {
-      if (!is.null(path) != "")
-        warning(paste("Two paths were specified in attach.resource.",
-          "The one associated with the file will be used.", sep="  "))
-      fileWithPath = obj
+    
+    if (is.null(path) || path == "") { # unspecified path extra argument
+      fileWithPath <- path.expand(obj)
     } else {
-      if (!is.null(path) && path == "")
-        fileWithPath <- obj
-      else if (!is.null(path))
-        fileWithPath = paste(path, obj, sep=.Platform$file.sep)
-      else
-        fileWithPath = obj
-    }
-    fi = file.info(fileWithPath)
-    if (is.na(fi$isdir))
-      stop( paste("The file", fileWithPath, "could not be found") )
-    if (fi$isdir)
-      stop( fileWithPath, "is a directory" )
-    info <- tryCatch(readRDS(file=fileWithPath), error=function(er){return(dget(fileWithPath))})
-    if (info@description$sharedType == "FileBacked") {
-      info@description$dirname <- file.path(dirname(fileWithPath), "")
+      if (dirname(obj) != ".") { # path also specified in obj
+        warning(paste("Two paths were specified in attach.resource.",
+                      "The one associated with the file will be used.", 
+                      sep="\n"))
+        fileWithPath <- path.expand(obj)
+      } else {
+        fileWithPath <- path.expand(file.path(path, obj))
+      }
     }
     
-    if (dirname(obj) != ".") {
-      new_path = dirname(obj)
+    if (!file.exists(fileWithPath))
+      stop( paste("The file", fileWithPath, "could not be found") )
+    if (dir.exists(fileWithPath))
+      stop( paste(fileWithPath, "is a directory") )
+    
+    info <- tryCatch(readRDS(fileWithPath), 
+                     error = function(er) dget(fileWithPath))
+    if (info@description$sharedType == "FileBacked") {
+      info@description$dirname <- format_path(dirname(fileWithPath))
     }
-    else if (!is.null(path) && path != "") new_path = path
-    else new_path = path
-    return(attach.resource(info, path=new_path, ...))
+    
+    attach.resource(info, path = NULL, ...)
   })
 
 #' @rdname big.matrix.descriptor-class
@@ -1776,23 +1779,22 @@ setMethod('attach.resource', signature(obj='big.matrix.descriptor'),
     if (is.null(typeLength)) 
       stop('invalid type')
 
-    readOnly <- ifelse( is.null(list(...)$readonly), FALSE, list(...)$readonly)
+    readonly <- list(...)[['readonly']]
+    readOnly <- `if`(is.null(readonly), FALSE, readonly)
     if (!is.logical(readOnly)) {
       stop("The readOnly argument must be of type logical")
     }
     
-    if (info$sharedType == 'SharedMemory')
-    {
+    if (info$sharedType == 'SharedMemory') {
       address <- CAttachSharedBigMatrix(as.character(info$sharedName), 
         as.double(info$totalRows), 
         as.double(info$totalCols), 
         as.character(info$rowNames), 
-        as.character(info$colNames), as.integer(typeLength), 
+        as.character(info$colNames), 
+        as.integer(typeLength), 
         as.logical(info$separated),
         as.logical(readOnly))
-    }
-    else
-    {
+    } else {
       # if (is.null(path) && dirname(info$filename) == ".") {
       #   path <- getwd()  
       #   path <- path.expand(path)
@@ -1828,8 +1830,7 @@ setMethod('attach.resource', signature(obj='big.matrix.descriptor'),
         as.logical(info$separated), 
         as.logical(readOnly))
     }
-    if (!is.null(address)) 
-    {
+    if (!is.null(address)) {
       SetRowOffsetInfo(address, info$rowOffset, info$nrow)
       SetColumnOffsetInfo(address, info$colOffset, info$ncol)
       ret <- new('big.matrix', address=address)
@@ -1838,9 +1839,7 @@ setMethod('attach.resource', signature(obj='big.matrix.descriptor'),
       if (readOnly != is.readonly(ret)) {
         warning("big.matrix object could only be opened read-only.")
       }
-    }
-    else 
-    {
+    } else {
       stop("Fatal error in attach: big.matrix could not be attached.")
     }
     return(ret)  

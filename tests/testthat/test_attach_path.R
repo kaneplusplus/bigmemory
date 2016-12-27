@@ -9,8 +9,14 @@ X <- big.matrix(10, 10, backingfile = tmp.file, backingpath = tmp.dir,
                 descriptorfile = desc.path, init = 0)
 X.desc <- describe(X)
 
+test_that("Format_path puts an '/' at the end if there isn't", {
+  expect_equal(format_path("test"), "test/")
+  expect_equal(format_path("test/"), "test/")
+  expect_equal(format_path("test/test/"), "test/test/")
+})
+
 test_that("New element 'dirname' in description", {
-  expect_equal(X.desc@description$dirname, file.path(tmp.dir, ""))
+  expect_equal(X.desc@description$dirname, format_path(tmp.dir))
 })
 
 test_that("you can attach from a full path", {
