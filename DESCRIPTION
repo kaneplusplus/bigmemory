@@ -28,4 +28,4 @@ VignetteBuilder: knitr
 Suggests:
     knitr,
     testthat
-RoxygenNote: 5.0.1
+RoxygenNote: 5.0.1.9000

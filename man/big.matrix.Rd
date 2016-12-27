@@ -2,25 +2,27 @@
 % Please edit documentation in R/bigmemory.R
 \docType{methods}
 \name{big.matrix}
-\alias{as.big.matrix}
 \alias{big.matrix}
-\alias{file.name}
-\alias{file.name,big.matrix-method}
 \alias{filebacked.big.matrix}
+\alias{as.big.matrix}
 \alias{is.big.matrix}
-\alias{is.big.matrix,ANY-method}
 \alias{is.big.matrix,big.matrix-method}
-\alias{is.filebacked}
-\alias{is.filebacked,big.matrix-method}
-\alias{is.nil}
-\alias{is.readonly}
-\alias{is.readonly,big.matrix-method}
+\alias{is.big.matrix,ANY-method}
 \alias{is.separated}
 \alias{is.separated,big.matrix-method}
-\alias{is.shared}
-\alias{is.shared,big.matrix-method}
+\alias{is.filebacked}
+\alias{is.filebacked,big.matrix-method}
 \alias{shared.name}
 \alias{shared.name,big.matrix-method}
+\alias{file.name}
+\alias{file.name,big.matrix-method}
+\alias{dir.name}
+\alias{dir.name,big.matrix-method}
+\alias{is.shared}
+\alias{is.shared,big.matrix-method}
+\alias{is.readonly}
+\alias{is.readonly,big.matrix-method}
+\alias{is.nil}
 \title{The core "big.matrix" operations.}
 \usage{
 big.matrix(nrow, ncol, type = options()$bigmemory.default.type, init = NULL,
@@ -57,6 +59,10 @@ shared.name(x)
 file.name(x)
 
 \S4method{file.name}{big.matrix}(x)
+
+dir.name(x)
+
+\S4method{dir.name}{big.matrix}(x)
 
 is.shared(x)
 
@@ -235,10 +241,6 @@ y[1,1] <- -100
 y[,]
 z[,]
 }
-\author{
-John W. Emerson and Michael J. Kane 
-\email{<bigmemoryauthors@gmail.com>}
-}
 \references{
 The Bigmemory Project: \url{http://www.bigmemory.org/}.
 }
@@ -248,6 +250,9 @@ The Bigmemory Project: \url{http://www.bigmemory.org/}.
 \code{\link{describe}}.  Sister packages \pkg{biganalytics}, \pkg{bigtabulate},
 \pkg{synchronicity}, and \pkg{bigalgebra} provide advanced functionality.
 }
+\author{
+John W. Emerson and Michael J. Kane 
+\email{<bigmemoryauthors@gmail.com>}
+}
 \keyword{classes}
 \keyword{methods}
-

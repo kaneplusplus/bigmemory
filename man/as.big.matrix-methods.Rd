@@ -2,10 +2,10 @@
 % Please edit documentation in R/bigmemory.R
 \docType{methods}
 \name{as.big.matrix-methods}
-\alias{as.big.matrix,data.frame-method}
+\alias{as.big.matrix-methods}
 \alias{as.big.matrix,matrix-method}
 \alias{as.big.matrix,vector-method}
-\alias{as.big.matrix-methods}
+\alias{as.big.matrix,data.frame-method}
 \title{Create a ``big.matrix'' from a matrix or vector.}
 \description{
 Create a \code{\link{big.matrix}} from a \code{matrix} or \code{vector}
@@ -23,5 +23,5 @@ values will be lost.
  \item{\code{signature(x = "data.frame")}}{ ... }
 }
 }
-\keyword{methods}
 
+\keyword{methods}

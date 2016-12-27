@@ -2,11 +2,11 @@
 % Please edit documentation in R/bigmemory.R
 \docType{methods}
 \name{mwhich-methods}
+\alias{mwhich-methods}
 \alias{mwhich,big.matrix,ANY,ANY,ANY,character-method}
 \alias{mwhich,big.matrix,ANY,ANY,ANY,missing-method}
 \alias{mwhich,matrix,ANY,ANY,ANY,character-method}
 \alias{mwhich,matrix,ANY,ANY,ANY,missing-method}
-\alias{mwhich-methods}
 \title{Expanded ``which''-like functionality.}
 \description{
 Implements \code{\link{which}}-like functionality for a
@@ -28,8 +28,8 @@ test
  \item{signature(x = "matrix", cols = "ANY", vals = "ANY",", 
  " comps = "ANY", op = "missing")}{ ... } }
 }
+
 \seealso{
 \code{\link{big.matrix}}, \code{\link{which}}, \code{\link{mwhich}}
 }
 \keyword{methods}
-

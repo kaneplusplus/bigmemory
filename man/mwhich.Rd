@@ -92,11 +92,10 @@ mwhich(x, 1, Inf, 'eq')
 mwhich(x, 1, 1, 'gt')
 mwhich(x, 1, 1, 'le')
 }
-\author{
-John W. Emerson \email{<bigmemoryauthors@gmail.com>}
-}
 \seealso{
 \code{\link{big.matrix}}, \code{\link{which}}
 }
+\author{
+John W. Emerson \email{<bigmemoryauthors@gmail.com>}
+}
 \keyword{methods}
-

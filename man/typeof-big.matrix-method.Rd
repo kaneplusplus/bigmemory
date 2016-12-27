@@ -14,4 +14,3 @@
 \code{typeof} returns the storage type of a 
 \code{big.matrix} object
 }
-

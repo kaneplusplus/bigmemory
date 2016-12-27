@@ -14,4 +14,3 @@
 Extract values from a \code{big.matrix} object
 and convert to a base R matrix object
 }
-

@@ -1878,6 +1878,22 @@ setMethod('file.name', signature(x='big.matrix'),
     return(FileName(x@address))
   })
 
+#' @rdname big.matrix
+#' @export
+setGeneric('dir.name', function(x) standardGeneric('dir.name'))
+
+#' @rdname big.matrix
+setMethod('dir.name', signature(x='big.matrix'),
+          function(x)
+          {
+            if (!is.filebacked(x))
+            {
+              stop("The argument is not a file backed big.matrix.")
+            }
+            return(DirName(x@address))
+          })
+
+
 
 t.big.matrix <- function(x, backingfile=NULL,
                      backingpath=NULL, descriptorfile=NULL,
