@@ -1,6 +1,7 @@
 ################################################################################
 
 #' @rdname big.matrix
+#' @param ... Arguments passed on to big.matrix.
 #' @export
 setGeneric('transpose', function(x, ...) standardGeneric('transpose'))
 

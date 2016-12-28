@@ -125,6 +125,8 @@ For the \code{is.*} functions, \code{x} is likely a \code{big.matrix}.}
 
 \item{address}{an \code{externalptr}, so \code{is.nil(x@address)} might 
 be a sensible thing to want to check, but it's pretty obscure.}
+
+\item{...}{Arguments passed on to big.matrix.}
 }
 \value{
 A \code{big.matrix} is returned (for \code{big.matrix} and
