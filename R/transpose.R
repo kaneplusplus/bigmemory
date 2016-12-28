@@ -1,5 +1,6 @@
 ################################################################################
 
+#' @rdname big.matrix
 #' @export
 setGeneric('transpose', function(x, ...) standardGeneric('transpose'))
 
