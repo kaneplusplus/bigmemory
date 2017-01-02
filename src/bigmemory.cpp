@@ -3322,6 +3322,16 @@ SEXP FileName( SEXP address )
 }
 
 // [[Rcpp::export]]
+SEXP DirName( SEXP address )  
+{   
+  BigMatrix *pMat = (BigMatrix*)R_ExternalPtrAddr(address);
+  FileBackedBigMatrix *pfbbm = dynamic_cast<FileBackedBigMatrix*>(pMat);
+  if (pfbbm) return String2RChar(pfbbm->file_path());
+  Rf_error("Object is not a filebacked big.matrix.");
+  return R_NilValue;
+}
+
+// [[Rcpp::export]]
 SEXP Flush( SEXP address )  
 {   
   FileBackedBigMatrix *pMat =   

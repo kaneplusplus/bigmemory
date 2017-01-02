@@ -11,7 +11,6 @@
 \item{x}{A \code{big.matrix} object}
 }
 \description{
-\code{typeof} returns the storage type of a 
+\code{typeof} returns the storage type of a
 \code{big.matrix} object
 }
-

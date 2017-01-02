@@ -12,4 +12,3 @@ is.float(x)
 \description{
 Check to see if the elements of a big.matrix object are floats.
 }
-

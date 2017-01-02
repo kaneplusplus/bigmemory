@@ -13,4 +13,3 @@
 \description{
 Retrieve the dimensions of a \code{big.matrix} object
 }
-
