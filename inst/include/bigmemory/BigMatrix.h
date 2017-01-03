@@ -14,7 +14,9 @@
 
 #include "bigmemoryDefines.h"
 #include "SharedCounter.h"
+#include <Rcpp.h>
 
+using namespace Rcpp;
 using namespace std;
 
 typedef vector<std::string> Names;
@@ -32,7 +34,8 @@ class BigMatrix : public boost::noncopyable
   // Constructor and Destructor
   public:
     BigMatrix():_ncol(0),_nrow(0), _totalRows(0), _totalCols(0),
-                _colOffset(0), _rowOffset(0),_matType(0), _pdata(NULL),
+                _colOffset(0), _rowOffset(0), _rows(NULL), _cols(NULL),
+                _matType(0), _pdata(NULL),
                 _sepCols(false), _readOnly(false), _allocationSize(0){}
     virtual ~BigMatrix(){}
 
@@ -49,6 +52,8 @@ class BigMatrix : public boost::noncopyable
     index_type total_columns() const {return _totalCols;}
     index_type col_offset() const {return _colOffset;}
     index_type row_offset() const {return _rowOffset;}
+    const IntegerVector& rows() {return _rows;}
+    const IntegerVector& cols() {return _cols;}
     int matrix_type() const {return _matType;}
     bool shared() const {return _shared;}
     bool separated_columns() const {return _sepCols;}
@@ -168,6 +173,8 @@ class BigMatrix : public boost::noncopyable
     index_type _totalCols;
     index_type _colOffset;
     index_type _rowOffset;
+    IntegerVector _rows;
+    IntegerVector _cols;
     index_type _nebytes;
     int _matType;
     void* _pdata;
@@ -259,5 +266,6 @@ class FileBackedBigMatrix : public SharedBigMatrix
   protected:
     std::string _fileName, _filePath;
 };
+
 
 #endif // BIGMATRIX_H

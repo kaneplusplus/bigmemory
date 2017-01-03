@@ -2117,45 +2117,6 @@ SEXP CreateRAMMatrix(SEXP row, SEXP col, SEXP colnames, SEXP rownames,
 // Rcpp functions
 
 // [[Rcpp::export]]
-void SetRowOffsetInfo( SEXP bigMatAddr, SEXP rowOffset, SEXP numRows )
-{
-  BigMatrix *pMat = 
-    reinterpret_cast<BigMatrix*>(R_ExternalPtrAddr(bigMatAddr));
-  pMat->row_offset(static_cast<index_type>(REAL(rowOffset)[0]));
-  pMat->nrow(static_cast<index_type>(REAL(numRows)[0]));
-  
-}
-
-// [[Rcpp::export]]
-void SetColumnOffsetInfo( SEXP bigMatAddr, SEXP colOffset, SEXP numCols )
-{
-  BigMatrix *pMat = 
-    reinterpret_cast<BigMatrix*>(R_ExternalPtrAddr(bigMatAddr));
-  pMat->col_offset(static_cast<index_type>(REAL(colOffset)[0]));
-  pMat->ncol(static_cast<index_type>(REAL(numCols)[0]));
-}
-
-// [[Rcpp::export]]
-SEXP GetRowOffset( SEXP bigMatAddr )
-{
-    Rcpp::XPtr<BigMatrix> pMat(bigMatAddr);
-    Rcpp::NumericVector ret(2);
-    ret[0] = pMat->row_offset();
-    ret[1] = pMat->nrow();
-    return ret;
-}
-
-// [[Rcpp::export]]
-Rcpp::NumericVector GetColOffset( SEXP bigMatAddr )
-{
-    Rcpp::XPtr<BigMatrix> pMat(bigMatAddr);
-    Rcpp::NumericVector ret(2);
-    ret[0] = pMat->col_offset();
-    ret[1] = pMat->ncol();
-    return ret;
-}
-
-// [[Rcpp::export]]
 SEXP GetTotalColumns( SEXP bigMatAddr )
 {
     Rcpp::XPtr<BigMatrix> pMat(bigMatAddr);
@@ -3347,17 +3308,6 @@ SEXP Flush( SEXP address )
     LOGICAL(ret)[0] = (Rboolean)FALSE;
     Rf_error("Object is not a filebacked big.matrix");
   }
-  Rf_unprotect(1);
-  return ret;
-}
-
-// [[Rcpp::export]]
-SEXP IsShared( SEXP address )
-{
-  FileBackedBigMatrix *pMat =   
-    reinterpret_cast<FileBackedBigMatrix*>(R_ExternalPtrAddr(address));   
-  SEXP ret = Rf_protect(Rf_allocVector(LGLSXP,1));
-  LOGICAL(ret)[0] = pMat->shared() ? (Rboolean)TRUE : Rboolean(FALSE);
   Rf_unprotect(1);
   return ret;
 }

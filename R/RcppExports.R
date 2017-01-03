@@ -125,22 +125,6 @@ IsSeparated <- function(bigMatAddr) {
     .Call('bigmemory_IsSeparated', PACKAGE = 'bigmemory', bigMatAddr)
 }
 
-SetRowOffsetInfo <- function(bigMatAddr, rowOffset, numRows) {
-    invisible(.Call('bigmemory_SetRowOffsetInfo', PACKAGE = 'bigmemory', bigMatAddr, rowOffset, numRows))
-}
-
-SetColumnOffsetInfo <- function(bigMatAddr, colOffset, numCols) {
-    invisible(.Call('bigmemory_SetColumnOffsetInfo', PACKAGE = 'bigmemory', bigMatAddr, colOffset, numCols))
-}
-
-GetRowOffset <- function(bigMatAddr) {
-    .Call('bigmemory_GetRowOffset', PACKAGE = 'bigmemory', bigMatAddr)
-}
-
-GetColOffset <- function(bigMatAddr) {
-    .Call('bigmemory_GetColOffset', PACKAGE = 'bigmemory', bigMatAddr)
-}
-
 GetTotalColumns <- function(bigMatAddr) {
     .Call('bigmemory_GetTotalColumns', PACKAGE = 'bigmemory', bigMatAddr)
 }
@@ -261,12 +245,28 @@ Flush <- function(address) {
     .Call('bigmemory_Flush', PACKAGE = 'bigmemory', address)
 }
 
-IsShared <- function(address) {
-    .Call('bigmemory_IsShared', PACKAGE = 'bigmemory', address)
-}
-
 isnil <- function(address) {
     .Call('bigmemory_isnil', PACKAGE = 'bigmemory', address)
+}
+
+IsShared <- function(pMat) {
+    .Call('bigmemory_IsShared', PACKAGE = 'bigmemory', pMat)
+}
+
+SetRowOffsetInfo <- function(pMat, rowOffset, numRows) {
+    invisible(.Call('bigmemory_SetRowOffsetInfo', PACKAGE = 'bigmemory', pMat, rowOffset, numRows))
+}
+
+SetColumnOffsetInfo <- function(pMat, colOffset, numCols) {
+    invisible(.Call('bigmemory_SetColumnOffsetInfo', PACKAGE = 'bigmemory', pMat, colOffset, numCols))
+}
+
+GetRowOffset <- function(pMat) {
+    .Call('bigmemory_GetRowOffset', PACKAGE = 'bigmemory', pMat)
+}
+
+GetColOffset <- function(pMat) {
+    .Call('bigmemory_GetColOffset', PACKAGE = 'bigmemory', pMat)
 }
 
 CDeepCopy <- function(inAddr, outAddr, rowInds, colInds, typecast_warning) {
