@@ -2,9 +2,18 @@
 #' @import methods bigmemory.sri Rcpp
 #' @importFrom utils head tail
 
-# puts an '/' at the end if there isn't
+# puts an '/' at the end if there isn't 
+# need extra '/' on Windows 
 format_path <- function(path) {
   paste0(sub(file.path("", "$"), "", path), .Platform$file.sep)
+}
+
+getReadOnly <- function(readonly) {
+  readOnly <- `if`(is.null(readonly), FALSE, readonly)
+  if (!is.logical(readOnly)) {
+    stop("The readOnly argument must be of type logical")
+  }
+  readOnly
 }
 
 getTypeVal <- function(type) {
@@ -1624,10 +1633,34 @@ setGeneric('sub.big.matrix', function(x, firstRow = 1, lastRow = NULL,
 
 #' @rdname sub.big.matrix
 setMethod('sub.big.matrix', signature(x = 'big.matrix'),
-  function(x, firstRow, lastRow, firstCol, lastCol, backingpath)
-  {
-    return(sub.big.matrix(describe(x), firstRow, lastRow, firstCol, lastCol, 
-           backingpath))
+  function(x, firstRow, lastRow, firstCol, lastCol, backingpath) {
+    if (is.shared(x)) {
+      sub.big.matrix(describe(x), firstRow, lastRow, firstCol, lastCol)
+    } else {
+      rowOffset <- firstRow - 1
+      colOffset <- firstCol - 1
+      if (is.null(lastRow)) lastRow <- nrow(x)
+      if (is.null(lastCol)) lastCol <- ncol(x)
+      numRows <- lastRow - rowOffset
+      numCols <- lastCol - colOffset
+      
+      address <- CAttachLocalBigMatrix(x@address, rowOffset, colOffset, 
+                                       numRows, numCols)
+      if (!is.null(address)) {
+        rbm <- new('big.matrix', address = address)
+      } else {
+        stop("Fatal error in attach: big.matrix could not be attached.")
+      }
+      
+      if (colOffset < 0 || rowOffset < 0 || numCols < 1 || numRows < 1 ||
+          colOffset + numCols > ncol(x) || rowOffset + numRows > nrow(x)) {
+        rm(rbm)
+        stop(paste("A sub.big.matrix object could not be created",
+                   "with the specified parameters"))
+      }
+      
+      rbm
+    }
   })
 
 #' @rdname big.matrix.descriptor-class
@@ -1668,19 +1701,18 @@ setMethod('description', signature(x = 'big.matrix.descriptor'),
 ################################################################################
 
 DescribeBigMatrix = function(x) {
-  if (!is.shared(x)) {
+  if (!is.shared(x)) 
     stop("you can't describe a non-shared big.matrix.")
+  
+  if (is.filebacked(x)) {
+    c(sharedType = 'FileBacked',
+      filename = file.name(x),
+      dirname = format_path(dir.name(x)), 
+      GetInfos(x@address))
   } else {
-    if (is.filebacked(x)) {
-      c(sharedType = 'FileBacked',
-        filename = file.name(x),
-        dirname = format_path(dir.name(x)), # need extra '/' on Windows 
-        GetInfos(x@address))
-    } else {
-      c(sharedType = 'SharedMemory',
-        sharedName = shared.name(x), 
-        GetInfos(x@address))
-    }
+    c(sharedType = 'SharedMemory',
+      sharedName = shared.name(x), 
+      GetInfos(x@address))
   }
 }
 
@@ -1735,6 +1767,8 @@ setMethod('attach.resource', signature(obj = 'character'),
     attach.resource(info, path = NULL, ...)
   })
 
+
+
 #' @rdname big.matrix.descriptor-class
 #' @export
 setMethod('attach.resource', signature(obj = 'big.matrix.descriptor'),
@@ -1743,11 +1777,7 @@ setMethod('attach.resource', signature(obj = 'big.matrix.descriptor'),
     info <- description(obj)
     typeLength <- getTypeVal(info$type)
 
-    readonly <- list(...)[['readonly']]
-    readOnly <- `if`(is.null(readonly), FALSE, readonly)
-    if (!is.logical(readOnly)) {
-      stop("The readOnly argument must be of type logical")
-    }
+    readOnly <- getReadOnly(list(...)[['readonly']])
     
     if (info$sharedType == 'SharedMemory') {
       address <- CAttachSharedBigMatrix(info$sharedName, 

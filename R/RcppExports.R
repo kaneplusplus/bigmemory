@@ -209,6 +209,10 @@ CreateFileBackedBigMatrix <- function(fileName, filePath, row, col, colnames, ro
     .Call('bigmemory_CreateFileBackedBigMatrix', PACKAGE = 'bigmemory', fileName, filePath, row, col, colnames, rownames, typeLength, ini, separated)
 }
 
+CAttachLocalBigMatrix <- function(pMat, rowOffset, colOffset, numRows, numCols) {
+    .Call('bigmemory_CAttachLocalBigMatrix', PACKAGE = 'bigmemory', pMat, rowOffset, colOffset, numRows, numCols)
+}
+
 CAttachSharedBigMatrix <- function(sharedName, rows, cols, rowNames, colNames, typeLength, separated, readOnly) {
     .Call('bigmemory_CAttachSharedBigMatrix', PACKAGE = 'bigmemory', sharedName, rows, cols, rowNames, colNames, typeLength, separated, readOnly)
 }

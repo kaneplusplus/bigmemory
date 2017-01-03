@@ -668,6 +668,21 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CAttachLocalBigMatrix
+SEXP CAttachLocalBigMatrix(XPtr<BigMatrix> pMat, index_type rowOffset, index_type colOffset, index_type numRows, index_type numCols);
+RcppExport SEXP bigmemory_CAttachLocalBigMatrix(SEXP pMatSEXP, SEXP rowOffsetSEXP, SEXP colOffsetSEXP, SEXP numRowsSEXP, SEXP numColsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< XPtr<BigMatrix> >::type pMat(pMatSEXP);
+    Rcpp::traits::input_parameter< index_type >::type rowOffset(rowOffsetSEXP);
+    Rcpp::traits::input_parameter< index_type >::type colOffset(colOffsetSEXP);
+    Rcpp::traits::input_parameter< index_type >::type numRows(numRowsSEXP);
+    Rcpp::traits::input_parameter< index_type >::type numCols(numColsSEXP);
+    rcpp_result_gen = Rcpp::wrap(CAttachLocalBigMatrix(pMat, rowOffset, colOffset, numRows, numCols));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CAttachSharedBigMatrix
 SEXP CAttachSharedBigMatrix(string sharedName, index_type rows, index_type cols, SEXP rowNames, SEXP colNames, int typeLength, bool separated, bool readOnly);
 RcppExport SEXP bigmemory_CAttachSharedBigMatrix(SEXP sharedNameSEXP, SEXP rowsSEXP, SEXP colsSEXP, SEXP rowNamesSEXP, SEXP colNamesSEXP, SEXP typeLengthSEXP, SEXP separatedSEXP, SEXP readOnlySEXP) {

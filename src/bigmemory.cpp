@@ -3157,6 +3157,21 @@ SEXP CreateFileBackedBigMatrix(SEXP fileName, SEXP filePath, SEXP row,
 }
 
 // [[Rcpp::export]]
+SEXP CAttachLocalBigMatrix(XPtr<BigMatrix> pMat, 
+                           index_type rowOffset, 
+                           index_type colOffset, 
+                           index_type numRows,
+                           index_type numCols) {
+  LocalBigMatrix *pMat2 = new LocalBigMatrix(pMat, rowOffset, colOffset, 
+                                            numRows, numCols);
+  SEXP address = R_MakeExternalPtr(dynamic_cast<BigMatrix*>(pMat2),
+                                   R_NilValue, R_NilValue);
+  R_RegisterCFinalizerEx(address, (R_CFinalizer_t) CDestroyBigMatrix, 
+                         (Rboolean) TRUE);
+  return address;
+}
+
+// [[Rcpp::export]]
 SEXP CAttachSharedBigMatrix(string sharedName, 
                             index_type rows, 
                             index_type cols, 
