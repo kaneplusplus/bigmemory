@@ -1746,21 +1746,7 @@ SEXP GetIndexColNames(SEXP address, SEXP indices_)
 //  return StringVec2RChar(cn, c_idx, indices.size());
 }
 
-// [[Rcpp::export]]
-SEXP GetColumnNamesBM(SEXP address)
-{
-  BigMatrix *pMat = (BigMatrix*)R_ExternalPtrAddr(address);
-  Names cn = pMat->column_names();
-  return Rcpp::wrap(cn);
-}
 
-// [[Rcpp::export]]
-SEXP GetRowNamesBM(SEXP address)
-{
-  BigMatrix *pMat = (BigMatrix*)R_ExternalPtrAddr(address);
-  Names rn = pMat->row_names();
-  return Rcpp::wrap(rn);
-}
 
 // [[Rcpp::export]]
 void SetColumnNames(SEXP address, SEXP columnNames)
@@ -2135,30 +2121,6 @@ SEXP GetTotalRows( SEXP bigMatAddr )
 template <typename T> std::string type_name();
 
 // simplifed to use Rcpp tools 04/13/2015 -- Charles Determan Jr.
-// [[Rcpp::export]]
-Rcpp::String GetTypeString( SEXP bigMatAddr )
-{
-    Rcpp::XPtr<BigMatrix> pMat(bigMatAddr);
-    
-    
-    switch(pMat->matrix_type())
-    {
-        case 1:
-            return "char";
-        case 2:
-            return "short";
-		case 3:
-			return "raw";
-		case 4:
-            return "integer";
-        case 6:
-            return "float";
-        case 8:
-            return "double";
-        default:
-            throw Rcpp::exception("unknown type detected for big.matrix object!");
-    }
-}
 
 
 /* Added by Charles Determan Jr. 04/20/2015
@@ -3195,69 +3157,61 @@ SEXP CreateFileBackedBigMatrix(SEXP fileName, SEXP filePath, SEXP row,
 }
 
 // [[Rcpp::export]]
-SEXP CAttachSharedBigMatrix(SEXP sharedName, SEXP rows, SEXP cols, 
-  SEXP rowNames, SEXP colNames, SEXP typeLength, SEXP separated,
-  SEXP readOnly)
-{
+SEXP CAttachSharedBigMatrix(string sharedName, 
+                            index_type rows, 
+                            index_type cols, 
+                            SEXP rowNames, 
+                            SEXP colNames, 
+                            int typeLength, 
+                            bool separated,
+                            bool readOnly) {
   SharedMemoryBigMatrix *pMat = new SharedMemoryBigMatrix();
-  bool connected = pMat->connect( 
-    string(CHAR(STRING_ELT(sharedName,0))),
-    static_cast<index_type>(REAL(rows)[0]),
-    static_cast<index_type>(REAL(cols)[0]),
-    Rf_asInteger(typeLength),
-    static_cast<bool>(LOGICAL(separated)[0]),
-    static_cast<bool>(LOGICAL(readOnly)[0]));
-  if (!connected)
-  {
+  bool connected = pMat->connect(sharedName, rows, cols, typeLength, 
+                                 separated, readOnly);
+  if (!connected) {
     delete pMat;
     return R_NilValue;
   }
-  if (Rf_length(colNames) > 0)
-  {
+  if (Rf_length(colNames) > 0) {
     pMat->column_names(RChar2StringVec(colNames));
   }
-  if (Rf_length(rowNames) > 0)
-  {
+  if (Rf_length(rowNames) > 0) {
     pMat->row_names(RChar2StringVec(rowNames));
   }
-  SEXP address = R_MakeExternalPtr( dynamic_cast<BigMatrix*>(pMat),
-    R_NilValue, R_NilValue);
+  SEXP address = R_MakeExternalPtr(dynamic_cast<BigMatrix*>(pMat),
+                                   R_NilValue, R_NilValue);
   R_RegisterCFinalizerEx(address, (R_CFinalizer_t) CDestroyBigMatrix, 
-      (Rboolean) TRUE);
+                         (Rboolean) TRUE);
   return address;
 }
 
 // [[Rcpp::export]]
-SEXP CAttachFileBackedBigMatrix(SEXP fileName, 
-  SEXP filePath, SEXP rows, SEXP cols, SEXP rowNames, SEXP colNames, 
-  SEXP typeLength, SEXP separated, SEXP readOnly)
-{
+SEXP CAttachFileBackedBigMatrix(string fileName, 
+                                string filePath, 
+                                index_type rows, 
+                                index_type cols, 
+                                SEXP rowNames, 
+                                SEXP colNames, 
+                                int typeLength,
+                                bool separated, 
+                                bool readOnly) {
   FileBackedBigMatrix *pMat = new FileBackedBigMatrix();
-  bool connected = pMat->connect( 
-    string(CHAR(STRING_ELT(fileName,0))),
-    string(CHAR(STRING_ELT(filePath,0))),
-    static_cast<index_type>(REAL(rows)[0]),
-    static_cast<index_type>(REAL(cols)[0]),
-    Rf_asInteger(typeLength),
-    static_cast<bool>(LOGICAL(separated)[0]),
-    static_cast<bool>(LOGICAL(readOnly)[0]));
-  if (!connected)
-  {
+  bool connected = pMat->connect(fileName, filePath, rows, cols,
+                                 typeLength, separated, readOnly);
+  if (!connected) {
     delete pMat;
     return R_NilValue;
   }
-  if (Rf_length(colNames) > 0)
-  {
+  if (Rf_length(colNames) > 0) {
     pMat->column_names(RChar2StringVec(colNames));
   }
-  if (Rf_length(rowNames) > 0)
-  {
+  if (Rf_length(rowNames) > 0) {
     pMat->row_names(RChar2StringVec(rowNames));
   }
-  SEXP address = R_MakeExternalPtr( dynamic_cast<BigMatrix*>(pMat),
-    R_NilValue, R_NilValue);
+  SEXP address = R_MakeExternalPtr(dynamic_cast<BigMatrix*>(pMat),
+                                   R_NilValue, R_NilValue);
   R_RegisterCFinalizerEx(address, (R_CFinalizer_t) CDestroyBigMatrix, 
-      (Rboolean) TRUE);
+                         (Rboolean) TRUE);
   return address;
 }
 

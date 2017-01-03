@@ -77,14 +77,6 @@ GetIndexColNames <- function(address, indices_) {
     .Call('bigmemory_GetIndexColNames', PACKAGE = 'bigmemory', address, indices_)
 }
 
-GetColumnNamesBM <- function(address) {
-    .Call('bigmemory_GetColumnNamesBM', PACKAGE = 'bigmemory', address)
-}
-
-GetRowNamesBM <- function(address) {
-    .Call('bigmemory_GetRowNamesBM', PACKAGE = 'bigmemory', address)
-}
-
 SetColumnNames <- function(address, columnNames) {
     invisible(.Call('bigmemory_SetColumnNames', PACKAGE = 'bigmemory', address, columnNames))
 }
@@ -131,10 +123,6 @@ GetTotalColumns <- function(bigMatAddr) {
 
 GetTotalRows <- function(bigMatAddr) {
     .Call('bigmemory_GetTotalRows', PACKAGE = 'bigmemory', bigMatAddr)
-}
-
-GetTypeString <- function(bigMatAddr) {
-    .Call('bigmemory_GetTypeString', PACKAGE = 'bigmemory', bigMatAddr)
 }
 
 #' @title big.matrix size
@@ -251,6 +239,22 @@ isnil <- function(address) {
 
 IsShared <- function(pMat) {
     .Call('bigmemory_IsShared', PACKAGE = 'bigmemory', pMat)
+}
+
+GetTypeString <- function(pMat) {
+    .Call('bigmemory_GetTypeString', PACKAGE = 'bigmemory', pMat)
+}
+
+GetColumnNamesBM <- function(pMat) {
+    .Call('bigmemory_GetColumnNamesBM', PACKAGE = 'bigmemory', pMat)
+}
+
+GetRowNamesBM <- function(pMat) {
+    .Call('bigmemory_GetRowNamesBM', PACKAGE = 'bigmemory', pMat)
+}
+
+GetInfos <- function(pMat) {
+    .Call('bigmemory_GetInfos', PACKAGE = 'bigmemory', pMat)
 }
 
 SetRowOffsetInfo <- function(pMat, rowOffset, numRows) {

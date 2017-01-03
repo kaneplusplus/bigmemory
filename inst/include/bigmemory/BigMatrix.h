@@ -57,27 +57,23 @@ class BigMatrix : public boost::noncopyable
     int matrix_type() const {return _matType;}
     bool shared() const {return _shared;}
     bool separated_columns() const {return _sepCols;}
-    Names column_names() 
-    {
+    Names column_names() {
       Names ret;
-      if (!_colNames.empty())
-      {
-        std::copy( _colNames.begin()+col_offset(), 
-                  _colNames.begin()+col_offset()+ncol(),
-                  std::back_inserter(ret) );
+      if (!_colNames.empty()) {
+        std::copy(_colNames.begin() + _colOffset, 
+                  _colNames.begin() + _colOffset + _ncol,
+                  std::back_inserter(ret));
       }
       return ret;
     }
 
-    Names row_names() 
-    {
+    Names row_names() {
       Names ret;
-      if (!_rowNames.empty())
-      {
+      if (!_rowNames.empty()) {
         ret.reserve(nrow());
-        std::copy( _rowNames.begin() + row_offset(), 
-                  _rowNames.begin() + row_offset() + nrow(),
-                  std::back_inserter(ret) );
+        std::copy(_rowNames.begin() + _rowOffset, 
+                  _rowNames.begin() + _rowOffset + _nrow,
+                  std::back_inserter(ret));
       }
       return ret;
     }

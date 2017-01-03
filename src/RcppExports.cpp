@@ -255,28 +255,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// GetColumnNamesBM
-SEXP GetColumnNamesBM(SEXP address);
-RcppExport SEXP bigmemory_GetColumnNamesBM(SEXP addressSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< SEXP >::type address(addressSEXP);
-    rcpp_result_gen = Rcpp::wrap(GetColumnNamesBM(address));
-    return rcpp_result_gen;
-END_RCPP
-}
-// GetRowNamesBM
-SEXP GetRowNamesBM(SEXP address);
-RcppExport SEXP bigmemory_GetRowNamesBM(SEXP addressSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< SEXP >::type address(addressSEXP);
-    rcpp_result_gen = Rcpp::wrap(GetRowNamesBM(address));
-    return rcpp_result_gen;
-END_RCPP
-}
 // SetColumnNames
 void SetColumnNames(SEXP address, SEXP columnNames);
 RcppExport SEXP bigmemory_SetColumnNames(SEXP addressSEXP, SEXP columnNamesSEXP) {
@@ -406,17 +384,6 @@ BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< SEXP >::type bigMatAddr(bigMatAddrSEXP);
     rcpp_result_gen = Rcpp::wrap(GetTotalRows(bigMatAddr));
-    return rcpp_result_gen;
-END_RCPP
-}
-// GetTypeString
-Rcpp::String GetTypeString(SEXP bigMatAddr);
-RcppExport SEXP bigmemory_GetTypeString(SEXP bigMatAddrSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< SEXP >::type bigMatAddr(bigMatAddrSEXP);
-    rcpp_result_gen = Rcpp::wrap(GetTypeString(bigMatAddr));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -702,38 +669,38 @@ BEGIN_RCPP
 END_RCPP
 }
 // CAttachSharedBigMatrix
-SEXP CAttachSharedBigMatrix(SEXP sharedName, SEXP rows, SEXP cols, SEXP rowNames, SEXP colNames, SEXP typeLength, SEXP separated, SEXP readOnly);
+SEXP CAttachSharedBigMatrix(string sharedName, index_type rows, index_type cols, SEXP rowNames, SEXP colNames, int typeLength, bool separated, bool readOnly);
 RcppExport SEXP bigmemory_CAttachSharedBigMatrix(SEXP sharedNameSEXP, SEXP rowsSEXP, SEXP colsSEXP, SEXP rowNamesSEXP, SEXP colNamesSEXP, SEXP typeLengthSEXP, SEXP separatedSEXP, SEXP readOnlySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< SEXP >::type sharedName(sharedNameSEXP);
-    Rcpp::traits::input_parameter< SEXP >::type rows(rowsSEXP);
-    Rcpp::traits::input_parameter< SEXP >::type cols(colsSEXP);
+    Rcpp::traits::input_parameter< string >::type sharedName(sharedNameSEXP);
+    Rcpp::traits::input_parameter< index_type >::type rows(rowsSEXP);
+    Rcpp::traits::input_parameter< index_type >::type cols(colsSEXP);
     Rcpp::traits::input_parameter< SEXP >::type rowNames(rowNamesSEXP);
     Rcpp::traits::input_parameter< SEXP >::type colNames(colNamesSEXP);
-    Rcpp::traits::input_parameter< SEXP >::type typeLength(typeLengthSEXP);
-    Rcpp::traits::input_parameter< SEXP >::type separated(separatedSEXP);
-    Rcpp::traits::input_parameter< SEXP >::type readOnly(readOnlySEXP);
+    Rcpp::traits::input_parameter< int >::type typeLength(typeLengthSEXP);
+    Rcpp::traits::input_parameter< bool >::type separated(separatedSEXP);
+    Rcpp::traits::input_parameter< bool >::type readOnly(readOnlySEXP);
     rcpp_result_gen = Rcpp::wrap(CAttachSharedBigMatrix(sharedName, rows, cols, rowNames, colNames, typeLength, separated, readOnly));
     return rcpp_result_gen;
 END_RCPP
 }
 // CAttachFileBackedBigMatrix
-SEXP CAttachFileBackedBigMatrix(SEXP fileName, SEXP filePath, SEXP rows, SEXP cols, SEXP rowNames, SEXP colNames, SEXP typeLength, SEXP separated, SEXP readOnly);
+SEXP CAttachFileBackedBigMatrix(string fileName, string filePath, index_type rows, index_type cols, SEXP rowNames, SEXP colNames, int typeLength, bool separated, bool readOnly);
 RcppExport SEXP bigmemory_CAttachFileBackedBigMatrix(SEXP fileNameSEXP, SEXP filePathSEXP, SEXP rowsSEXP, SEXP colsSEXP, SEXP rowNamesSEXP, SEXP colNamesSEXP, SEXP typeLengthSEXP, SEXP separatedSEXP, SEXP readOnlySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< SEXP >::type fileName(fileNameSEXP);
-    Rcpp::traits::input_parameter< SEXP >::type filePath(filePathSEXP);
-    Rcpp::traits::input_parameter< SEXP >::type rows(rowsSEXP);
-    Rcpp::traits::input_parameter< SEXP >::type cols(colsSEXP);
+    Rcpp::traits::input_parameter< string >::type fileName(fileNameSEXP);
+    Rcpp::traits::input_parameter< string >::type filePath(filePathSEXP);
+    Rcpp::traits::input_parameter< index_type >::type rows(rowsSEXP);
+    Rcpp::traits::input_parameter< index_type >::type cols(colsSEXP);
     Rcpp::traits::input_parameter< SEXP >::type rowNames(rowNamesSEXP);
     Rcpp::traits::input_parameter< SEXP >::type colNames(colNamesSEXP);
-    Rcpp::traits::input_parameter< SEXP >::type typeLength(typeLengthSEXP);
-    Rcpp::traits::input_parameter< SEXP >::type separated(separatedSEXP);
-    Rcpp::traits::input_parameter< SEXP >::type readOnly(readOnlySEXP);
+    Rcpp::traits::input_parameter< int >::type typeLength(typeLengthSEXP);
+    Rcpp::traits::input_parameter< bool >::type separated(separatedSEXP);
+    Rcpp::traits::input_parameter< bool >::type readOnly(readOnlySEXP);
     rcpp_result_gen = Rcpp::wrap(CAttachFileBackedBigMatrix(fileName, filePath, rows, cols, rowNames, colNames, typeLength, separated, readOnly));
     return rcpp_result_gen;
 END_RCPP
@@ -804,32 +771,76 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// GetTypeString
+String GetTypeString(XPtr<BigMatrix> pMat);
+RcppExport SEXP bigmemory_GetTypeString(SEXP pMatSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< XPtr<BigMatrix> >::type pMat(pMatSEXP);
+    rcpp_result_gen = Rcpp::wrap(GetTypeString(pMat));
+    return rcpp_result_gen;
+END_RCPP
+}
+// GetColumnNamesBM
+SEXP GetColumnNamesBM(XPtr<BigMatrix> pMat);
+RcppExport SEXP bigmemory_GetColumnNamesBM(SEXP pMatSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< XPtr<BigMatrix> >::type pMat(pMatSEXP);
+    rcpp_result_gen = Rcpp::wrap(GetColumnNamesBM(pMat));
+    return rcpp_result_gen;
+END_RCPP
+}
+// GetRowNamesBM
+SEXP GetRowNamesBM(XPtr<BigMatrix> pMat);
+RcppExport SEXP bigmemory_GetRowNamesBM(SEXP pMatSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< XPtr<BigMatrix> >::type pMat(pMatSEXP);
+    rcpp_result_gen = Rcpp::wrap(GetRowNamesBM(pMat));
+    return rcpp_result_gen;
+END_RCPP
+}
+// GetInfos
+ListOf<SEXP> GetInfos(XPtr<BigMatrix> pMat);
+RcppExport SEXP bigmemory_GetInfos(SEXP pMatSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< XPtr<BigMatrix> >::type pMat(pMatSEXP);
+    rcpp_result_gen = Rcpp::wrap(GetInfos(pMat));
+    return rcpp_result_gen;
+END_RCPP
+}
 // SetRowOffsetInfo
-void SetRowOffsetInfo(XPtr<BigMatrix> pMat, double rowOffset, double numRows);
+void SetRowOffsetInfo(XPtr<BigMatrix> pMat, index_type rowOffset, index_type numRows);
 RcppExport SEXP bigmemory_SetRowOffsetInfo(SEXP pMatSEXP, SEXP rowOffsetSEXP, SEXP numRowsSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< XPtr<BigMatrix> >::type pMat(pMatSEXP);
-    Rcpp::traits::input_parameter< double >::type rowOffset(rowOffsetSEXP);
-    Rcpp::traits::input_parameter< double >::type numRows(numRowsSEXP);
+    Rcpp::traits::input_parameter< index_type >::type rowOffset(rowOffsetSEXP);
+    Rcpp::traits::input_parameter< index_type >::type numRows(numRowsSEXP);
     SetRowOffsetInfo(pMat, rowOffset, numRows);
     return R_NilValue;
 END_RCPP
 }
 // SetColumnOffsetInfo
-void SetColumnOffsetInfo(XPtr<BigMatrix> pMat, double colOffset, double numCols);
+void SetColumnOffsetInfo(XPtr<BigMatrix> pMat, index_type colOffset, index_type numCols);
 RcppExport SEXP bigmemory_SetColumnOffsetInfo(SEXP pMatSEXP, SEXP colOffsetSEXP, SEXP numColsSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< XPtr<BigMatrix> >::type pMat(pMatSEXP);
-    Rcpp::traits::input_parameter< double >::type colOffset(colOffsetSEXP);
-    Rcpp::traits::input_parameter< double >::type numCols(numColsSEXP);
+    Rcpp::traits::input_parameter< index_type >::type colOffset(colOffsetSEXP);
+    Rcpp::traits::input_parameter< index_type >::type numCols(numColsSEXP);
     SetColumnOffsetInfo(pMat, colOffset, numCols);
     return R_NilValue;
 END_RCPP
 }
 // GetRowOffset
-double GetRowOffset(XPtr<BigMatrix> pMat);
+index_type GetRowOffset(XPtr<BigMatrix> pMat);
 RcppExport SEXP bigmemory_GetRowOffset(SEXP pMatSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -840,7 +851,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // GetColOffset
-double GetColOffset(XPtr<BigMatrix> pMat);
+index_type GetColOffset(XPtr<BigMatrix> pMat);
 RcppExport SEXP bigmemory_GetColOffset(SEXP pMatSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
