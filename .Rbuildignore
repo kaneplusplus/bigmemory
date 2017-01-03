@@ -8,4 +8,3 @@ appveyor.yml
 man-roxygen
 examples
 cran-comments.md
-tmp
