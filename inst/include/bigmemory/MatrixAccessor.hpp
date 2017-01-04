@@ -73,30 +73,30 @@ class MatrixAccessor
     index_type _ncol;
 };
 
-template<typename T>
-class MatrixAccessor2
-{
-public:
-  typedef T value_type;
-  
-public:
-  MatrixAccessor2( BigMatrix &bm ) {
-    _pMat = reinterpret_cast<T*>(bm.matrix());
-    _totalRows = bm.total_rows();
-    _cols = bm.cols();
-    _rows = bm.rows();
-  }
-  
-  inline T operator()(int i, int j)  {
-    return *(_pMat + _totalRows * _cols[j] + _rows[i]);
-  }
-  
-protected:
-  T *_pMat;
-  index_type _totalRows;
-  IntegerVector& _rows;
-  IntegerVector& _cols;
-};
+// template<typename T>
+// class MatrixAccessor2
+// {
+// public:
+//   typedef T value_type;
+//   
+// public:
+//   MatrixAccessor2( BigMatrix &bm ) {
+//     _pMat = reinterpret_cast<T*>(bm.matrix());
+//     _totalRows = bm.total_rows();
+//     _cols = bm.cols();
+//     _rows = bm.rows();
+//   }
+//   
+//   inline T operator()(int i, int j)  {
+//     return *(_pMat + _totalRows * _cols[j] + _rows[i]);
+//   }
+//   
+// protected:
+//   T *_pMat;
+//   index_type _totalRows;
+//   IntegerVector& _rows;
+//   IntegerVector& _cols;
+// };
 
 template<typename T>
 class SepMatrixAccessor
