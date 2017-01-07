@@ -21,8 +21,8 @@ test_that("filebacked matrix created successfully",{
 test_that("describe returns correct data", {
     desc <- describe(bm)
     expect_is(desc, "big.matrix.descriptor")
-    # expect_true(length(desc@description$rowOffset) == 2)
-    # expect_true(length(desc@description$colOffset) == 2)
+    expect_true(length(desc@description$rowOffset) == 2)
+    expect_true(length(desc@description$colOffset) == 2)
     expect_true(typeof(bm) == desc@description$type)
 })
 
