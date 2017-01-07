@@ -16,7 +16,7 @@
 #ifdef __intptr_t_defined
   typedef intptr_t index_type;
 #else
-  // We don't have 64-bit indexing. Build with 32.
+  // We don't have 64-bit indexing.  Build with 32.
   typedef long index_type;
 #endif
 
