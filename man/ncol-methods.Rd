@@ -20,3 +20,4 @@ An integer of length 1
 \code{nrow} and \code{ncol} return the number of
 rows or columns present in a \code{big.matrix} object.
 }
+

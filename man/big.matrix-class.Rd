@@ -92,15 +92,15 @@ fileName = "character")}: produce an ASCII file from the \code{big.matrix}.}
 would expect from \code{apply()}.}
 }
 }
-
 \examples{
 showClass("big.matrix")
-}
-\seealso{
-\code{\link{big.matrix}}
 }
 \author{
 Michael J. Kane and John W. Emerson 
 \email{<bigmemoryauthors@gmail.com>}
 }
+\seealso{
+\code{\link{big.matrix}}
+}
 \keyword{classes}
+

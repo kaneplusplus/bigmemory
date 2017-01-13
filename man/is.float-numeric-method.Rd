@@ -13,3 +13,4 @@
 \description{
 Check if R numeric value has float flag
 }
+

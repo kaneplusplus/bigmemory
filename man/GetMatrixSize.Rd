@@ -12,3 +12,4 @@ GetMatrixSize(bigMat)
 \description{
 Returns the size of the created matrix in bytes
 }
+

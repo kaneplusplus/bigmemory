@@ -19,3 +19,4 @@
 Returns the first or last parts of a \code{big.matrix}
 object.
 }
+

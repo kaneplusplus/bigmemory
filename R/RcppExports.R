@@ -273,7 +273,3 @@ CDeepCopy <- function(inAddr, outAddr, rowInds, colInds, typecast_warning) {
     .Call('bigmemory_CDeepCopy', PACKAGE = 'bigmemory', inAddr, outAddr, rowInds, colInds, typecast_warning)
 }
 
-transpose3 <- function(pBigMat, pBigMat2) {
-    invisible(.Call('bigmemory_transpose3', PACKAGE = 'bigmemory', pBigMat, pBigMat2))
-}
-
