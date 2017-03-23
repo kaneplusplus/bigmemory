@@ -2,11 +2,11 @@
 % Please edit documentation in R/bigmemory.R
 \docType{class}
 \name{descriptor-class}
-\alias{descriptor-class}
-\alias{big.matrix.descriptor-class}
-\alias{sub.big.matrix,big.matrix.descriptor-method}
-\alias{attach.resource,character-method}
 \alias{attach.resource,big.matrix.descriptor-method}
+\alias{attach.resource,character-method}
+\alias{big.matrix.descriptor-class}
+\alias{descriptor-class}
+\alias{sub.big.matrix,big.matrix.descriptor-method}
 \title{Class "big.matrix.descriptor"}
 \usage{
 \S4method{sub.big.matrix}{big.matrix.descriptor}(x, firstRow = 1,
@@ -68,9 +68,11 @@ Class \code{"\linkS4class{descriptor}"}, directly.
      \item{sub.big.matrix}{\code{signature(x = "big.matrix.descriptor")}: ... }
  }
 }
-
 \examples{
 showClass("big.matrix.descriptor")
+}
+\author{
+John W. Emerson and Michael J. Kane
 }
 \references{
 Other types of descriptors are defined in package \pkg{synchronicity}.
@@ -78,7 +80,5 @@ Other types of descriptors are defined in package \pkg{synchronicity}.
 \seealso{
 See also \code{\link{attach.big.matrix}}.
 }
-\author{
-John W. Emerson and Michael J. Kane
-}
 \keyword{classes}
+

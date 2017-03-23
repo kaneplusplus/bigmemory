@@ -2,8 +2,8 @@
 % Please edit documentation in R/hello-bigmemory.R
 \docType{package}
 \name{bigmemory-package}
-\alias{bigmemory-package}
 \alias{bigmemory}
+\alias{bigmemory-package}
 \title{Manage massive matrices with shared memory and memory-mapped files.}
 \description{
 Create, store, access, and manipulate massive matrices.  Matrices are, by
@@ -116,7 +116,6 @@ will remain in the memory (perhaps under obfuscated names) with no easy way to r
 
 }
 }
-
 \examples{
 
 
@@ -136,6 +135,11 @@ x[,]
 
 
 }
+\author{
+Michael J. Kane, John W. Emerson, Peter Haverty, and Charles Determan Jr.
+
+Maintainers: Michael J. Kane \href{mailto:bigmemoryauthors@gmail.com}{bigmemoryauthors@gmail.com}
+}
 \references{
 \url{http://www.bigmemory.org}
 }
@@ -143,9 +147,5 @@ x[,]
 For example, \code{\link{big.matrix}}, \code{\link{mwhich}},
 \code{\link{read.big.matrix}}
 }
-\author{
-Michael J. Kane, John W. Emerson, Peter Haverty, and Charles Determan Jr.
-
-Maintainers: Michael J. Kane \href{mailto:bigmemoryauthors@gmail.com}{bigmemoryauthors@gmail.com}
-}
 \keyword{package}
+

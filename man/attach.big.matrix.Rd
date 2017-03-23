@@ -2,10 +2,10 @@
 % Please edit documentation in R/bigmemory.R
 \docType{methods}
 \name{describe,big.matrix-method}
-\alias{describe,big.matrix-method}
 \alias{attach.big.matrix}
-\alias{describe}
 \alias{attach.resource}
+\alias{describe}
+\alias{describe,big.matrix-method}
 \title{The basic ``big.matrix'' operations for sharing and re-attaching.}
 \usage{
 \S4method{describe}{big.matrix}(x)
@@ -66,13 +66,14 @@ zz[1,1] <- -100
 y[,]
 z[,]
 }
-\seealso{
-\code{\link{bigmemory}}, \code{\link{big.matrix}}, or the class 
-documentation \code{\linkS4class{big.matrix}}.
-}
 \author{
 Michael J. Kane and John W. Emerson 
 \email{<bigmemoryauthors@gmail.com>}
 }
+\seealso{
+\code{\link{bigmemory}}, \code{\link{big.matrix}}, or the class 
+documentation \code{\linkS4class{big.matrix}}.
+}
 \keyword{classes}
 \keyword{methods}
+

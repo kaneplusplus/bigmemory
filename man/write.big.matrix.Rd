@@ -2,10 +2,10 @@
 % Please edit documentation in R/bigmemory.R
 \docType{methods}
 \name{write.big.matrix}
-\alias{write.big.matrix}
-\alias{write.big.matrix,big.matrix,character-method}
 \alias{read.big.matrix}
 \alias{read.big.matrix,character-method}
+\alias{write.big.matrix}
+\alias{write.big.matrix,big.matrix,character-method}
 \title{File interface for a ``big.matrix''}
 \usage{
 write.big.matrix(x, filename, row.names = FALSE, col.names = FALSE,
@@ -151,11 +151,12 @@ head(y)
 if (FALSE) y <- read.big.matrix(file.path(temp_dir, "IrisData.txt"), 
                                 header=TRUE)
 }
-\seealso{
-\code{\link{big.matrix}}
-}
 \author{
 John W. Emerson and Michael J. Kane 
 \email{<bigmemoryauthors@gmail.com>}
 }
+\seealso{
+\code{\link{big.matrix}}
+}
 \keyword{methods}
+

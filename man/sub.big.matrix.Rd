@@ -58,10 +58,11 @@ y[1,1] <- -99
 x[,]
 rm(x)
 }
-\seealso{
-\code{\link{big.matrix}}
-}
 \author{
 John W. Emerson and Michael J. Kane
 }
+\seealso{
+\code{\link{big.matrix}}
+}
 \keyword{methods}
+
