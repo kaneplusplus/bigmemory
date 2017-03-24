@@ -1,6 +1,6 @@
 Package: bigmemory
-Version: 4.5.20
-Date: 2016-07-18
+Version: 4.5.22
+Date: 2017-03-24
 Title: Manage Massive Matrices with Shared Memory and Memory-Mapped Files
 Author: Michael J. Kane <kaneplusplus@gmail.com>, John W. Emerson
     <jayemerson@gmail.com>, Peter Haverty <haverty.peter@gene.com>, and Charles
@@ -29,3 +29,4 @@ Suggests:
     knitr,
     testthat
 RoxygenNote: 5.0.1
+Roxygen: list(markdown = TRUE)

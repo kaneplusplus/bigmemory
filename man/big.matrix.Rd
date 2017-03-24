@@ -4,6 +4,8 @@
 \name{big.matrix}
 \alias{as.big.matrix}
 \alias{big.matrix}
+\alias{dir.name}
+\alias{dir.name,big.matrix-method}
 \alias{file.name}
 \alias{file.name,big.matrix-method}
 \alias{filebacked.big.matrix}
@@ -26,7 +28,7 @@
 big.matrix(nrow, ncol, type = options()$bigmemory.default.type, init = NULL,
   dimnames = NULL, separated = FALSE, backingfile = NULL,
   backingpath = NULL, descriptorfile = NULL, binarydescriptor = FALSE,
-  shared = TRUE)
+  shared = options()$bigmemory.default.shared)
 
 filebacked.big.matrix(nrow, ncol, type = options()$bigmemory.default.type,
   init = NULL, dimnames = NULL, separated = FALSE, backingfile = NULL,
@@ -34,7 +36,7 @@ filebacked.big.matrix(nrow, ncol, type = options()$bigmemory.default.type,
 
 as.big.matrix(x, type = NULL, separated = FALSE, backingfile = NULL,
   backingpath = NULL, descriptorfile = NULL, binarydescriptor = FALSE,
-  shared = TRUE)
+  shared = options()$bigmemory.default.shared)
 
 is.big.matrix(x)
 
@@ -57,6 +59,10 @@ shared.name(x)
 file.name(x)
 
 \S4method{file.name}{big.matrix}(x)
+
+dir.name(x)
+
+\S4method{dir.name}{big.matrix}(x)
 
 is.shared(x)
 

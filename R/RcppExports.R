@@ -29,6 +29,10 @@ ReorderRNumericMatrixCols <- function(matrixVector, nrow, ncol, orderVec) {
     invisible(.Call('bigmemory_ReorderRNumericMatrixCols', PACKAGE = 'bigmemory', matrixVector, nrow, ncol, orderVec))
 }
 
+ReorderRRawMatrixCols <- function(matrixVector, nrow, ncol, orderVec) {
+    invisible(.Call('bigmemory_ReorderRRawMatrixCols', PACKAGE = 'bigmemory', matrixVector, nrow, ncol, orderVec))
+}
+
 ReorderBigMatrixCols <- function(address, orderVec) {
     invisible(.Call('bigmemory_ReorderBigMatrixCols', PACKAGE = 'bigmemory', address, orderVec))
 }
@@ -247,6 +251,10 @@ SharedName <- function(address) {
 
 FileName <- function(address) {
     .Call('bigmemory_FileName', PACKAGE = 'bigmemory', address)
+}
+
+DirName <- function(address) {
+    .Call('bigmemory_DirName', PACKAGE = 'bigmemory', address)
 }
 
 Flush <- function(address) {

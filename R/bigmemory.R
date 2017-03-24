@@ -2,6 +2,11 @@
 #' @import methods bigmemory.sri Rcpp
 #' @importFrom utils head tail
 
+# puts an '/' at the end if there isn't
+format_path <- function(path) {
+  paste0(sub(file.path("", "$"), "", path), .Platform$file.sep)
+}
+
 #############################################################################
 # This function is used to match up a vector of column names to the
 # entire set of column names, providing the proper column indices.
@@ -56,7 +61,7 @@ setMethod('describe', signature(x='big.matrix'),
 big.matrix <- function(nrow, ncol, type=options()$bigmemory.default.type,
                        init=NULL, dimnames=NULL, separated=FALSE,
                        backingfile=NULL, backingpath=NULL, descriptorfile=NULL,
-                       binarydescriptor=FALSE, shared=TRUE)
+                       binarydescriptor=FALSE, shared=options()$bigmemory.default.shared)
 {
   if (!is.null(backingfile))
   {
@@ -76,6 +81,8 @@ big.matrix <- function(nrow, ncol, type=options()$bigmemory.default.type,
   if (type == 'double') typeVal <- 8
   if (type == 'short') typeVal <- 2
   if (type == 'char') typeVal <- 1
+  if (type == 'raw' || type == 'byte') typeVal <- 3
+  
   if (is.null(typeVal)) stop('invalid type')
   if (!is.null(dimnames)) {
     rownames <- dimnames[[1]]
@@ -122,6 +129,8 @@ filebacked.big.matrix <- function(nrow, ncol,
     if (type == 'double') typeVal <- 8
     if (type == 'short') typeVal <- 2
     if (type == 'char') typeVal <- 1
+    if (type == 'raw' || type == 'byte') typeVal <- 3
+    
     if (is.null(typeVal)) stop('invalid type')
     if (!is.null(dimnames)) {
         rownames <- dimnames[[1]]
@@ -208,7 +217,7 @@ filebacked.big.matrix <- function(nrow, ncol,
 setGeneric('as.big.matrix', 
            function(x, type=NULL, separated=FALSE,
                     backingfile=NULL, backingpath=NULL,
-                    descriptorfile=NULL, binarydescriptor=FALSE, shared=TRUE) standardGeneric('as.big.matrix'))
+                    descriptorfile=NULL, binarydescriptor=FALSE, shared=options()$bigmemory.default.shared) standardGeneric('as.big.matrix'))
 
 
 #' @title Convert to base R matrix
@@ -228,14 +237,14 @@ setMethod('as.big.matrix', signature(x='matrix'),
           function(x, type, separated, backingfile, backingpath, descriptorfile,
                    binarydescriptor, shared)
           {
-              if (!is.numeric(x)) {
+              if (!is.numeric(x) && !is.raw(x)) {
                   warning("Casting to numeric type")
                   x <- matrix(as.numeric(x), nrow=nrow(x), dimnames=dimnames(x))
               }
               if (is.null(type)) type <- typeof(x)
               
 #               if (type=="integer" | type=="double" | type=="short" | type=="char") 
-              if (type %in% c("integer","double", "short", "char", "float"))
+              if (type %in% c("integer","double", "short", "char", "float", "raw"))
               {
                   y <- big.matrix(nrow=nrow(x), ncol=ncol(x), type=type, 
                                   init=NULL, dimnames=dimnames(x), separated=separated,
@@ -257,7 +266,7 @@ setMethod('as.big.matrix', signature(x='data.frame'),
               warning("Coercing data.frame to matrix via factor level numberings.")
               if (is.null(type)) type <- options()$bigmemory.default.type
 #               if (type=="integer" | type=="double" | type=="short" | type=="char") 
-              if (type %in% c("integer","double", "short", "char", "float"))
+              if (type %in% c("integer","double", "short", "char", "raw", "float"))
               {
                   y <- big.matrix(nrow=nrow(x), ncol=ncol(x), type=type, 
                                   init=NULL, dimnames=dimnames(x), separated=separated,
@@ -634,7 +643,8 @@ SetElements.bm <- function(x, i, j, value)
        (typeof(value) == "integer" && (typeof(x) != "double" && 
                                            typeof(x) != "float" &&
                                            typeof(x) != "integer")) || 
-       (typeof(value) == "double" && (typeof(x) == "float")) 
+       (typeof(value) == "double" && (typeof(x) == "float")) ||
+       (typeof(value) == "raw" && (typeof(x) != "raw"))
        )) 
   {
     warning(paste0("Assignment will down cast from ", typeof(value), " to ",
@@ -676,12 +686,14 @@ SetElements.bm <- function(x, i, j, value)
 #     SetMatrixElements(x@address, as.double(j), as.double(i), 
 #           as.integer(value))
 #   }
-  
   switch(typeof(x),
          'double' = {SetMatrixElements(x@address, as.double(j), as.double(i), 
                                       as.double(value))},
          'float' = {SetMatrixElements(x@address, as.double(j), as.double(i), 
                                      as.double(value))},
+  			 #Don't convert raw before assigning them
+  			 'raw' = {SetMatrixElements(x@address, as.double(j), as.double(i), 
+  			 													 value)},
          SetMatrixElements(x@address, as.double(j), as.double(i), 
                            as.integer(value))
          )
@@ -723,7 +735,8 @@ SetIndivElements.bm <- function(x, i, value) {
        ((typeof(value) == "double") && (typeof(x) != "double") ||
        (typeof(value) == "integer" &&
         (typeof(x) != "double" && typeof(x) != "integer"))) ||
-       (typeof(value) == "double" && (typeof(x) == "float"))
+       (typeof(value) == "double" && (typeof(x) == "float")) ||
+  		 (typeof(value) == "raw" && (typeof(x) != "raw"))
        )
   {
     warning(cat("Assignment will down cast from ", typeof(value), " to ",
@@ -745,6 +758,9 @@ SetIndivElements.bm <- function(x, i, value) {
                                             as.double(i[,1]), as.double(value))},
          'float' = {SetIndivMatrixElements(x@address, as.double(i[,2]),
                                            as.double(i[,1]), as.single(value))},
+  			 #Don't convert raw before assigning them
+  			 'raw' = {SetIndivMatrixElements(x@address, as.double(i[,2]),
+  			 																	as.double(i[,1]), value)}, 
          SetIndivMatrixElements(x@address, as.double(i[,2]),
                                 as.double(i[,1]), as.integer(value))
   )
@@ -806,8 +822,9 @@ SetCols.bm <- function(x, j, value)
        ((typeof(value) == "double") && (typeof(x) != "double") ||
        (typeof(value) == "integer" &&
         (typeof(x) != "double" && typeof(x) != "integer")) || 
-       (typeof(value) == "double" && (typeof(x) == "float"))) 
-       )
+       (typeof(value) == "double" && (typeof(x) == "float"))) ||
+  		 (typeof(value) == "raw" && (typeof(x) != "raw"))
+  )
   {
     warning(cat("Assignment will down cast from ", typeof(value), " to ",
                 typeof(x), "\nHint: To remove this warning type:  ",
@@ -852,7 +869,9 @@ SetCols.bm <- function(x, j, value)
   switch(typeof(x),
          'double' = {SetMatrixCols(x@address, as.double(j), as.double(value))},
          'float' = {SetMatrixCols(x@address, as.double(j), as.single(value))},
-         SetMatrixCols(x@address, as.double(j), as.integer(value))
+  			 #Don't convert raw before assigning them
+  			 'raw' = {SetMatrixCols(x@address, as.double(j), value)},
+  			 SetMatrixCols(x@address, as.double(j), as.integer(value))
   )
   
   return(x)
@@ -881,7 +900,8 @@ SetRows.bm <- function(x, i, value)
        ((typeof(value) == "double") && (typeof(x) != "double") ||
        (typeof(value) == "integer" &&
         (typeof(x) != "double" && typeof(x) != "integer"))  || 
-       (typeof(value) == "double" && (typeof(x) == "float")))
+       (typeof(value) == "double" && (typeof(x) == "float"))) ||
+  		 (typeof(value) == "raw" && (typeof(x) != "raw"))
   )
   {
     warning(cat("Assignment will down cast from ", typeof(value), " to ",
@@ -933,6 +953,8 @@ SetRows.bm <- function(x, i, value)
   switch(typeof(x),
          'double' = {SetMatrixRows(x@address, as.double(i), as.double(value))},
          'float' = {SetMatrixRows(x@address, as.double(i), as.single(value))},
+  			 #Don't convert raw before assigning them
+  			 'raw' = {SetMatrixRows(x@address, as.double(i), value)},
          SetMatrixRows(x@address, as.double(i), as.integer(value))
   )
   
@@ -947,7 +969,8 @@ SetAll.bm <- function(x, value)
        ((typeof(value) == "double") && (typeof(x) != "double") ||
        (typeof(value) == "integer" &&
         (typeof(x) != "double" && typeof(x) != "integer"))  || 
-       (typeof(value) == "double" && (typeof(x) == "float")))
+       (typeof(value) == "double" && (typeof(x) == "float"))) ||
+  		 (typeof(value) == "raw" && (typeof(x) != "raw"))
   )
   {
     warning(cat("Assignment will down cast from ", typeof(value), " to ",
@@ -996,7 +1019,9 @@ SetAll.bm <- function(x, value)
   switch(typeof(x),
          'double' = {SetMatrixAll(x@address, as.double(value))},
          'float' = {SetMatrixAll(x@address, as.single(value))},
-         SetMatrixAll(x@address, as.integer(value))
+  			 #Don't convert raw before assigning them
+  			 'raw' = {SetMatrixAll(x@address, value)},
+  			 SetMatrixAll(x@address, as.integer(value))
   )
   
   return(x)
@@ -1379,7 +1404,7 @@ setGeneric('read.big.matrix',
            has.row.names=FALSE, ignore.row.names=FALSE, type=NA, skip=0, 
            separated=FALSE, backingfile=NULL, backingpath=NULL, 
            descriptorfile=NULL, binarydescriptor=FALSE, extraCols=NULL,
-           shared=TRUE) 
+           shared=options()$bigmemory.default.shared) 
   standardGeneric('read.big.matrix'))
 
 #' @@importFrom stats na.omit
@@ -1387,7 +1412,7 @@ setGeneric('read.big.matrix',
 setMethod('read.big.matrix', signature(filename='character'),
   function(filename, sep, header, col.names, row.names, has.row.names, 
            ignore.row.names, type, skip, separated, backingfile, backingpath, 
-           descriptorfile, binarydescriptor, extraCols, shared=TRUE)
+           descriptorfile, binarydescriptor, extraCols, shared=options()$bigmemory.default.shared)
   {
     if (!is.logical(header))
       stop("header argument must be logical")
@@ -1476,7 +1501,7 @@ setMethod('read.big.matrix', signature(filename='character'),
                          separated=separated, backingfile=backingfile,
                          backingpath=backingpath,
                          descriptorfile=descriptorfile,
-                         binarydescriptor=binarydescriptor, shared=TRUE)
+                         binarydescriptor=binarydescriptor, shared=options()$bigmemory.default.shared)
 
     # has.row.names indicates whether or not there are row names;
     # we take ignore.row.names from the user, but pass (essentially)
@@ -1552,7 +1577,7 @@ deepcopy <- function(x, cols=NULL, rows=NULL,
                      y=NULL, type=NULL, separated=NULL,
                      backingfile=NULL, backingpath=NULL,
                      descriptorfile=NULL, binarydescriptor=FALSE,
-                     shared=TRUE)
+                     shared=options()$bigmemory.default.shared)
 {
   cols <- cleanupcols(cols, ncol(x), colnames(x))
   rows <- cleanuprows(rows, nrow(x), rownames(x))
@@ -1652,33 +1677,35 @@ setMethod('description', signature(x='big.matrix.descriptor'),
 
 DescribeBigMatrix = function(x)
 {
-  if (!is.filebacked(x))
-  {
+  if (!is.filebacked(x)) {
     if (is.shared(x)) {
-      ret <- list(sharedType = 'SharedMemory',
-                  sharedName = shared.name(x), 
-                  totalRows = GetTotalRows(x@address),
-                  totalCols = GetTotalColumns(x@address),
-                  rowOffset = GetRowOffset(x@address),
-                  colOffset = GetColOffset(x@address),
-                  nrow=nrow(x), ncol=ncol(x),
-                  rowNames=rownames(x), colNames=colnames(x), type=typeof(x), 
-                  separated=is.separated(x))
+      list(sharedType = 'SharedMemory',
+           sharedName = shared.name(x), 
+           totalRows = GetTotalRows(x@address),
+           totalCols = GetTotalColumns(x@address),
+           rowOffset = GetRowOffset(x@address),
+           colOffset = GetColOffset(x@address),
+           nrow=nrow(x), ncol=ncol(x),
+           rowNames=rownames(x), 
+           colNames=colnames(x), 
+           type=typeof(x), 
+           separated=is.separated(x))
     } else {
       stop("you can't describe a non-shared big.matrix.")
     }
-  }
-  else
-  {
-    ret = list(sharedType='FileBacked',
-               filename=file.name(x),
-               totalRows = GetTotalRows(x@address),
-               totalCols = GetTotalColumns(x@address),
-               rowOffset = GetRowOffset(x@address),
-               colOffset = GetColOffset(x@address),
-               nrow=nrow(x), ncol=ncol(x),
-               rowNames=rownames(x), colNames=colnames(x), type=typeof(x), 
-               separated=is.separated(x))
+  } else {
+    list(sharedType = 'FileBacked',
+         filename = file.name(x),
+         dirname = format_path(dir.name(x)), # need extra '/' on Windows 
+         totalRows = GetTotalRows(x@address),
+         totalCols = GetTotalColumns(x@address),
+         rowOffset = GetRowOffset(x@address),
+         colOffset = GetColOffset(x@address),
+         nrow=nrow(x), ncol=ncol(x),
+         rowNames=rownames(x), 
+         colNames=colnames(x), 
+         type=typeof(x), 
+         separated=is.separated(x))
   }
 }
 
@@ -1688,50 +1715,50 @@ DescribeBigMatrix = function(x)
 #' @export
 attach.big.matrix = function(obj, ...)
 {
-  if (!is.null( list(...)[['backingpath']]))
-    return(attach.resource(obj, path=list(...)[['backingpath']], ...))
-  return(attach.resource(obj, ...))
+  back <- list(...)[['backingpath']]
+  if (is.null(back)) {
+    attach.resource(obj, ...)
+  } else {
+    attach.resource(obj, path = back, ...)
+  }
 }
 
 #' @rdname big.matrix.descriptor-class
 #' @param obj The filename of the descriptor for a filebacked matrix,
 #' assumed ot be in the directory specified
 #' @param ... possibly \code{path} which gives the path where the descriptor
-#' and/or filebacking can be found.
+#' and/or filebacking can be found. 
 #' @export
-setMethod('attach.resource', signature(obj='character'),
+setMethod('attach.resource', signature(obj = 'character'),
   function(obj, ...)
   {
     path <- list(...)[['path']]
-    if (!is.null(path) && path != "") 
-      path = paste(path.expand(path), "", sep=.Platform$file.sep)
-    if (basename(obj) != obj)
-    {
-      if (!is.null(path) != "")
-        warning(paste("Two paths were specified in attach.resource.",
-          "The one associated with the file will be used.", sep="  "))
-      fileWithPath = obj
-    } else {
-      if (!is.null(path) && path == "")
-        fileWithPath <- obj
-      else if (!is.null(path))
-        fileWithPath = paste(path, obj, sep=.Platform$file.sep)
-      else
-        fileWithPath = obj
-    }
-    fi = file.info(fileWithPath)
-    if (is.na(fi$isdir))
-      stop( paste("The file", fileWithPath, "could not be found") )
-    if (fi$isdir)
-      stop( fileWithPath, "is a directory" )
-    info <- tryCatch(readRDS(file=fileWithPath), error=function(er){return(dget(fileWithPath))})
     
-    if (dirname(obj) != ".") {
-      new_path = dirname(obj)
+    if (is.null(path) || path == "") { # unspecified path extra argument
+      fileWithPath <- path.expand(obj)
+    } else {
+      if (dirname(obj) != ".") { # path also specified in obj
+        warning(paste("Two paths were specified in attach.resource.",
+                      "The one associated with the file will be used.", 
+                      sep="\n"))
+        fileWithPath <- path.expand(obj)
+      } else {
+        fileWithPath <- path.expand(file.path(path, obj))
+      }
     }
-    else if (!is.null(path) && path != "") new_path = path
-    else new_path = path
-    return(attach.resource(info, path=new_path, ...))
+    
+    if (!file.exists(fileWithPath))
+      stop( paste("The file", fileWithPath, "could not be found") )
+    if (dir.exists(fileWithPath))
+      stop( paste(fileWithPath, "is a directory") )
+    
+    info <- tryCatch(readRDS(fileWithPath), 
+                     error = function(er) dget(fileWithPath))
+    if (info@description$sharedType == "FileBacked") {
+      info@description$dirname <- format_path(dirname(fileWithPath))
+    }
+    
+    attach.resource(info, path = NULL, ...)
   })
 
 #' @rdname big.matrix.descriptor-class
@@ -1739,7 +1766,7 @@ setMethod('attach.resource', signature(obj='character'),
 setMethod('attach.resource', signature(obj='big.matrix.descriptor'),
   function(obj, ...)
   {
-    path <- list(...)[['path']]
+    # path <- list(...)[['path']]
     info <- description(obj)
     typeLength <- NULL
     if (info$type == 'char') typeLength <- 1
@@ -1747,57 +1774,54 @@ setMethod('attach.resource', signature(obj='big.matrix.descriptor'),
     if (info$type == 'integer') typeLength <- 4
     if (info$type == 'float') typeLength <- 6
     if (info$type == 'double') typeLength <- 8
+    if (info$type == 'raw' ) typeLength <- 3
+    
     if (is.null(typeLength)) 
       stop('invalid type')
 
-    readOnly <- ifelse( is.null(list(...)$readonly), FALSE, list(...)$readonly)
+    readonly <- list(...)[['readonly']]
+    readOnly <- `if`(is.null(readonly), FALSE, readonly)
     if (!is.logical(readOnly)) {
       stop("The readOnly argument must be of type logical")
     }
     
-    if (info$sharedType == 'SharedMemory')
-    {
+    if (info$sharedType == 'SharedMemory') {
       address <- CAttachSharedBigMatrix(as.character(info$sharedName), 
         as.double(info$totalRows), 
         as.double(info$totalCols), 
         as.character(info$rowNames), 
-        as.character(info$colNames), as.integer(typeLength), 
+        as.character(info$colNames), 
+        as.integer(typeLength), 
         as.logical(info$separated),
         as.logical(readOnly))
-    }
-    else
-    {
-      if (is.null(path) && dirname(info$filename) == ".") {
-        path <- getwd()  
-        path <- path.expand(path)
-        path <- paste(path, '', sep=.Platform$file.sep)
-      } else if (is.null(path) && dirname(info$filename) != ".") {
-        path = paste(dirname(info$filename), "", sep=.Platform$file.sep)
-        info$filename = basename(info$filename)
-      } else if(nchar(path) > 0) {
-        path = paste(path, "", sep=.Platform$file.sep)
-      }
+    } else {
+      # if (is.null(path) && dirname(info$filename) == ".") {
+      #   path <- getwd()  
+      #   path <- path.expand(path)
+      #   path <- paste(path, '', sep=.Platform$file.sep)
+      # } else if (is.null(path) && dirname(info$filename) != ".") {
+      #   path = paste(dirname(info$filename), "", sep=.Platform$file.sep)
+      #   info$filename = basename(info$filename)
+      # } else if(nchar(path) > 0) {
+      #   path = paste(path, "", sep=.Platform$file.sep)
+      # }
+      file <- file.path(info$dirname, info$filename)
       if (!info$separated) {
-        if (!file.exists(paste(path, info$filename, sep=.Platform$file.sep)))
+        if (!file.exists(file))
         {
-          stop(paste("The backing file", paste(path, info$filename, sep=''),
-            "could not be found"))
+          stop(paste("The backing file", file, "could not be found"))
         }
       } else { 
         # It's separated and we need to check for each column.
-        for (i in 1:info$ncol) {
-          fn <- paste(info$filename, "_column_", (i-1), sep='')
-          if (!file.exists(paste(path, fn, sep=.Platform$file.sep)))
-          {
-            stop(paste("The backing file", 
-                       paste(path, fn, sep=.Platform$file.sep), 
-              "could not be found"))
-          }
-        }
+        fn <- paste0(file, "_column_", 1:info$ncol - 1)
+        noexists <- which(!file.exists(fn))
+        if (length(noexists)) # report the first non-existing
+          stop(paste("The backing file", fn[noexists[1]], 
+                     "could not be found"))
       }
       address <- CAttachFileBackedBigMatrix(
         as.character(info$filename), 
-        as.character(path), 
+        as.character(info$dirname), 
         as.double(info$totalRows), 
         as.double(info$totalCols), 
         as.character(info$rowNames), 
@@ -1806,8 +1830,7 @@ setMethod('attach.resource', signature(obj='big.matrix.descriptor'),
         as.logical(info$separated), 
         as.logical(readOnly))
     }
-    if (!is.null(address)) 
-    {
+    if (!is.null(address)) {
       SetRowOffsetInfo(address, info$rowOffset, info$nrow)
       SetColumnOffsetInfo(address, info$colOffset, info$ncol)
       ret <- new('big.matrix', address=address)
@@ -1816,9 +1839,7 @@ setMethod('attach.resource', signature(obj='big.matrix.descriptor'),
       if (readOnly != is.readonly(ret)) {
         warning("big.matrix object could only be opened read-only.")
       }
-    }
-    else 
-    {
+    } else {
       stop("Fatal error in attach: big.matrix could not be attached.")
     }
     return(ret)  
@@ -1856,22 +1877,22 @@ setMethod('file.name', signature(x='big.matrix'),
     return(FileName(x@address))
   })
 
+#' @rdname big.matrix
+#' @export
+setGeneric('dir.name', function(x) standardGeneric('dir.name'))
 
-t.big.matrix <- function(x, backingfile=NULL,
-                     backingpath=NULL, descriptorfile=NULL,
-                     binarydescriptor=FALSE, shared=TRUE) {
-  temp <- big.matrix(nrow=ncol(x), ncol=nrow(x), type=typeof(x),
-    dimnames=dimnames(x)[[2:1]], separated=is.separated(x),
-    backingfile=backingfile, backingpath=backingpath, 
-    descriptorfile=descriptorfile, binarydescriptor=binarydescriptor,
-    shared=TRUE)
+#' @rdname big.matrix
+setMethod('dir.name', signature(x='big.matrix'),
+          function(x)
+          {
+            if (!is.filebacked(x))
+            {
+              stop("The argument is not a file backed big.matrix.")
+            }
+            return(DirName(x@address))
+          })
 
-  for (i in 1:nrow(x)) {
-    temp[,i] <- x[i,]
-  }
 
-  return(temp)
-}
 
 #' @template flush_template
 #' @export
@@ -1939,6 +1960,8 @@ morderCols <- function(x, rows, na.last=TRUE, decreasing = FALSE)
                                                            as.integer(na.last), as.logical(decreasing) ),
                            'double' = OrderRNumericMatrixCols(x, nrow(x), ncol(x), as.double(rows), 
                                                               as.integer(na.last), as.logical(decreasing) ),
+         									'raw' = OrderRIntMatrixCols(x, nrow(x), ncol(x), as.double(rows), 
+         																							as.integer(na.last), as.logical(decreasing) ),
                            stop("Unsupported matrix value type.")),
          stop("unsupported matrix type")
   )
@@ -1976,7 +1999,8 @@ mpermute <- function(x, order=NULL, cols=NULL, allow.duplicates=FALSE, ...)
          "matrix" = switch(typeof(x),
                            'integer' = ReorderRIntMatrix(x, nrow(x), ncol(x), order),
                            'double' = ReorderRNumericMatrix(x, nrow(x), ncol(x), order),
-                           stop("Unsupported matrix value type.")),
+         									 'raw' = ReorderRIntMatrix(x, nrow(x), ncol(x), order),
+         									stop("Unsupported matrix value type.")),
          stop("invalid class")
   )
 
@@ -2019,6 +2043,7 @@ mpermuteCols <- function(x, order=NULL, rows=NULL, allow.duplicates=FALSE, ...)
          "matrix" = {
            switch(typeof(x),
                   'integer' = ReorderRIntMatrixCols(x, nrow(x), ncol(x), order),
+           			  'raw' = ReorderRRawMatrixCols(x, nrow(x), ncol(x), order),
                   'double' = ReorderRNumericMatrixCols(x, nrow(x), ncol(x), order),
                   stop("Unsupported matrix value type."))
          },

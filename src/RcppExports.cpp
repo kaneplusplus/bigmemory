@@ -93,6 +93,19 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// ReorderRRawMatrixCols
+void ReorderRRawMatrixCols(Rcpp::RawMatrix matrixVector, SEXP nrow, SEXP ncol, Rcpp::IntegerVector orderVec);
+RcppExport SEXP bigmemory_ReorderRRawMatrixCols(SEXP matrixVectorSEXP, SEXP nrowSEXP, SEXP ncolSEXP, SEXP orderVecSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::RawMatrix >::type matrixVector(matrixVectorSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type nrow(nrowSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type ncol(ncolSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type orderVec(orderVecSEXP);
+    ReorderRRawMatrixCols(matrixVector, nrow, ncol, orderVec);
+    return R_NilValue;
+END_RCPP
+}
 // ReorderBigMatrixCols
 void ReorderBigMatrixCols(SEXP address, SEXP orderVec);
 RcppExport SEXP bigmemory_ReorderBigMatrixCols(SEXP addressSEXP, SEXP orderVecSEXP) {
@@ -789,6 +802,17 @@ BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< SEXP >::type address(addressSEXP);
     rcpp_result_gen = Rcpp::wrap(FileName(address));
+    return rcpp_result_gen;
+END_RCPP
+}
+// DirName
+SEXP DirName(SEXP address);
+RcppExport SEXP bigmemory_DirName(SEXP addressSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type address(addressSEXP);
+    rcpp_result_gen = Rcpp::wrap(DirName(address));
     return rcpp_result_gen;
 END_RCPP
 }
