@@ -1,4 +1,4 @@
-#' @useDynLib bigmemory
+#' @useDynLib bigmemory, .registration = TRUE
 #' @import methods bigmemory.sri Rcpp
 #' @importFrom utils head tail
 
