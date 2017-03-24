@@ -67,19 +67,6 @@
 #' default (a change in default behavior as of 4.1.1) but may be changed by the
 #' user.
 #' 
-#' Versions >=4.0 represent a major redesign, with the mutexes (locking)
-#' abstracted to package \pkg{synchronicity}, the exploratory data analysis
-#' functionality relocated to package \pkg{biganalytics}, and new linear
-#' algebra support available in package \pkg{bigalgebra}.  Package
-#' \pkg{bigtabulate} extends the \pkg{bigmemory} package with table-, tapply-,
-#' and split-like behavior.  The functions may also be used with regular
-#' matrices for speed and memory-efficiency gains. Package \pkg{bigmemory}
-#' itself is now minimalist, providing only the core functionality.  As an
-#' example, the \code{apply()} method appears in \pkg{biganalytics}, supporting
-#' exploration and analysis, while \code{\link{mwhich}}, \code{\link{morder}}
-#' and \code{\link{mpermute}} appear in \pkg{bigmemory} as fundamental tools
-#' for data manipulation.
-#' 
 #' Note that you can't simply use a \code{big.matrix} with many (most) existing
 #' functions (e.g. \code{\link{lm}}, \code{\link{kmeans}}).  One nice exception
 #' is \code{\link{split}}, because this function only accesses subsets of the
