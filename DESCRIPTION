@@ -14,7 +14,7 @@ Depends:
     bigmemory.sri
 Imports:
     Rcpp
-Enhances: biganalytics, bigtabulate, synchronicity
+Enhances: biganalytics, bigtabulate
 LinkingTo: BH, Rcpp
 Description: Create, store, access, and manipulate massive matrices.
     Matrices are allocated to shared memory and may use memory-mapped
