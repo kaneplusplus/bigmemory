@@ -70,4 +70,3 @@ head(y)
 \code{\link{big.matrix}}
 }
 \keyword{methods}
-

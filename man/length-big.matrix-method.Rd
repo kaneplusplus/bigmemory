@@ -13,4 +13,3 @@
 \description{
 Get the length of a \code{big.matrix} object
 }
-

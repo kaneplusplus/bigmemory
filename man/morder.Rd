@@ -78,10 +78,9 @@ m[order(m[,1]), 2]
 mpermute(m, cols=1)
 m[,2]
 }
-\author{
-Michael J. Kane \email{<bigmemoryauthors@gmail.com>}
-}
 \seealso{
 \code{\link{order}}
 }
-
+\author{
+Michael J. Kane \email{<bigmemoryauthors@gmail.com>}
+}

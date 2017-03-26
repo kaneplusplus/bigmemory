@@ -18,4 +18,3 @@
 \description{
 Retrieve or set the dimnames of an object
 }
-

@@ -36,9 +36,10 @@
 #' well-equipped hardware. Use of \acronym{C/C++} can provide efficiencies, but
 #' is cumbersome for interactive data analysis and lacks the flexibility and
 #' power of 's rich statistical programming environment.  The package
-#' \pkg{bigmemory} and sister packages \pkg{biganalytics}, \pkg{synchronicity},
-#' \pkg{bigtabulate}, and \pkg{bigalgebra} bridge this gap, implementing
-#' massive matrices and supporting their manipulation and exploration. The data
+#' \pkg{bigmemory} and associated packages \pkg{biganalytics}, 
+#' \pkg{synchronicity}, \pkg{bigtabulate}, and \pkg{bigalgebra} bridge 
+#' this gap, implementing massive matrices and supporting their manipulation 
+#' and exploration. The data
 #' structures may be allocated to shared memory, allowing separate processes on
 #' the same computer to share access to a single copy of the data set.  The
 #' data structures may also be file-backed, allowing users to easily manage and
