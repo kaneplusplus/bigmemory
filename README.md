@@ -4,7 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/kaneplusplus/bigmemory/badge.svg)](https://coveralls.io/r/kaneplusplus/bigmemory)
 [![rstudio mirror downloads](http://cranlogs.r-pkg.org/badges/bigmemory?color=blue)](https://github.com/metacran/cranlogs.app)
 [![rstudio mirror downloads](http://cranlogs.r-pkg.org/badges/grand-total/bigmemory?color=blue)](https://github.com/metacran/cranlogs.app)
-[![Research software impact](http://depsy.org/api/package/cran/GSODR/badge.svg)](http://depsy.org/package/r/bigmemory)
+[![Research software impact](http://depsy.org/api/package/cran/bigmemory/badge.svg)](http://depsy.org/package/r/bigmemory)
 <!---
 [![Total Downloads](https://poser.pugx.org/simkimsia/utility_behaviors/d/total.png)](https://packagist.org/packages/simkimsia/utility_behaviors)
 [![Latest Stable Version](https://poser.pugx.org/simkimsia/utility_behaviors/v/stable.png)](https://packagist.org/packages/simkimsia/utility_behaviors)
