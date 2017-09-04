@@ -1725,7 +1725,7 @@ attach.big.matrix = function(obj, ...)
 
 #' @rdname big.matrix.descriptor-class
 #' @param obj The filename of the descriptor for a filebacked matrix,
-#' assumed ot be in the directory specified
+#' assumed to be in the directory specified
 #' @param ... possibly \code{path} which gives the path where the descriptor
 #' and/or filebacking can be found. 
 #' @export
