@@ -3,7 +3,7 @@
 #' @aliases describe attach.resource
 #' @title The basic ``big.matrix'' operations for sharing and re-attaching.
 #' @description
-#' The \code{describe} function returns the infommation needed by 
+#' The \code{describe} function returns the information needed by 
 #' \code{attach.big.matrix} to reference a shared or file-backed 
 #' \code{big.matrix} object.
 #' The \code{attach.big.matrix} and \code{attach.resource} functions create a
@@ -13,7 +13,7 @@
 #' @param obj an object as returned by \code{describe()} or, optionally, 
 #' the filename of the descriptor for a filebacked matrix, assumed to be in 
 #' the directory specified by the \code{path} (if one is provided)
-#' @param ... possibly \code{path} which givesthe path where the descriptor 
+#' @param ... possibly \code{path} which gives the path where the descriptor 
 #' and/or filebacking can be found
 #' @details
 #' The \code{describe} function returns a list of the information needed to 
