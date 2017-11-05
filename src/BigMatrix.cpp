@@ -19,6 +19,7 @@
 #include <boost/interprocess/sync/named_mutex.hpp>
 
 #include "bigmemory/BigMatrix.h"
+//#include "uuid/uuid.h"
 
 #define COND_EXCEPTION_PRINT(bYes)                \
   if (bYes)                                       \
@@ -202,7 +203,15 @@ bool SharedBigMatrix::create_uuid()
     // Darwin has a limit on the size of share memory names.
     _uuid.resize(5);
     #endif
-    return true;
+//  uuid_t u;
+//  char c[40];
+//  uuid_generate_time(u);
+//  uuid_unparse_lower(u, c);
+//  _uuid = c;
+//  #ifdef DARWIN
+//    _uuid.resize(5);
+//  #endif
+  return true;
 }
 
 template<typename T>

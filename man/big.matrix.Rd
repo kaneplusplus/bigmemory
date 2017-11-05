@@ -138,12 +138,12 @@ is a \code{big.matrix}, or create a \code{big.matrix} from a
 A \code{big.matrix} consists of an object in \R that does nothing 
 more than point to the data structure implemented in \acronym{C++}.  The 
 object acts much like a traditional \R matrix, but helps protect the user 
-from many inadvertant memory-consuming pitfalls of traditional \R matrices 
+from many inadvertent memory-consuming pitfalls of traditional \R matrices 
 and data frames.
 
 There are two \code{big.matrix} types which manage
 data in different ways.  A standard, shared \code{big.matrix} is constrained
-to available \acronym{RAM}, and may be shared acrossseparate \R processes.  
+to available \acronym{RAM}, and may be shared across separate \R processes.  
 A file-backed \code{big.matrix} may exceed available \acronym{RAM} by 
 using hard drive space, and may also be shared across processes.  The 
 atomic types of these matrices may be \code{double}, \code{integer}, 

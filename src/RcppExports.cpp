@@ -7,7 +7,7 @@ using namespace Rcpp;
 
 // GetIndivMatrixElements
 SEXP GetIndivMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row);
-RcppExport SEXP bigmemory_GetIndivMatrixElements(SEXP bigMatAddrSEXP, SEXP colSEXP, SEXP rowSEXP) {
+RcppExport SEXP _bigmemory_GetIndivMatrixElements(SEXP bigMatAddrSEXP, SEXP colSEXP, SEXP rowSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -20,7 +20,7 @@ END_RCPP
 }
 // GetIndivVectorMatrixElements
 SEXP GetIndivVectorMatrixElements(SEXP bigMatAddr, NumericVector elems);
-RcppExport SEXP bigmemory_GetIndivVectorMatrixElements(SEXP bigMatAddrSEXP, SEXP elemsSEXP) {
+RcppExport SEXP _bigmemory_GetIndivVectorMatrixElements(SEXP bigMatAddrSEXP, SEXP elemsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -32,7 +32,7 @@ END_RCPP
 }
 // ReorderRIntMatrix
 void ReorderRIntMatrix(SEXP matrixVector, SEXP nrow, SEXP ncol, SEXP orderVec);
-RcppExport SEXP bigmemory_ReorderRIntMatrix(SEXP matrixVectorSEXP, SEXP nrowSEXP, SEXP ncolSEXP, SEXP orderVecSEXP) {
+RcppExport SEXP _bigmemory_ReorderRIntMatrix(SEXP matrixVectorSEXP, SEXP nrowSEXP, SEXP ncolSEXP, SEXP orderVecSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< SEXP >::type matrixVector(matrixVectorSEXP);
@@ -45,7 +45,7 @@ END_RCPP
 }
 // ReorderRNumericMatrix
 void ReorderRNumericMatrix(SEXP matrixVector, SEXP nrow, SEXP ncol, SEXP orderVec);
-RcppExport SEXP bigmemory_ReorderRNumericMatrix(SEXP matrixVectorSEXP, SEXP nrowSEXP, SEXP ncolSEXP, SEXP orderVecSEXP) {
+RcppExport SEXP _bigmemory_ReorderRNumericMatrix(SEXP matrixVectorSEXP, SEXP nrowSEXP, SEXP ncolSEXP, SEXP orderVecSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< SEXP >::type matrixVector(matrixVectorSEXP);
@@ -58,7 +58,7 @@ END_RCPP
 }
 // ReorderBigMatrix
 void ReorderBigMatrix(SEXP address, SEXP orderVec);
-RcppExport SEXP bigmemory_ReorderBigMatrix(SEXP addressSEXP, SEXP orderVecSEXP) {
+RcppExport SEXP _bigmemory_ReorderBigMatrix(SEXP addressSEXP, SEXP orderVecSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< SEXP >::type address(addressSEXP);
@@ -69,7 +69,7 @@ END_RCPP
 }
 // ReorderRIntMatrixCols
 void ReorderRIntMatrixCols(Rcpp::IntegerMatrix matrixVector, SEXP nrow, SEXP ncol, Rcpp::IntegerVector orderVec);
-RcppExport SEXP bigmemory_ReorderRIntMatrixCols(SEXP matrixVectorSEXP, SEXP nrowSEXP, SEXP ncolSEXP, SEXP orderVecSEXP) {
+RcppExport SEXP _bigmemory_ReorderRIntMatrixCols(SEXP matrixVectorSEXP, SEXP nrowSEXP, SEXP ncolSEXP, SEXP orderVecSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::IntegerMatrix >::type matrixVector(matrixVectorSEXP);
@@ -82,7 +82,7 @@ END_RCPP
 }
 // ReorderRNumericMatrixCols
 void ReorderRNumericMatrixCols(Rcpp::NumericMatrix matrixVector, SEXP nrow, SEXP ncol, Rcpp::IntegerVector orderVec);
-RcppExport SEXP bigmemory_ReorderRNumericMatrixCols(SEXP matrixVectorSEXP, SEXP nrowSEXP, SEXP ncolSEXP, SEXP orderVecSEXP) {
+RcppExport SEXP _bigmemory_ReorderRNumericMatrixCols(SEXP matrixVectorSEXP, SEXP nrowSEXP, SEXP ncolSEXP, SEXP orderVecSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type matrixVector(matrixVectorSEXP);
@@ -95,7 +95,7 @@ END_RCPP
 }
 // ReorderRRawMatrixCols
 void ReorderRRawMatrixCols(Rcpp::RawMatrix matrixVector, SEXP nrow, SEXP ncol, Rcpp::IntegerVector orderVec);
-RcppExport SEXP bigmemory_ReorderRRawMatrixCols(SEXP matrixVectorSEXP, SEXP nrowSEXP, SEXP ncolSEXP, SEXP orderVecSEXP) {
+RcppExport SEXP _bigmemory_ReorderRRawMatrixCols(SEXP matrixVectorSEXP, SEXP nrowSEXP, SEXP ncolSEXP, SEXP orderVecSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::RawMatrix >::type matrixVector(matrixVectorSEXP);
@@ -108,7 +108,7 @@ END_RCPP
 }
 // ReorderBigMatrixCols
 void ReorderBigMatrixCols(SEXP address, SEXP orderVec);
-RcppExport SEXP bigmemory_ReorderBigMatrixCols(SEXP addressSEXP, SEXP orderVecSEXP) {
+RcppExport SEXP _bigmemory_ReorderBigMatrixCols(SEXP addressSEXP, SEXP orderVecSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< SEXP >::type address(addressSEXP);
@@ -119,7 +119,7 @@ END_RCPP
 }
 // OrderRIntMatrix
 SEXP OrderRIntMatrix(SEXP matrixVector, SEXP nrow, SEXP columns, SEXP naLast, SEXP decreasing);
-RcppExport SEXP bigmemory_OrderRIntMatrix(SEXP matrixVectorSEXP, SEXP nrowSEXP, SEXP columnsSEXP, SEXP naLastSEXP, SEXP decreasingSEXP) {
+RcppExport SEXP _bigmemory_OrderRIntMatrix(SEXP matrixVectorSEXP, SEXP nrowSEXP, SEXP columnsSEXP, SEXP naLastSEXP, SEXP decreasingSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -134,7 +134,7 @@ END_RCPP
 }
 // OrderRNumericMatrix
 SEXP OrderRNumericMatrix(SEXP matrixVector, SEXP nrow, SEXP columns, SEXP naLast, SEXP decreasing);
-RcppExport SEXP bigmemory_OrderRNumericMatrix(SEXP matrixVectorSEXP, SEXP nrowSEXP, SEXP columnsSEXP, SEXP naLastSEXP, SEXP decreasingSEXP) {
+RcppExport SEXP _bigmemory_OrderRNumericMatrix(SEXP matrixVectorSEXP, SEXP nrowSEXP, SEXP columnsSEXP, SEXP naLastSEXP, SEXP decreasingSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -149,7 +149,7 @@ END_RCPP
 }
 // OrderBigMatrix
 SEXP OrderBigMatrix(SEXP address, SEXP columns, SEXP naLast, SEXP decreasing);
-RcppExport SEXP bigmemory_OrderBigMatrix(SEXP addressSEXP, SEXP columnsSEXP, SEXP naLastSEXP, SEXP decreasingSEXP) {
+RcppExport SEXP _bigmemory_OrderBigMatrix(SEXP addressSEXP, SEXP columnsSEXP, SEXP naLastSEXP, SEXP decreasingSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -163,7 +163,7 @@ END_RCPP
 }
 // OrderRIntMatrixCols
 SEXP OrderRIntMatrixCols(SEXP matrixVector, SEXP nrow, SEXP ncol, SEXP rows, SEXP naLast, SEXP decreasing);
-RcppExport SEXP bigmemory_OrderRIntMatrixCols(SEXP matrixVectorSEXP, SEXP nrowSEXP, SEXP ncolSEXP, SEXP rowsSEXP, SEXP naLastSEXP, SEXP decreasingSEXP) {
+RcppExport SEXP _bigmemory_OrderRIntMatrixCols(SEXP matrixVectorSEXP, SEXP nrowSEXP, SEXP ncolSEXP, SEXP rowsSEXP, SEXP naLastSEXP, SEXP decreasingSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -179,7 +179,7 @@ END_RCPP
 }
 // OrderRNumericMatrixCols
 SEXP OrderRNumericMatrixCols(SEXP matrixVector, SEXP nrow, SEXP ncol, SEXP rows, SEXP naLast, SEXP decreasing);
-RcppExport SEXP bigmemory_OrderRNumericMatrixCols(SEXP matrixVectorSEXP, SEXP nrowSEXP, SEXP ncolSEXP, SEXP rowsSEXP, SEXP naLastSEXP, SEXP decreasingSEXP) {
+RcppExport SEXP _bigmemory_OrderRNumericMatrixCols(SEXP matrixVectorSEXP, SEXP nrowSEXP, SEXP ncolSEXP, SEXP rowsSEXP, SEXP naLastSEXP, SEXP decreasingSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -195,7 +195,7 @@ END_RCPP
 }
 // OrderBigMatrixCols
 SEXP OrderBigMatrixCols(SEXP address, SEXP rows, SEXP naLast, SEXP decreasing);
-RcppExport SEXP bigmemory_OrderBigMatrixCols(SEXP addressSEXP, SEXP rowsSEXP, SEXP naLastSEXP, SEXP decreasingSEXP) {
+RcppExport SEXP _bigmemory_OrderBigMatrixCols(SEXP addressSEXP, SEXP rowsSEXP, SEXP naLastSEXP, SEXP decreasingSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -209,7 +209,7 @@ END_RCPP
 }
 // CCleanIndices
 SEXP CCleanIndices(SEXP indices, SEXP rc);
-RcppExport SEXP bigmemory_CCleanIndices(SEXP indicesSEXP, SEXP rcSEXP) {
+RcppExport SEXP _bigmemory_CCleanIndices(SEXP indicesSEXP, SEXP rcSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -221,7 +221,7 @@ END_RCPP
 }
 // HasRowColNames
 SEXP HasRowColNames(SEXP address);
-RcppExport SEXP bigmemory_HasRowColNames(SEXP addressSEXP) {
+RcppExport SEXP _bigmemory_HasRowColNames(SEXP addressSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -232,7 +232,7 @@ END_RCPP
 }
 // GetIndexRowNames
 SEXP GetIndexRowNames(SEXP address, SEXP indices_);
-RcppExport SEXP bigmemory_GetIndexRowNames(SEXP addressSEXP, SEXP indices_SEXP) {
+RcppExport SEXP _bigmemory_GetIndexRowNames(SEXP addressSEXP, SEXP indices_SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -244,7 +244,7 @@ END_RCPP
 }
 // GetIndexColNames
 SEXP GetIndexColNames(SEXP address, SEXP indices_);
-RcppExport SEXP bigmemory_GetIndexColNames(SEXP addressSEXP, SEXP indices_SEXP) {
+RcppExport SEXP _bigmemory_GetIndexColNames(SEXP addressSEXP, SEXP indices_SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -256,7 +256,7 @@ END_RCPP
 }
 // GetColumnNamesBM
 SEXP GetColumnNamesBM(SEXP address);
-RcppExport SEXP bigmemory_GetColumnNamesBM(SEXP addressSEXP) {
+RcppExport SEXP _bigmemory_GetColumnNamesBM(SEXP addressSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -267,7 +267,7 @@ END_RCPP
 }
 // GetRowNamesBM
 SEXP GetRowNamesBM(SEXP address);
-RcppExport SEXP bigmemory_GetRowNamesBM(SEXP addressSEXP) {
+RcppExport SEXP _bigmemory_GetRowNamesBM(SEXP addressSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -278,7 +278,7 @@ END_RCPP
 }
 // SetColumnNames
 void SetColumnNames(SEXP address, SEXP columnNames);
-RcppExport SEXP bigmemory_SetColumnNames(SEXP addressSEXP, SEXP columnNamesSEXP) {
+RcppExport SEXP _bigmemory_SetColumnNames(SEXP addressSEXP, SEXP columnNamesSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< SEXP >::type address(addressSEXP);
@@ -289,7 +289,7 @@ END_RCPP
 }
 // SetRowNames
 void SetRowNames(SEXP address, SEXP rowNames);
-RcppExport SEXP bigmemory_SetRowNames(SEXP addressSEXP, SEXP rowNamesSEXP) {
+RcppExport SEXP _bigmemory_SetRowNames(SEXP addressSEXP, SEXP rowNamesSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< SEXP >::type address(addressSEXP);
@@ -300,7 +300,7 @@ END_RCPP
 }
 // IsReadOnly
 SEXP IsReadOnly(SEXP bigMatAddr);
-RcppExport SEXP bigmemory_IsReadOnly(SEXP bigMatAddrSEXP) {
+RcppExport SEXP _bigmemory_IsReadOnly(SEXP bigMatAddrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -311,7 +311,7 @@ END_RCPP
 }
 // CIsSubMatrix
 SEXP CIsSubMatrix(SEXP bigMatAddr);
-RcppExport SEXP bigmemory_CIsSubMatrix(SEXP bigMatAddrSEXP) {
+RcppExport SEXP _bigmemory_CIsSubMatrix(SEXP bigMatAddrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -322,7 +322,7 @@ END_RCPP
 }
 // CGetNrow
 SEXP CGetNrow(SEXP bigMatAddr);
-RcppExport SEXP bigmemory_CGetNrow(SEXP bigMatAddrSEXP) {
+RcppExport SEXP _bigmemory_CGetNrow(SEXP bigMatAddrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -333,7 +333,7 @@ END_RCPP
 }
 // CGetNcol
 SEXP CGetNcol(SEXP bigMatAddr);
-RcppExport SEXP bigmemory_CGetNcol(SEXP bigMatAddrSEXP) {
+RcppExport SEXP _bigmemory_CGetNcol(SEXP bigMatAddrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -344,7 +344,7 @@ END_RCPP
 }
 // CGetType
 SEXP CGetType(SEXP bigMatAddr);
-RcppExport SEXP bigmemory_CGetType(SEXP bigMatAddrSEXP) {
+RcppExport SEXP _bigmemory_CGetType(SEXP bigMatAddrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -355,7 +355,7 @@ END_RCPP
 }
 // IsSharedMemoryBigMatrix
 SEXP IsSharedMemoryBigMatrix(SEXP bigMatAddr);
-RcppExport SEXP bigmemory_IsSharedMemoryBigMatrix(SEXP bigMatAddrSEXP) {
+RcppExport SEXP _bigmemory_IsSharedMemoryBigMatrix(SEXP bigMatAddrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -366,7 +366,7 @@ END_RCPP
 }
 // IsFileBackedBigMatrix
 SEXP IsFileBackedBigMatrix(SEXP bigMatAddr);
-RcppExport SEXP bigmemory_IsFileBackedBigMatrix(SEXP bigMatAddrSEXP) {
+RcppExport SEXP _bigmemory_IsFileBackedBigMatrix(SEXP bigMatAddrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -377,7 +377,7 @@ END_RCPP
 }
 // IsSeparated
 SEXP IsSeparated(SEXP bigMatAddr);
-RcppExport SEXP bigmemory_IsSeparated(SEXP bigMatAddrSEXP) {
+RcppExport SEXP _bigmemory_IsSeparated(SEXP bigMatAddrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -388,7 +388,7 @@ END_RCPP
 }
 // SetRowOffsetInfo
 void SetRowOffsetInfo(SEXP bigMatAddr, SEXP rowOffset, SEXP numRows);
-RcppExport SEXP bigmemory_SetRowOffsetInfo(SEXP bigMatAddrSEXP, SEXP rowOffsetSEXP, SEXP numRowsSEXP) {
+RcppExport SEXP _bigmemory_SetRowOffsetInfo(SEXP bigMatAddrSEXP, SEXP rowOffsetSEXP, SEXP numRowsSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< SEXP >::type bigMatAddr(bigMatAddrSEXP);
@@ -400,7 +400,7 @@ END_RCPP
 }
 // SetColumnOffsetInfo
 void SetColumnOffsetInfo(SEXP bigMatAddr, SEXP colOffset, SEXP numCols);
-RcppExport SEXP bigmemory_SetColumnOffsetInfo(SEXP bigMatAddrSEXP, SEXP colOffsetSEXP, SEXP numColsSEXP) {
+RcppExport SEXP _bigmemory_SetColumnOffsetInfo(SEXP bigMatAddrSEXP, SEXP colOffsetSEXP, SEXP numColsSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< SEXP >::type bigMatAddr(bigMatAddrSEXP);
@@ -412,7 +412,7 @@ END_RCPP
 }
 // GetRowOffset
 SEXP GetRowOffset(SEXP bigMatAddr);
-RcppExport SEXP bigmemory_GetRowOffset(SEXP bigMatAddrSEXP) {
+RcppExport SEXP _bigmemory_GetRowOffset(SEXP bigMatAddrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -423,7 +423,7 @@ END_RCPP
 }
 // GetColOffset
 Rcpp::NumericVector GetColOffset(SEXP bigMatAddr);
-RcppExport SEXP bigmemory_GetColOffset(SEXP bigMatAddrSEXP) {
+RcppExport SEXP _bigmemory_GetColOffset(SEXP bigMatAddrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -434,7 +434,7 @@ END_RCPP
 }
 // GetTotalColumns
 SEXP GetTotalColumns(SEXP bigMatAddr);
-RcppExport SEXP bigmemory_GetTotalColumns(SEXP bigMatAddrSEXP) {
+RcppExport SEXP _bigmemory_GetTotalColumns(SEXP bigMatAddrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -445,7 +445,7 @@ END_RCPP
 }
 // GetTotalRows
 SEXP GetTotalRows(SEXP bigMatAddr);
-RcppExport SEXP bigmemory_GetTotalRows(SEXP bigMatAddrSEXP) {
+RcppExport SEXP _bigmemory_GetTotalRows(SEXP bigMatAddrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -456,7 +456,7 @@ END_RCPP
 }
 // GetTypeString
 Rcpp::String GetTypeString(SEXP bigMatAddr);
-RcppExport SEXP bigmemory_GetTypeString(SEXP bigMatAddrSEXP) {
+RcppExport SEXP _bigmemory_GetTypeString(SEXP bigMatAddrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -467,7 +467,7 @@ END_RCPP
 }
 // GetMatrixSize
 SEXP GetMatrixSize(SEXP bigMat);
-RcppExport SEXP bigmemory_GetMatrixSize(SEXP bigMatSEXP) {
+RcppExport SEXP _bigmemory_GetMatrixSize(SEXP bigMatSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -478,7 +478,7 @@ END_RCPP
 }
 // MWhichBigMatrix
 SEXP MWhichBigMatrix(SEXP bigMatAddr, SEXP selectColumn, SEXP minVal, SEXP maxVal, SEXP chkMin, SEXP chkMax, SEXP opVal);
-RcppExport SEXP bigmemory_MWhichBigMatrix(SEXP bigMatAddrSEXP, SEXP selectColumnSEXP, SEXP minValSEXP, SEXP maxValSEXP, SEXP chkMinSEXP, SEXP chkMaxSEXP, SEXP opValSEXP) {
+RcppExport SEXP _bigmemory_MWhichBigMatrix(SEXP bigMatAddrSEXP, SEXP selectColumnSEXP, SEXP minValSEXP, SEXP maxValSEXP, SEXP chkMinSEXP, SEXP chkMaxSEXP, SEXP opValSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -495,7 +495,7 @@ END_RCPP
 }
 // MWhichRIntMatrix
 SEXP MWhichRIntMatrix(SEXP matrixVector, SEXP nrow, SEXP selectColumn, SEXP minVal, SEXP maxVal, SEXP chkMin, SEXP chkMax, SEXP opVal);
-RcppExport SEXP bigmemory_MWhichRIntMatrix(SEXP matrixVectorSEXP, SEXP nrowSEXP, SEXP selectColumnSEXP, SEXP minValSEXP, SEXP maxValSEXP, SEXP chkMinSEXP, SEXP chkMaxSEXP, SEXP opValSEXP) {
+RcppExport SEXP _bigmemory_MWhichRIntMatrix(SEXP matrixVectorSEXP, SEXP nrowSEXP, SEXP selectColumnSEXP, SEXP minValSEXP, SEXP maxValSEXP, SEXP chkMinSEXP, SEXP chkMaxSEXP, SEXP opValSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -513,7 +513,7 @@ END_RCPP
 }
 // MWhichRNumericMatrix
 SEXP MWhichRNumericMatrix(SEXP matrixVector, SEXP nrow, SEXP selectColumn, SEXP minVal, SEXP maxVal, SEXP chkMin, SEXP chkMax, SEXP opVal);
-RcppExport SEXP bigmemory_MWhichRNumericMatrix(SEXP matrixVectorSEXP, SEXP nrowSEXP, SEXP selectColumnSEXP, SEXP minValSEXP, SEXP maxValSEXP, SEXP chkMinSEXP, SEXP chkMaxSEXP, SEXP opValSEXP) {
+RcppExport SEXP _bigmemory_MWhichRNumericMatrix(SEXP matrixVectorSEXP, SEXP nrowSEXP, SEXP selectColumnSEXP, SEXP minValSEXP, SEXP maxValSEXP, SEXP chkMinSEXP, SEXP chkMaxSEXP, SEXP opValSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -531,7 +531,7 @@ END_RCPP
 }
 // CCountLines
 SEXP CCountLines(SEXP fileName);
-RcppExport SEXP bigmemory_CCountLines(SEXP fileNameSEXP) {
+RcppExport SEXP _bigmemory_CCountLines(SEXP fileNameSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -542,7 +542,7 @@ END_RCPP
 }
 // ReadMatrix
 SEXP ReadMatrix(SEXP fileName, SEXP bigMatAddr, SEXP firstLine, SEXP numLines, SEXP numCols, SEXP separator, SEXP hasRowNames, SEXP useRowNames);
-RcppExport SEXP bigmemory_ReadMatrix(SEXP fileNameSEXP, SEXP bigMatAddrSEXP, SEXP firstLineSEXP, SEXP numLinesSEXP, SEXP numColsSEXP, SEXP separatorSEXP, SEXP hasRowNamesSEXP, SEXP useRowNamesSEXP) {
+RcppExport SEXP _bigmemory_ReadMatrix(SEXP fileNameSEXP, SEXP bigMatAddrSEXP, SEXP firstLineSEXP, SEXP numLinesSEXP, SEXP numColsSEXP, SEXP separatorSEXP, SEXP hasRowNamesSEXP, SEXP useRowNamesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -560,7 +560,7 @@ END_RCPP
 }
 // WriteMatrix
 void WriteMatrix(SEXP bigMatAddr, SEXP fileName, SEXP rowNames, SEXP colNames, SEXP sep);
-RcppExport SEXP bigmemory_WriteMatrix(SEXP bigMatAddrSEXP, SEXP fileNameSEXP, SEXP rowNamesSEXP, SEXP colNamesSEXP, SEXP sepSEXP) {
+RcppExport SEXP _bigmemory_WriteMatrix(SEXP bigMatAddrSEXP, SEXP fileNameSEXP, SEXP rowNamesSEXP, SEXP colNamesSEXP, SEXP sepSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< SEXP >::type bigMatAddr(bigMatAddrSEXP);
@@ -574,7 +574,7 @@ END_RCPP
 }
 // GetMatrixElements
 SEXP GetMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row);
-RcppExport SEXP bigmemory_GetMatrixElements(SEXP bigMatAddrSEXP, SEXP colSEXP, SEXP rowSEXP) {
+RcppExport SEXP _bigmemory_GetMatrixElements(SEXP bigMatAddrSEXP, SEXP colSEXP, SEXP rowSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -587,7 +587,7 @@ END_RCPP
 }
 // GetMatrixRows
 SEXP GetMatrixRows(SEXP bigMatAddr, SEXP row);
-RcppExport SEXP bigmemory_GetMatrixRows(SEXP bigMatAddrSEXP, SEXP rowSEXP) {
+RcppExport SEXP _bigmemory_GetMatrixRows(SEXP bigMatAddrSEXP, SEXP rowSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -599,7 +599,7 @@ END_RCPP
 }
 // GetMatrixCols
 SEXP GetMatrixCols(SEXP bigMatAddr, SEXP col);
-RcppExport SEXP bigmemory_GetMatrixCols(SEXP bigMatAddrSEXP, SEXP colSEXP) {
+RcppExport SEXP _bigmemory_GetMatrixCols(SEXP bigMatAddrSEXP, SEXP colSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -611,7 +611,7 @@ END_RCPP
 }
 // GetMatrixAll
 SEXP GetMatrixAll(SEXP bigMatAddr);
-RcppExport SEXP bigmemory_GetMatrixAll(SEXP bigMatAddrSEXP) {
+RcppExport SEXP _bigmemory_GetMatrixAll(SEXP bigMatAddrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -622,7 +622,7 @@ END_RCPP
 }
 // SetMatrixElements
 void SetMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row, SEXP values);
-RcppExport SEXP bigmemory_SetMatrixElements(SEXP bigMatAddrSEXP, SEXP colSEXP, SEXP rowSEXP, SEXP valuesSEXP) {
+RcppExport SEXP _bigmemory_SetMatrixElements(SEXP bigMatAddrSEXP, SEXP colSEXP, SEXP rowSEXP, SEXP valuesSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< SEXP >::type bigMatAddr(bigMatAddrSEXP);
@@ -635,7 +635,7 @@ END_RCPP
 }
 // SetIndivVectorMatrixElements
 void SetIndivVectorMatrixElements(SEXP bigMatAddr, NumericVector elems, NumericVector inVec);
-RcppExport SEXP bigmemory_SetIndivVectorMatrixElements(SEXP bigMatAddrSEXP, SEXP elemsSEXP, SEXP inVecSEXP) {
+RcppExport SEXP _bigmemory_SetIndivVectorMatrixElements(SEXP bigMatAddrSEXP, SEXP elemsSEXP, SEXP inVecSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< SEXP >::type bigMatAddr(bigMatAddrSEXP);
@@ -647,7 +647,7 @@ END_RCPP
 }
 // SetIndivMatrixElements
 void SetIndivMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row, SEXP values);
-RcppExport SEXP bigmemory_SetIndivMatrixElements(SEXP bigMatAddrSEXP, SEXP colSEXP, SEXP rowSEXP, SEXP valuesSEXP) {
+RcppExport SEXP _bigmemory_SetIndivMatrixElements(SEXP bigMatAddrSEXP, SEXP colSEXP, SEXP rowSEXP, SEXP valuesSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< SEXP >::type bigMatAddr(bigMatAddrSEXP);
@@ -660,7 +660,7 @@ END_RCPP
 }
 // SetMatrixAll
 void SetMatrixAll(SEXP bigMatAddr, SEXP values);
-RcppExport SEXP bigmemory_SetMatrixAll(SEXP bigMatAddrSEXP, SEXP valuesSEXP) {
+RcppExport SEXP _bigmemory_SetMatrixAll(SEXP bigMatAddrSEXP, SEXP valuesSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< SEXP >::type bigMatAddr(bigMatAddrSEXP);
@@ -671,7 +671,7 @@ END_RCPP
 }
 // SetMatrixCols
 void SetMatrixCols(SEXP bigMatAddr, SEXP col, SEXP values);
-RcppExport SEXP bigmemory_SetMatrixCols(SEXP bigMatAddrSEXP, SEXP colSEXP, SEXP valuesSEXP) {
+RcppExport SEXP _bigmemory_SetMatrixCols(SEXP bigMatAddrSEXP, SEXP colSEXP, SEXP valuesSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< SEXP >::type bigMatAddr(bigMatAddrSEXP);
@@ -683,7 +683,7 @@ END_RCPP
 }
 // SetMatrixRows
 void SetMatrixRows(SEXP bigMatAddr, SEXP row, SEXP values);
-RcppExport SEXP bigmemory_SetMatrixRows(SEXP bigMatAddrSEXP, SEXP rowSEXP, SEXP valuesSEXP) {
+RcppExport SEXP _bigmemory_SetMatrixRows(SEXP bigMatAddrSEXP, SEXP rowSEXP, SEXP valuesSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< SEXP >::type bigMatAddr(bigMatAddrSEXP);
@@ -695,7 +695,7 @@ END_RCPP
 }
 // CreateSharedMatrix
 SEXP CreateSharedMatrix(SEXP row, SEXP col, SEXP colnames, SEXP rownames, SEXP typeLength, SEXP ini, SEXP separated);
-RcppExport SEXP bigmemory_CreateSharedMatrix(SEXP rowSEXP, SEXP colSEXP, SEXP colnamesSEXP, SEXP rownamesSEXP, SEXP typeLengthSEXP, SEXP iniSEXP, SEXP separatedSEXP) {
+RcppExport SEXP _bigmemory_CreateSharedMatrix(SEXP rowSEXP, SEXP colSEXP, SEXP colnamesSEXP, SEXP rownamesSEXP, SEXP typeLengthSEXP, SEXP iniSEXP, SEXP separatedSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -712,7 +712,7 @@ END_RCPP
 }
 // CreateLocalMatrix
 SEXP CreateLocalMatrix(SEXP row, SEXP col, SEXP colnames, SEXP rownames, SEXP typeLength, SEXP ini, SEXP separated);
-RcppExport SEXP bigmemory_CreateLocalMatrix(SEXP rowSEXP, SEXP colSEXP, SEXP colnamesSEXP, SEXP rownamesSEXP, SEXP typeLengthSEXP, SEXP iniSEXP, SEXP separatedSEXP) {
+RcppExport SEXP _bigmemory_CreateLocalMatrix(SEXP rowSEXP, SEXP colSEXP, SEXP colnamesSEXP, SEXP rownamesSEXP, SEXP typeLengthSEXP, SEXP iniSEXP, SEXP separatedSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -729,7 +729,7 @@ END_RCPP
 }
 // CreateFileBackedBigMatrix
 SEXP CreateFileBackedBigMatrix(SEXP fileName, SEXP filePath, SEXP row, SEXP col, SEXP colnames, SEXP rownames, SEXP typeLength, SEXP ini, SEXP separated);
-RcppExport SEXP bigmemory_CreateFileBackedBigMatrix(SEXP fileNameSEXP, SEXP filePathSEXP, SEXP rowSEXP, SEXP colSEXP, SEXP colnamesSEXP, SEXP rownamesSEXP, SEXP typeLengthSEXP, SEXP iniSEXP, SEXP separatedSEXP) {
+RcppExport SEXP _bigmemory_CreateFileBackedBigMatrix(SEXP fileNameSEXP, SEXP filePathSEXP, SEXP rowSEXP, SEXP colSEXP, SEXP colnamesSEXP, SEXP rownamesSEXP, SEXP typeLengthSEXP, SEXP iniSEXP, SEXP separatedSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -748,7 +748,7 @@ END_RCPP
 }
 // CAttachSharedBigMatrix
 SEXP CAttachSharedBigMatrix(SEXP sharedName, SEXP rows, SEXP cols, SEXP rowNames, SEXP colNames, SEXP typeLength, SEXP separated, SEXP readOnly);
-RcppExport SEXP bigmemory_CAttachSharedBigMatrix(SEXP sharedNameSEXP, SEXP rowsSEXP, SEXP colsSEXP, SEXP rowNamesSEXP, SEXP colNamesSEXP, SEXP typeLengthSEXP, SEXP separatedSEXP, SEXP readOnlySEXP) {
+RcppExport SEXP _bigmemory_CAttachSharedBigMatrix(SEXP sharedNameSEXP, SEXP rowsSEXP, SEXP colsSEXP, SEXP rowNamesSEXP, SEXP colNamesSEXP, SEXP typeLengthSEXP, SEXP separatedSEXP, SEXP readOnlySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -766,7 +766,7 @@ END_RCPP
 }
 // CAttachFileBackedBigMatrix
 SEXP CAttachFileBackedBigMatrix(SEXP fileName, SEXP filePath, SEXP rows, SEXP cols, SEXP rowNames, SEXP colNames, SEXP typeLength, SEXP separated, SEXP readOnly);
-RcppExport SEXP bigmemory_CAttachFileBackedBigMatrix(SEXP fileNameSEXP, SEXP filePathSEXP, SEXP rowsSEXP, SEXP colsSEXP, SEXP rowNamesSEXP, SEXP colNamesSEXP, SEXP typeLengthSEXP, SEXP separatedSEXP, SEXP readOnlySEXP) {
+RcppExport SEXP _bigmemory_CAttachFileBackedBigMatrix(SEXP fileNameSEXP, SEXP filePathSEXP, SEXP rowsSEXP, SEXP colsSEXP, SEXP rowNamesSEXP, SEXP colNamesSEXP, SEXP typeLengthSEXP, SEXP separatedSEXP, SEXP readOnlySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -785,7 +785,7 @@ END_RCPP
 }
 // SharedName
 SEXP SharedName(SEXP address);
-RcppExport SEXP bigmemory_SharedName(SEXP addressSEXP) {
+RcppExport SEXP _bigmemory_SharedName(SEXP addressSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -796,7 +796,7 @@ END_RCPP
 }
 // FileName
 SEXP FileName(SEXP address);
-RcppExport SEXP bigmemory_FileName(SEXP addressSEXP) {
+RcppExport SEXP _bigmemory_FileName(SEXP addressSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -807,7 +807,7 @@ END_RCPP
 }
 // DirName
 SEXP DirName(SEXP address);
-RcppExport SEXP bigmemory_DirName(SEXP addressSEXP) {
+RcppExport SEXP _bigmemory_DirName(SEXP addressSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -818,7 +818,7 @@ END_RCPP
 }
 // Flush
 SEXP Flush(SEXP address);
-RcppExport SEXP bigmemory_Flush(SEXP addressSEXP) {
+RcppExport SEXP _bigmemory_Flush(SEXP addressSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -829,7 +829,7 @@ END_RCPP
 }
 // IsShared
 SEXP IsShared(SEXP address);
-RcppExport SEXP bigmemory_IsShared(SEXP addressSEXP) {
+RcppExport SEXP _bigmemory_IsShared(SEXP addressSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -840,7 +840,7 @@ END_RCPP
 }
 // isnil
 SEXP isnil(SEXP address);
-RcppExport SEXP bigmemory_isnil(SEXP addressSEXP) {
+RcppExport SEXP _bigmemory_isnil(SEXP addressSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -851,7 +851,7 @@ END_RCPP
 }
 // CDeepCopy
 SEXP CDeepCopy(SEXP inAddr, SEXP outAddr, SEXP rowInds, SEXP colInds, SEXP typecast_warning);
-RcppExport SEXP bigmemory_CDeepCopy(SEXP inAddrSEXP, SEXP outAddrSEXP, SEXP rowIndsSEXP, SEXP colIndsSEXP, SEXP typecast_warningSEXP) {
+RcppExport SEXP _bigmemory_CDeepCopy(SEXP inAddrSEXP, SEXP outAddrSEXP, SEXP rowIndsSEXP, SEXP colIndsSEXP, SEXP typecast_warningSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -863,4 +863,80 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(CDeepCopy(inAddr, outAddr, rowInds, colInds, typecast_warning));
     return rcpp_result_gen;
 END_RCPP
+}
+
+static const R_CallMethodDef CallEntries[] = {
+    {"_bigmemory_GetIndivMatrixElements", (DL_FUNC) &_bigmemory_GetIndivMatrixElements, 3},
+    {"_bigmemory_GetIndivVectorMatrixElements", (DL_FUNC) &_bigmemory_GetIndivVectorMatrixElements, 2},
+    {"_bigmemory_ReorderRIntMatrix", (DL_FUNC) &_bigmemory_ReorderRIntMatrix, 4},
+    {"_bigmemory_ReorderRNumericMatrix", (DL_FUNC) &_bigmemory_ReorderRNumericMatrix, 4},
+    {"_bigmemory_ReorderBigMatrix", (DL_FUNC) &_bigmemory_ReorderBigMatrix, 2},
+    {"_bigmemory_ReorderRIntMatrixCols", (DL_FUNC) &_bigmemory_ReorderRIntMatrixCols, 4},
+    {"_bigmemory_ReorderRNumericMatrixCols", (DL_FUNC) &_bigmemory_ReorderRNumericMatrixCols, 4},
+    {"_bigmemory_ReorderRRawMatrixCols", (DL_FUNC) &_bigmemory_ReorderRRawMatrixCols, 4},
+    {"_bigmemory_ReorderBigMatrixCols", (DL_FUNC) &_bigmemory_ReorderBigMatrixCols, 2},
+    {"_bigmemory_OrderRIntMatrix", (DL_FUNC) &_bigmemory_OrderRIntMatrix, 5},
+    {"_bigmemory_OrderRNumericMatrix", (DL_FUNC) &_bigmemory_OrderRNumericMatrix, 5},
+    {"_bigmemory_OrderBigMatrix", (DL_FUNC) &_bigmemory_OrderBigMatrix, 4},
+    {"_bigmemory_OrderRIntMatrixCols", (DL_FUNC) &_bigmemory_OrderRIntMatrixCols, 6},
+    {"_bigmemory_OrderRNumericMatrixCols", (DL_FUNC) &_bigmemory_OrderRNumericMatrixCols, 6},
+    {"_bigmemory_OrderBigMatrixCols", (DL_FUNC) &_bigmemory_OrderBigMatrixCols, 4},
+    {"_bigmemory_CCleanIndices", (DL_FUNC) &_bigmemory_CCleanIndices, 2},
+    {"_bigmemory_HasRowColNames", (DL_FUNC) &_bigmemory_HasRowColNames, 1},
+    {"_bigmemory_GetIndexRowNames", (DL_FUNC) &_bigmemory_GetIndexRowNames, 2},
+    {"_bigmemory_GetIndexColNames", (DL_FUNC) &_bigmemory_GetIndexColNames, 2},
+    {"_bigmemory_GetColumnNamesBM", (DL_FUNC) &_bigmemory_GetColumnNamesBM, 1},
+    {"_bigmemory_GetRowNamesBM", (DL_FUNC) &_bigmemory_GetRowNamesBM, 1},
+    {"_bigmemory_SetColumnNames", (DL_FUNC) &_bigmemory_SetColumnNames, 2},
+    {"_bigmemory_SetRowNames", (DL_FUNC) &_bigmemory_SetRowNames, 2},
+    {"_bigmemory_IsReadOnly", (DL_FUNC) &_bigmemory_IsReadOnly, 1},
+    {"_bigmemory_CIsSubMatrix", (DL_FUNC) &_bigmemory_CIsSubMatrix, 1},
+    {"_bigmemory_CGetNrow", (DL_FUNC) &_bigmemory_CGetNrow, 1},
+    {"_bigmemory_CGetNcol", (DL_FUNC) &_bigmemory_CGetNcol, 1},
+    {"_bigmemory_CGetType", (DL_FUNC) &_bigmemory_CGetType, 1},
+    {"_bigmemory_IsSharedMemoryBigMatrix", (DL_FUNC) &_bigmemory_IsSharedMemoryBigMatrix, 1},
+    {"_bigmemory_IsFileBackedBigMatrix", (DL_FUNC) &_bigmemory_IsFileBackedBigMatrix, 1},
+    {"_bigmemory_IsSeparated", (DL_FUNC) &_bigmemory_IsSeparated, 1},
+    {"_bigmemory_SetRowOffsetInfo", (DL_FUNC) &_bigmemory_SetRowOffsetInfo, 3},
+    {"_bigmemory_SetColumnOffsetInfo", (DL_FUNC) &_bigmemory_SetColumnOffsetInfo, 3},
+    {"_bigmemory_GetRowOffset", (DL_FUNC) &_bigmemory_GetRowOffset, 1},
+    {"_bigmemory_GetColOffset", (DL_FUNC) &_bigmemory_GetColOffset, 1},
+    {"_bigmemory_GetTotalColumns", (DL_FUNC) &_bigmemory_GetTotalColumns, 1},
+    {"_bigmemory_GetTotalRows", (DL_FUNC) &_bigmemory_GetTotalRows, 1},
+    {"_bigmemory_GetTypeString", (DL_FUNC) &_bigmemory_GetTypeString, 1},
+    {"_bigmemory_GetMatrixSize", (DL_FUNC) &_bigmemory_GetMatrixSize, 1},
+    {"_bigmemory_MWhichBigMatrix", (DL_FUNC) &_bigmemory_MWhichBigMatrix, 7},
+    {"_bigmemory_MWhichRIntMatrix", (DL_FUNC) &_bigmemory_MWhichRIntMatrix, 8},
+    {"_bigmemory_MWhichRNumericMatrix", (DL_FUNC) &_bigmemory_MWhichRNumericMatrix, 8},
+    {"_bigmemory_CCountLines", (DL_FUNC) &_bigmemory_CCountLines, 1},
+    {"_bigmemory_ReadMatrix", (DL_FUNC) &_bigmemory_ReadMatrix, 8},
+    {"_bigmemory_WriteMatrix", (DL_FUNC) &_bigmemory_WriteMatrix, 5},
+    {"_bigmemory_GetMatrixElements", (DL_FUNC) &_bigmemory_GetMatrixElements, 3},
+    {"_bigmemory_GetMatrixRows", (DL_FUNC) &_bigmemory_GetMatrixRows, 2},
+    {"_bigmemory_GetMatrixCols", (DL_FUNC) &_bigmemory_GetMatrixCols, 2},
+    {"_bigmemory_GetMatrixAll", (DL_FUNC) &_bigmemory_GetMatrixAll, 1},
+    {"_bigmemory_SetMatrixElements", (DL_FUNC) &_bigmemory_SetMatrixElements, 4},
+    {"_bigmemory_SetIndivVectorMatrixElements", (DL_FUNC) &_bigmemory_SetIndivVectorMatrixElements, 3},
+    {"_bigmemory_SetIndivMatrixElements", (DL_FUNC) &_bigmemory_SetIndivMatrixElements, 4},
+    {"_bigmemory_SetMatrixAll", (DL_FUNC) &_bigmemory_SetMatrixAll, 2},
+    {"_bigmemory_SetMatrixCols", (DL_FUNC) &_bigmemory_SetMatrixCols, 3},
+    {"_bigmemory_SetMatrixRows", (DL_FUNC) &_bigmemory_SetMatrixRows, 3},
+    {"_bigmemory_CreateSharedMatrix", (DL_FUNC) &_bigmemory_CreateSharedMatrix, 7},
+    {"_bigmemory_CreateLocalMatrix", (DL_FUNC) &_bigmemory_CreateLocalMatrix, 7},
+    {"_bigmemory_CreateFileBackedBigMatrix", (DL_FUNC) &_bigmemory_CreateFileBackedBigMatrix, 9},
+    {"_bigmemory_CAttachSharedBigMatrix", (DL_FUNC) &_bigmemory_CAttachSharedBigMatrix, 8},
+    {"_bigmemory_CAttachFileBackedBigMatrix", (DL_FUNC) &_bigmemory_CAttachFileBackedBigMatrix, 9},
+    {"_bigmemory_SharedName", (DL_FUNC) &_bigmemory_SharedName, 1},
+    {"_bigmemory_FileName", (DL_FUNC) &_bigmemory_FileName, 1},
+    {"_bigmemory_DirName", (DL_FUNC) &_bigmemory_DirName, 1},
+    {"_bigmemory_Flush", (DL_FUNC) &_bigmemory_Flush, 1},
+    {"_bigmemory_IsShared", (DL_FUNC) &_bigmemory_IsShared, 1},
+    {"_bigmemory_isnil", (DL_FUNC) &_bigmemory_isnil, 1},
+    {"_bigmemory_CDeepCopy", (DL_FUNC) &_bigmemory_CDeepCopy, 5},
+    {NULL, NULL, 0}
+};
+
+RcppExport void R_init_bigmemory(DllInfo *dll) {
+    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+    R_useDynamicSymbols(dll, FALSE);
 }

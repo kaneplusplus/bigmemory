@@ -19,7 +19,7 @@ attach.big.matrix(obj, ...)
 the filename of the descriptor for a filebacked matrix, assumed to be in 
 the directory specified by the \code{path} (if one is provided)}
 
-\item{...}{possibly \code{path} which givesthe path where the descriptor 
+\item{...}{possibly \code{path} which gives the path where the descriptor 
 and/or filebacking can be found}
 }
 \value{
@@ -30,7 +30,7 @@ a \code{big.matrix} object.
 corresponding to a shared-memory or file-backed \code{big.matrix}.
 }
 \description{
-The \code{describe} function returns the infommation needed by 
+The \code{describe} function returns the information needed by 
 \code{attach.big.matrix} to reference a shared or file-backed 
 \code{big.matrix} object.
 The \code{attach.big.matrix} and \code{attach.resource} functions create a

@@ -10,8 +10,8 @@ Create, store, access, and manipulate massive matrices.  Matrices are, by
 default, allocated to shared memory and may use memory-mapped files.
 Packages \pkg{biganalytics}, \pkg{synchronicity}, \pkg{bigalgebra}, and
 \pkg{bigtabulate} provide advanced functionality.  Access to and
-manipulation of a \code{\link{big.matrix}} object is exposed in by an S4
-class whose interface is simlar to that of an \code{\link{matrix}}.  Use of
+manipulation of a \code{\link{big.matrix}} object is exposed in an S4
+class whose interface is similar to that of a \code{\link{matrix}}.  Use of
 these packages in parallel environments can provide substantial speed and
 memory efficiencies.  \pkg{bigmemory} also provides a \acronym{C++}
 framework for the development of new tools that can work both with
@@ -92,13 +92,13 @@ This has subtle implications:
 object (which acts merely as a pointer to the external memory structure), which can result
 in much less eagerness to garbage-collect the unused \code{big.memory} objects.
 After removing a last reference to a big \code{big.matrix}, user should manually run
-\code{gc()} to reclaim the memeory.
+\code{gc()} to reclaim the memory.
 \item Attaching the description of already finalized \code{big.matrix} and accessing this object
 will result in undefined behaviour, which simply means it will crash the current R session
 with no hope of saving the data in it. To prevent R from de-allocating (finalizing) the
 matrices, user should keep at least one \code{big.memory} object somewhere in R memory in at
 least one R session on the current machine.
-\item Abruptly closed R (using e.g. task mamanger) will not have a chance to finalize the
+\item Abruptly closed R (using e.g. task manager) will not have a chance to finalize the
 \code{big.matrix} objects, which will result in a memory leak, as the \code{big.matrices}
 will remain in the memory (perhaps under obfuscated names) with no easy way to reconnect R to them.
 

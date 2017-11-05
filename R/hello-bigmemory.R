@@ -50,7 +50,7 @@
 #' This project (\pkg{bigmemory} and its sister packages) is still actively
 #' developed, although the design and current features can be viewed as
 #' "stable."  Please feel free to email us with any questions:
-#' bigmemoryauthors@@gmail.com.
+#' bigmemoryauthors@gmail.com.
 #' 
 #' @name bigmemory-package
 #' @aliases bigmemory-package bigmemory

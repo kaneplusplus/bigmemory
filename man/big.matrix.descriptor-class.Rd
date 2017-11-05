@@ -30,7 +30,7 @@
 \item{backingpath}{required path to the filebacked object, if applicable}
 
 \item{obj}{The filename of the descriptor for a filebacked matrix,
-assumed ot be in the directory specified}
+assumed to be in the directory specified}
 
 \item{...}{possibly \code{path} which gives the path where the descriptor
 and/or filebacking can be found.}

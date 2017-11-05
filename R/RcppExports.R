@@ -2,155 +2,155 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 GetIndivMatrixElements <- function(bigMatAddr, col, row) {
-    .Call('bigmemory_GetIndivMatrixElements', PACKAGE = 'bigmemory', bigMatAddr, col, row)
+    .Call(`_bigmemory_GetIndivMatrixElements`, bigMatAddr, col, row)
 }
 
 GetIndivVectorMatrixElements <- function(bigMatAddr, elems) {
-    .Call('bigmemory_GetIndivVectorMatrixElements', PACKAGE = 'bigmemory', bigMatAddr, elems)
+    .Call(`_bigmemory_GetIndivVectorMatrixElements`, bigMatAddr, elems)
 }
 
 ReorderRIntMatrix <- function(matrixVector, nrow, ncol, orderVec) {
-    invisible(.Call('bigmemory_ReorderRIntMatrix', PACKAGE = 'bigmemory', matrixVector, nrow, ncol, orderVec))
+    invisible(.Call(`_bigmemory_ReorderRIntMatrix`, matrixVector, nrow, ncol, orderVec))
 }
 
 ReorderRNumericMatrix <- function(matrixVector, nrow, ncol, orderVec) {
-    invisible(.Call('bigmemory_ReorderRNumericMatrix', PACKAGE = 'bigmemory', matrixVector, nrow, ncol, orderVec))
+    invisible(.Call(`_bigmemory_ReorderRNumericMatrix`, matrixVector, nrow, ncol, orderVec))
 }
 
 ReorderBigMatrix <- function(address, orderVec) {
-    invisible(.Call('bigmemory_ReorderBigMatrix', PACKAGE = 'bigmemory', address, orderVec))
+    invisible(.Call(`_bigmemory_ReorderBigMatrix`, address, orderVec))
 }
 
 ReorderRIntMatrixCols <- function(matrixVector, nrow, ncol, orderVec) {
-    invisible(.Call('bigmemory_ReorderRIntMatrixCols', PACKAGE = 'bigmemory', matrixVector, nrow, ncol, orderVec))
+    invisible(.Call(`_bigmemory_ReorderRIntMatrixCols`, matrixVector, nrow, ncol, orderVec))
 }
 
 ReorderRNumericMatrixCols <- function(matrixVector, nrow, ncol, orderVec) {
-    invisible(.Call('bigmemory_ReorderRNumericMatrixCols', PACKAGE = 'bigmemory', matrixVector, nrow, ncol, orderVec))
+    invisible(.Call(`_bigmemory_ReorderRNumericMatrixCols`, matrixVector, nrow, ncol, orderVec))
 }
 
 ReorderRRawMatrixCols <- function(matrixVector, nrow, ncol, orderVec) {
-    invisible(.Call('bigmemory_ReorderRRawMatrixCols', PACKAGE = 'bigmemory', matrixVector, nrow, ncol, orderVec))
+    invisible(.Call(`_bigmemory_ReorderRRawMatrixCols`, matrixVector, nrow, ncol, orderVec))
 }
 
 ReorderBigMatrixCols <- function(address, orderVec) {
-    invisible(.Call('bigmemory_ReorderBigMatrixCols', PACKAGE = 'bigmemory', address, orderVec))
+    invisible(.Call(`_bigmemory_ReorderBigMatrixCols`, address, orderVec))
 }
 
 OrderRIntMatrix <- function(matrixVector, nrow, columns, naLast, decreasing) {
-    .Call('bigmemory_OrderRIntMatrix', PACKAGE = 'bigmemory', matrixVector, nrow, columns, naLast, decreasing)
+    .Call(`_bigmemory_OrderRIntMatrix`, matrixVector, nrow, columns, naLast, decreasing)
 }
 
 OrderRNumericMatrix <- function(matrixVector, nrow, columns, naLast, decreasing) {
-    .Call('bigmemory_OrderRNumericMatrix', PACKAGE = 'bigmemory', matrixVector, nrow, columns, naLast, decreasing)
+    .Call(`_bigmemory_OrderRNumericMatrix`, matrixVector, nrow, columns, naLast, decreasing)
 }
 
 OrderBigMatrix <- function(address, columns, naLast, decreasing) {
-    .Call('bigmemory_OrderBigMatrix', PACKAGE = 'bigmemory', address, columns, naLast, decreasing)
+    .Call(`_bigmemory_OrderBigMatrix`, address, columns, naLast, decreasing)
 }
 
 OrderRIntMatrixCols <- function(matrixVector, nrow, ncol, rows, naLast, decreasing) {
-    .Call('bigmemory_OrderRIntMatrixCols', PACKAGE = 'bigmemory', matrixVector, nrow, ncol, rows, naLast, decreasing)
+    .Call(`_bigmemory_OrderRIntMatrixCols`, matrixVector, nrow, ncol, rows, naLast, decreasing)
 }
 
 OrderRNumericMatrixCols <- function(matrixVector, nrow, ncol, rows, naLast, decreasing) {
-    .Call('bigmemory_OrderRNumericMatrixCols', PACKAGE = 'bigmemory', matrixVector, nrow, ncol, rows, naLast, decreasing)
+    .Call(`_bigmemory_OrderRNumericMatrixCols`, matrixVector, nrow, ncol, rows, naLast, decreasing)
 }
 
 OrderBigMatrixCols <- function(address, rows, naLast, decreasing) {
-    .Call('bigmemory_OrderBigMatrixCols', PACKAGE = 'bigmemory', address, rows, naLast, decreasing)
+    .Call(`_bigmemory_OrderBigMatrixCols`, address, rows, naLast, decreasing)
 }
 
 CCleanIndices <- function(indices, rc) {
-    .Call('bigmemory_CCleanIndices', PACKAGE = 'bigmemory', indices, rc)
+    .Call(`_bigmemory_CCleanIndices`, indices, rc)
 }
 
 HasRowColNames <- function(address) {
-    .Call('bigmemory_HasRowColNames', PACKAGE = 'bigmemory', address)
+    .Call(`_bigmemory_HasRowColNames`, address)
 }
 
 GetIndexRowNames <- function(address, indices_) {
-    .Call('bigmemory_GetIndexRowNames', PACKAGE = 'bigmemory', address, indices_)
+    .Call(`_bigmemory_GetIndexRowNames`, address, indices_)
 }
 
 GetIndexColNames <- function(address, indices_) {
-    .Call('bigmemory_GetIndexColNames', PACKAGE = 'bigmemory', address, indices_)
+    .Call(`_bigmemory_GetIndexColNames`, address, indices_)
 }
 
 GetColumnNamesBM <- function(address) {
-    .Call('bigmemory_GetColumnNamesBM', PACKAGE = 'bigmemory', address)
+    .Call(`_bigmemory_GetColumnNamesBM`, address)
 }
 
 GetRowNamesBM <- function(address) {
-    .Call('bigmemory_GetRowNamesBM', PACKAGE = 'bigmemory', address)
+    .Call(`_bigmemory_GetRowNamesBM`, address)
 }
 
 SetColumnNames <- function(address, columnNames) {
-    invisible(.Call('bigmemory_SetColumnNames', PACKAGE = 'bigmemory', address, columnNames))
+    invisible(.Call(`_bigmemory_SetColumnNames`, address, columnNames))
 }
 
 SetRowNames <- function(address, rowNames) {
-    invisible(.Call('bigmemory_SetRowNames', PACKAGE = 'bigmemory', address, rowNames))
+    invisible(.Call(`_bigmemory_SetRowNames`, address, rowNames))
 }
 
 IsReadOnly <- function(bigMatAddr) {
-    .Call('bigmemory_IsReadOnly', PACKAGE = 'bigmemory', bigMatAddr)
+    .Call(`_bigmemory_IsReadOnly`, bigMatAddr)
 }
 
 CIsSubMatrix <- function(bigMatAddr) {
-    .Call('bigmemory_CIsSubMatrix', PACKAGE = 'bigmemory', bigMatAddr)
+    .Call(`_bigmemory_CIsSubMatrix`, bigMatAddr)
 }
 
 CGetNrow <- function(bigMatAddr) {
-    .Call('bigmemory_CGetNrow', PACKAGE = 'bigmemory', bigMatAddr)
+    .Call(`_bigmemory_CGetNrow`, bigMatAddr)
 }
 
 CGetNcol <- function(bigMatAddr) {
-    .Call('bigmemory_CGetNcol', PACKAGE = 'bigmemory', bigMatAddr)
+    .Call(`_bigmemory_CGetNcol`, bigMatAddr)
 }
 
 CGetType <- function(bigMatAddr) {
-    .Call('bigmemory_CGetType', PACKAGE = 'bigmemory', bigMatAddr)
+    .Call(`_bigmemory_CGetType`, bigMatAddr)
 }
 
 IsSharedMemoryBigMatrix <- function(bigMatAddr) {
-    .Call('bigmemory_IsSharedMemoryBigMatrix', PACKAGE = 'bigmemory', bigMatAddr)
+    .Call(`_bigmemory_IsSharedMemoryBigMatrix`, bigMatAddr)
 }
 
 IsFileBackedBigMatrix <- function(bigMatAddr) {
-    .Call('bigmemory_IsFileBackedBigMatrix', PACKAGE = 'bigmemory', bigMatAddr)
+    .Call(`_bigmemory_IsFileBackedBigMatrix`, bigMatAddr)
 }
 
 IsSeparated <- function(bigMatAddr) {
-    .Call('bigmemory_IsSeparated', PACKAGE = 'bigmemory', bigMatAddr)
+    .Call(`_bigmemory_IsSeparated`, bigMatAddr)
 }
 
 SetRowOffsetInfo <- function(bigMatAddr, rowOffset, numRows) {
-    invisible(.Call('bigmemory_SetRowOffsetInfo', PACKAGE = 'bigmemory', bigMatAddr, rowOffset, numRows))
+    invisible(.Call(`_bigmemory_SetRowOffsetInfo`, bigMatAddr, rowOffset, numRows))
 }
 
 SetColumnOffsetInfo <- function(bigMatAddr, colOffset, numCols) {
-    invisible(.Call('bigmemory_SetColumnOffsetInfo', PACKAGE = 'bigmemory', bigMatAddr, colOffset, numCols))
+    invisible(.Call(`_bigmemory_SetColumnOffsetInfo`, bigMatAddr, colOffset, numCols))
 }
 
 GetRowOffset <- function(bigMatAddr) {
-    .Call('bigmemory_GetRowOffset', PACKAGE = 'bigmemory', bigMatAddr)
+    .Call(`_bigmemory_GetRowOffset`, bigMatAddr)
 }
 
 GetColOffset <- function(bigMatAddr) {
-    .Call('bigmemory_GetColOffset', PACKAGE = 'bigmemory', bigMatAddr)
+    .Call(`_bigmemory_GetColOffset`, bigMatAddr)
 }
 
 GetTotalColumns <- function(bigMatAddr) {
-    .Call('bigmemory_GetTotalColumns', PACKAGE = 'bigmemory', bigMatAddr)
+    .Call(`_bigmemory_GetTotalColumns`, bigMatAddr)
 }
 
 GetTotalRows <- function(bigMatAddr) {
-    .Call('bigmemory_GetTotalRows', PACKAGE = 'bigmemory', bigMatAddr)
+    .Call(`_bigmemory_GetTotalRows`, bigMatAddr)
 }
 
 GetTypeString <- function(bigMatAddr) {
-    .Call('bigmemory_GetTypeString', PACKAGE = 'bigmemory', bigMatAddr)
+    .Call(`_bigmemory_GetTypeString`, bigMatAddr)
 }
 
 #' @title big.matrix size
@@ -158,118 +158,118 @@ GetTypeString <- function(bigMatAddr) {
 #' @param bigMat a \code{big.matrix} object
 #' @export
 GetMatrixSize <- function(bigMat) {
-    .Call('bigmemory_GetMatrixSize', PACKAGE = 'bigmemory', bigMat)
+    .Call(`_bigmemory_GetMatrixSize`, bigMat)
 }
 
 MWhichBigMatrix <- function(bigMatAddr, selectColumn, minVal, maxVal, chkMin, chkMax, opVal) {
-    .Call('bigmemory_MWhichBigMatrix', PACKAGE = 'bigmemory', bigMatAddr, selectColumn, minVal, maxVal, chkMin, chkMax, opVal)
+    .Call(`_bigmemory_MWhichBigMatrix`, bigMatAddr, selectColumn, minVal, maxVal, chkMin, chkMax, opVal)
 }
 
 MWhichRIntMatrix <- function(matrixVector, nrow, selectColumn, minVal, maxVal, chkMin, chkMax, opVal) {
-    .Call('bigmemory_MWhichRIntMatrix', PACKAGE = 'bigmemory', matrixVector, nrow, selectColumn, minVal, maxVal, chkMin, chkMax, opVal)
+    .Call(`_bigmemory_MWhichRIntMatrix`, matrixVector, nrow, selectColumn, minVal, maxVal, chkMin, chkMax, opVal)
 }
 
 MWhichRNumericMatrix <- function(matrixVector, nrow, selectColumn, minVal, maxVal, chkMin, chkMax, opVal) {
-    .Call('bigmemory_MWhichRNumericMatrix', PACKAGE = 'bigmemory', matrixVector, nrow, selectColumn, minVal, maxVal, chkMin, chkMax, opVal)
+    .Call(`_bigmemory_MWhichRNumericMatrix`, matrixVector, nrow, selectColumn, minVal, maxVal, chkMin, chkMax, opVal)
 }
 
 CCountLines <- function(fileName) {
-    .Call('bigmemory_CCountLines', PACKAGE = 'bigmemory', fileName)
+    .Call(`_bigmemory_CCountLines`, fileName)
 }
 
 ReadMatrix <- function(fileName, bigMatAddr, firstLine, numLines, numCols, separator, hasRowNames, useRowNames) {
-    .Call('bigmemory_ReadMatrix', PACKAGE = 'bigmemory', fileName, bigMatAddr, firstLine, numLines, numCols, separator, hasRowNames, useRowNames)
+    .Call(`_bigmemory_ReadMatrix`, fileName, bigMatAddr, firstLine, numLines, numCols, separator, hasRowNames, useRowNames)
 }
 
 WriteMatrix <- function(bigMatAddr, fileName, rowNames, colNames, sep) {
-    invisible(.Call('bigmemory_WriteMatrix', PACKAGE = 'bigmemory', bigMatAddr, fileName, rowNames, colNames, sep))
+    invisible(.Call(`_bigmemory_WriteMatrix`, bigMatAddr, fileName, rowNames, colNames, sep))
 }
 
 GetMatrixElements <- function(bigMatAddr, col, row) {
-    .Call('bigmemory_GetMatrixElements', PACKAGE = 'bigmemory', bigMatAddr, col, row)
+    .Call(`_bigmemory_GetMatrixElements`, bigMatAddr, col, row)
 }
 
 GetMatrixRows <- function(bigMatAddr, row) {
-    .Call('bigmemory_GetMatrixRows', PACKAGE = 'bigmemory', bigMatAddr, row)
+    .Call(`_bigmemory_GetMatrixRows`, bigMatAddr, row)
 }
 
 GetMatrixCols <- function(bigMatAddr, col) {
-    .Call('bigmemory_GetMatrixCols', PACKAGE = 'bigmemory', bigMatAddr, col)
+    .Call(`_bigmemory_GetMatrixCols`, bigMatAddr, col)
 }
 
 GetMatrixAll <- function(bigMatAddr) {
-    .Call('bigmemory_GetMatrixAll', PACKAGE = 'bigmemory', bigMatAddr)
+    .Call(`_bigmemory_GetMatrixAll`, bigMatAddr)
 }
 
 SetMatrixElements <- function(bigMatAddr, col, row, values) {
-    invisible(.Call('bigmemory_SetMatrixElements', PACKAGE = 'bigmemory', bigMatAddr, col, row, values))
+    invisible(.Call(`_bigmemory_SetMatrixElements`, bigMatAddr, col, row, values))
 }
 
 SetIndivVectorMatrixElements <- function(bigMatAddr, elems, inVec) {
-    invisible(.Call('bigmemory_SetIndivVectorMatrixElements', PACKAGE = 'bigmemory', bigMatAddr, elems, inVec))
+    invisible(.Call(`_bigmemory_SetIndivVectorMatrixElements`, bigMatAddr, elems, inVec))
 }
 
 SetIndivMatrixElements <- function(bigMatAddr, col, row, values) {
-    invisible(.Call('bigmemory_SetIndivMatrixElements', PACKAGE = 'bigmemory', bigMatAddr, col, row, values))
+    invisible(.Call(`_bigmemory_SetIndivMatrixElements`, bigMatAddr, col, row, values))
 }
 
 SetMatrixAll <- function(bigMatAddr, values) {
-    invisible(.Call('bigmemory_SetMatrixAll', PACKAGE = 'bigmemory', bigMatAddr, values))
+    invisible(.Call(`_bigmemory_SetMatrixAll`, bigMatAddr, values))
 }
 
 SetMatrixCols <- function(bigMatAddr, col, values) {
-    invisible(.Call('bigmemory_SetMatrixCols', PACKAGE = 'bigmemory', bigMatAddr, col, values))
+    invisible(.Call(`_bigmemory_SetMatrixCols`, bigMatAddr, col, values))
 }
 
 SetMatrixRows <- function(bigMatAddr, row, values) {
-    invisible(.Call('bigmemory_SetMatrixRows', PACKAGE = 'bigmemory', bigMatAddr, row, values))
+    invisible(.Call(`_bigmemory_SetMatrixRows`, bigMatAddr, row, values))
 }
 
 CreateSharedMatrix <- function(row, col, colnames, rownames, typeLength, ini, separated) {
-    .Call('bigmemory_CreateSharedMatrix', PACKAGE = 'bigmemory', row, col, colnames, rownames, typeLength, ini, separated)
+    .Call(`_bigmemory_CreateSharedMatrix`, row, col, colnames, rownames, typeLength, ini, separated)
 }
 
 CreateLocalMatrix <- function(row, col, colnames, rownames, typeLength, ini, separated) {
-    .Call('bigmemory_CreateLocalMatrix', PACKAGE = 'bigmemory', row, col, colnames, rownames, typeLength, ini, separated)
+    .Call(`_bigmemory_CreateLocalMatrix`, row, col, colnames, rownames, typeLength, ini, separated)
 }
 
 CreateFileBackedBigMatrix <- function(fileName, filePath, row, col, colnames, rownames, typeLength, ini, separated) {
-    .Call('bigmemory_CreateFileBackedBigMatrix', PACKAGE = 'bigmemory', fileName, filePath, row, col, colnames, rownames, typeLength, ini, separated)
+    .Call(`_bigmemory_CreateFileBackedBigMatrix`, fileName, filePath, row, col, colnames, rownames, typeLength, ini, separated)
 }
 
 CAttachSharedBigMatrix <- function(sharedName, rows, cols, rowNames, colNames, typeLength, separated, readOnly) {
-    .Call('bigmemory_CAttachSharedBigMatrix', PACKAGE = 'bigmemory', sharedName, rows, cols, rowNames, colNames, typeLength, separated, readOnly)
+    .Call(`_bigmemory_CAttachSharedBigMatrix`, sharedName, rows, cols, rowNames, colNames, typeLength, separated, readOnly)
 }
 
 CAttachFileBackedBigMatrix <- function(fileName, filePath, rows, cols, rowNames, colNames, typeLength, separated, readOnly) {
-    .Call('bigmemory_CAttachFileBackedBigMatrix', PACKAGE = 'bigmemory', fileName, filePath, rows, cols, rowNames, colNames, typeLength, separated, readOnly)
+    .Call(`_bigmemory_CAttachFileBackedBigMatrix`, fileName, filePath, rows, cols, rowNames, colNames, typeLength, separated, readOnly)
 }
 
 SharedName <- function(address) {
-    .Call('bigmemory_SharedName', PACKAGE = 'bigmemory', address)
+    .Call(`_bigmemory_SharedName`, address)
 }
 
 FileName <- function(address) {
-    .Call('bigmemory_FileName', PACKAGE = 'bigmemory', address)
+    .Call(`_bigmemory_FileName`, address)
 }
 
 DirName <- function(address) {
-    .Call('bigmemory_DirName', PACKAGE = 'bigmemory', address)
+    .Call(`_bigmemory_DirName`, address)
 }
 
 Flush <- function(address) {
-    .Call('bigmemory_Flush', PACKAGE = 'bigmemory', address)
+    .Call(`_bigmemory_Flush`, address)
 }
 
 IsShared <- function(address) {
-    .Call('bigmemory_IsShared', PACKAGE = 'bigmemory', address)
+    .Call(`_bigmemory_IsShared`, address)
 }
 
 isnil <- function(address) {
-    .Call('bigmemory_isnil', PACKAGE = 'bigmemory', address)
+    .Call(`_bigmemory_isnil`, address)
 }
 
 CDeepCopy <- function(inAddr, outAddr, rowInds, colInds, typecast_warning) {
-    .Call('bigmemory_CDeepCopy', PACKAGE = 'bigmemory', inAddr, outAddr, rowInds, colInds, typecast_warning)
+    .Call(`_bigmemory_CDeepCopy`, inAddr, outAddr, rowInds, colInds, typecast_warning)
 }
 

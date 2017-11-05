@@ -8,10 +8,10 @@
 The \code{big.matrix} class is designed for matrices with 
 elements of type \code{double}, \code{integer}, \code{short}, or \code{char}.
 A \code{big.matrix} acts much like a traditional \R matrix, but helps protect
-the user from many inadvertant memory-consuming pitfalls of traditional \R 
+the user from many inadvertent memory-consuming pitfalls of traditional \R 
 matrices and data frames.  The objects are allocated to shared memory,
 and if file-backing is used they may exceed virtual memory in size.  Sadly,
-32-bit operating system contraints -- largely Windows and some MacOS versions 
+32-bit operating system constraints -- largely Windows and some MacOS versions 
 --will be a limiting factor with file-backed matrices; 64-bit operating 
 systems are recommended.
 }
