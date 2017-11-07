@@ -535,7 +535,7 @@ GetAll.bm <- function(x, drop=TRUE)
 #' @docType methods
 #' @rdname extract-methods
 #' @aliases [,big.matrix,ANY,ANY,missing-method
-#' @aliases [<-,big.matrix,ANY,ANY,missing-method
+#' @aliases [<-,big.matrix,ANY,ANY,ANY-method
 #' @export
 setMethod("[",
   signature(x = "big.matrix", drop = "missing"),
@@ -1033,21 +1033,44 @@ setMethod('[<-',
   signature(x = "big.matrix", i = "numeric", j = "numeric"),
   function(x, i, j, value) return(SetElements.bm(x, i, j, value)))
 
+#' @rdname extract-methods
+#' @export
+setMethod('[<-',
+  signature(x = "big.matrix", i = "numeric", j = "logical"),
+  function(x, i, j, value) return(SetElements.bm(x, i, j, value)))
 
 #' @rdname extract-methods
 #' @export
 setMethod('[<-',
-          signature(x = "big.matrix", i = "missing", j = "missing"),
-          function(x, i, j, value){
-            i <- seq(nrow(x))
-            j <- seq(ncol(x))
-            return(SetElements.bm(x, i, j, value))
-          })
+  signature(x = "big.matrix", i = "logical", j = "numeric"),
+  function(x, i, j, value) return(SetElements.bm(x, i, j, value)))
+
+#' @rdname extract-methods
+#' @export
+setMethod('[<-',
+  signature(x = "big.matrix", i = "logical", j = "logical"),
+  function(x, i, j, value) return(SetElements.bm(x, i, j, value)))
+
+#' @rdname extract-methods
+#' @export
+setMethod('[<-',
+  signature(x = "big.matrix", i = "missing", j = "missing"),
+  function(x, i, j, value){
+    i <- seq(nrow(x))
+    j <- seq(ncol(x))
+    return(SetElements.bm(x, i, j, value))
+  })
 
 #' @rdname extract-methods
 #' @export
 setMethod('[<-',
   signature(x = "big.matrix", i="missing", j = "numeric"),
+  function(x, i, j, value) return(SetCols.bm(x, j, value)))
+
+#' @rdname extract-methods
+#' @export
+setMethod('[<-',
+  signature(x = "big.matrix", i="missing", j = "logical"),
   function(x, i, j, value) return(SetCols.bm(x, j, value)))
 
 #' @rdname extract-methods
@@ -1067,16 +1090,41 @@ setMethod('[<-',
 #' @rdname extract-methods
 #' @export
 setMethod('[<-',
-          signature(x = "big.matrix", i = "numeric", j="missing", value = "matrix"),
-          function(x, i, j, ..., value){
-            
-            if(nargs() == 3){
-              return(SetIndivVectorElements.bm(x, i, value))
-            }else{
-              return(SetRows.bm(x, i, value))
-            }
-          })
+  signature(x = "big.matrix", i = "logical", j="missing", value = "numeric"),
+  function(x, i, j, ..., value){
 
+    if(nargs() == 3){
+      return(SetIndivVectorElements.bm(x, i, value))
+    }else{
+      return(SetRows.bm(x, i, value))
+    }
+  })
+
+#' @rdname extract-methods
+#' @export
+setMethod('[<-',
+  signature(x = "big.matrix", i = "numeric", j="missing", value = "matrix"),
+  function(x, i, j, ..., value){
+    
+    if(nargs() == 3){
+      return(SetIndivVectorElements.bm(x, i, value))
+    }else{
+      return(SetRows.bm(x, i, value))
+    }
+  })
+
+#' @rdname extract-methods
+#' @export
+setMethod('[<-',
+  signature(x = "big.matrix", i = "logical", j="missing", value = "matrix"),
+  function(x, i, j, ..., value){
+
+    if(nargs() == 3){
+      return(SetIndivVectorElements.bm(x, i, value))
+    }else{
+      return(SetRows.bm(x, i, value))
+    }
+  })
 
 #' @rdname extract-methods
 #' @export
