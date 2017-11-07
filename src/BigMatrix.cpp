@@ -203,14 +203,16 @@ bool SharedBigMatrix::create_uuid()
     // Darwin has a limit on the size of share memory names.
     _uuid.resize(5);
     #endif
-//  uuid_t u;
-//  char c[40];
-//  uuid_generate_time(u);
-//  uuid_unparse_lower(u, c);
-//  _uuid = c;
-//  #ifdef DARWIN
-//    _uuid.resize(5);
-//  #endif
+/*
+  uuid_t u;
+  char c[40];
+  uuid_generate_time(u);
+  uuid_unparse_lower(u, c);
+  _uuid = c;
+  #ifdef DARWIN
+    _uuid.resize(5);
+  #endif
+*/
   return true;
 }
 
