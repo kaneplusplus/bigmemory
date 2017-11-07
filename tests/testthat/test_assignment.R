@@ -113,6 +113,66 @@ test_that("Able to assign matrix to rows", {
   
 })
 
+test_that("Able to assign row-wise using logical vectors", {
+  tmp <- bm[]
+  bm[c(TRUE,FALSE,TRUE),] <- 123
+  z[c(TRUE,FALSE,TRUE),] <- 123
+  mat[c(TRUE,FALSE,TRUE),] <- 123
+  expect_equivalent (bm[], mat)
+  expect_equivalent (z[], mat)
+  bm[] <- tmp
+  z[] <- tmp
+  mat <- tmp
+})
+
+test_that("Able to assign column-wise using logical vectors", {
+  tmp <- bm[]
+  bm[,c(TRUE,FALSE,TRUE)] <- 123
+  z[,c(TRUE,FALSE,TRUE)] <- 123
+  mat[,c(TRUE,FALSE,TRUE)] <- 123
+  expect_equivalent (bm[], mat)
+  expect_equivalent (z[], mat)
+  bm[] <- tmp
+  z[] <- tmp
+  mat <- tmp
+})
+
+test_that("Able to assign logical vectors for column and vector indices", {
+  tmp <- bm[]
+  bm[c(TRUE,FALSE,FALSE),c(TRUE,FALSE,TRUE)] <- 123
+  z[c(TRUE,FALSE,FALSE),c(TRUE,FALSE,TRUE)] <- 123
+  mat[c(TRUE,FALSE,FALSE),c(TRUE,FALSE,TRUE)] <- 123
+  expect_equivalent (bm[], mat)
+  expect_equivalent (z[], mat)
+  bm[] <- tmp
+  z[] <- tmp
+  mat <- tmp
+})
+
+test_that("Able to assign row-wise using logical vectors and numeric", {
+  tmp <- bm[]
+  bm[c(TRUE,FALSE,TRUE),1:2] <- 123
+  z[c(TRUE,FALSE,TRUE),1:2] <- 123
+  mat[c(TRUE,FALSE,TRUE),1:2] <- 123
+  expect_equivalent (bm[], mat)
+  expect_equivalent (z[], mat)
+  bm[] <- tmp
+  z[] <- tmp
+  mat <- tmp
+})
+
+test_that("Able to assign column-wise using logical vectors and numeric", {
+  tmp <- bm[]
+  bm[1:2,c(TRUE,FALSE,TRUE)] <- 123
+  z[1:2,c(TRUE,FALSE,TRUE)] <- 123
+  mat[1:2,c(TRUE,FALSE,TRUE)] <- 123
+  expect_equivalent (bm[], mat)
+  expect_equivalent (z[], mat)
+  bm[] <- tmp
+  z[] <- tmp
+  mat <- tmp
+})
+
 rm(z)
 gc()
 file.remove('example.bin')
