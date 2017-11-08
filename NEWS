@@ -9,6 +9,9 @@
 # Mike Kane <michael.kane@yale.edu>
 # Charles Determan <cdetermanjr@gmail.com>
 
+2017-11-08 Michael Kane
+* Memory leak problem solved.
+
 2016-09-21 Adam Ryczkowski <adam@statystyka.net> 
 * Fixed a bug with handling raw bytes. Now it is possible to
   use big.matrix to store arbitrary R object (using serialization).
