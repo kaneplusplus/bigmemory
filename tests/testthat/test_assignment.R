@@ -173,6 +173,11 @@ test_that("Able to assign column-wise using logical vectors and numeric", {
   mat <- tmp
 })
 
+test_that("Able to assign based on row names and column names", {
+  z[c('a', 'b'), c('d', 'e')] <- 1
+})
+
+
 rm(z)
 gc()
 file.remove('example.bin')
