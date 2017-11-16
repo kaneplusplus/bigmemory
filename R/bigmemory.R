@@ -1129,6 +1129,24 @@ setMethod('[<-',
 #' @rdname extract-methods
 #' @export
 setMethod('[<-',
+  signature(x="big.matrix", i="character", j="character"),
+  function(x, i, j, value) return(SetElements.bm(x, i, j, value)))
+
+#' @rdname extract-methods
+#' @export
+setMethod('[<-',
+  signature(x="big.matrix", i="missing", j="character"),
+  function(x, j, value) return(SetCols.bm(x, j, value)))
+
+#' @rdname extract-methods
+#' @export
+setMethod('[<-',
+  signature(x="big.matrix", i="character", j="missing"),
+  function(x, i, value) return(SetRows.bm(x, i, value)))
+
+#' @rdname extract-methods
+#' @export
+setMethod('[<-',
   signature(x = "big.matrix", i="missing", j="missing", value = "numeric"),
   function(x, i, j, value) return(SetAll.bm(x, value)))
 

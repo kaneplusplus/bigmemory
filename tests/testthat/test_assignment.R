@@ -177,6 +177,14 @@ test_that("Able to assign based on row names and column names", {
   z[c('a', 'b'), c('d', 'e')] <- 1
 })
 
+test_that("Able to assign based on row names", {
+  z[c('a', 'b'),] <- 1
+})
+
+test_that("Able to assign based on column names", {
+  z[, c('d', 'e')] <- 1
+})
+
 
 rm(z)
 gc()
