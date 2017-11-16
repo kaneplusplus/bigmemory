@@ -9,6 +9,9 @@
 # Mike Kane <michael.kane@yale.edu>
 # Charles Determan <cdetermanjr@gmail.com>
 
+2017-11-15
+* Re-added functions to assign based on column and row names.
+
 2017-11-08 Michael Kane
 * Memory leak problem solved.
 

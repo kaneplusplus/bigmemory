@@ -23,6 +23,9 @@
 \alias{[<-,big.matrix,logical,missing,numeric-method}
 \alias{[<-,big.matrix,numeric,missing,matrix-method}
 \alias{[<-,big.matrix,logical,missing,matrix-method}
+\alias{[<-,big.matrix,character,character,ANY-method}
+\alias{[<-,big.matrix,missing,character,ANY-method}
+\alias{[<-,big.matrix,character,missing,ANY-method}
 \alias{[<-,big.matrix,missing,missing,numeric-method}
 \alias{[<-,big.matrix,matrix,missing,numeric-method}
 \title{Extract or Replace}
@@ -66,6 +69,12 @@
 \S4method{[}{big.matrix,numeric,missing,matrix}(x, i, j, ...) <- value
 
 \S4method{[}{big.matrix,logical,missing,matrix}(x, i, j, ...) <- value
+
+\S4method{[}{big.matrix,character,character,ANY}(x, i, j) <- value
+
+\S4method{[}{big.matrix,missing,character,ANY}(x, j) <- value
+
+\S4method{[}{big.matrix,character,missing,ANY}(x, i) <- value
 
 \S4method{[}{big.matrix,missing,missing,numeric}(x, i, j) <- value
 
