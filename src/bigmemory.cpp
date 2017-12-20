@@ -2320,7 +2320,10 @@ SEXP CCountLines(SEXP fileName)
   FP = fopen(CHAR(Rf_asChar(fileName)), "r");
   SEXP ret = Rf_protect(Rf_allocVector(REALSXP,1));
   REAL(ret)[0] = -1;                   
-  if (FP == NULL) return(ret);
+  if (FP == NULL) {
+    Rf_unprotect(1);                  
+    return(ret);
+  }
   do {
     readChar = fgetc(FP);
     if ('\n' == readChar) ++lineCount;
