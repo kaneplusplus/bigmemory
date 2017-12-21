@@ -189,6 +189,10 @@ test_that("Able to assign based on logical rows and column names", {
   z[c(TRUE, TRUE, FALSE), c('d', 'e')] <- 1
 })
 
+test_that("Able to assign based on integer rows and column names", {
+  z[2:3, c('d', 'e')] <- 1
+})
+
 
 rm(z)
 gc()
