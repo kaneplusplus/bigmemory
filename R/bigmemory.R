@@ -1063,7 +1063,7 @@ setMethod('[<-',
     if (any(is.na(ms))) {
       stop("Column names don't appear in the big.matrix.")
     }
-    return(SetElements.bm(x, i, ms))
+    return(SetElements.bm(x, i, ms, value))
   })
 
 #' @rdname extract-methods
@@ -1078,7 +1078,7 @@ setMethod('[<-',
     if (any(is.na(ms))) {
       stop("Column names don't appear in the big.matrix.")
     }
-    return(SetElements.bm(x, i, ms))
+    return(SetElements.bm(x, i, ms, value))
   })
 
 #' @rdname extract-methods
