@@ -1069,6 +1069,21 @@ setMethod('[<-',
 #' @rdname extract-methods
 #' @export
 setMethod('[<-',
+  signature(x = "big.matrix", i = "numeric", j = "character"),
+  function(x, i, j, value) {
+    if (any(duplicated(j))) {
+      stop("Column names can't be duplicated.")
+    }
+    ms <- match(j, colnames(x))
+    if (any(is.na(ms))) {
+      stop("Column names don't appear in the big.matrix.")
+    }
+    return(SetElements.bm(x, i, ms))
+  })
+
+#' @rdname extract-methods
+#' @export
+setMethod('[<-',
   signature(x = "big.matrix", i = "missing", j = "missing"),
   function(x, i, j, value){
     i <- seq(nrow(x))
