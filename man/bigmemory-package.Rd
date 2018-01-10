@@ -94,7 +94,7 @@ in much less eagerness to garbage-collect the unused \code{big.memory} objects.
 After removing a last reference to a big \code{big.matrix}, user should manually run
 \code{gc()} to reclaim the memory.
 \item Attaching the description of already finalized \code{big.matrix} and accessing this object
-will result in undefined behaviour, which simply means it will crash the current R session
+will result in undefined behavior, which simply means it will crash the current R session
 with no hope of saving the data in it. To prevent R from de-allocating (finalizing) the
 matrices, user should keep at least one \code{big.memory} object somewhere in R memory in at
 least one R session on the current machine.

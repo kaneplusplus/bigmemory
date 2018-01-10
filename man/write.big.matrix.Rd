@@ -84,8 +84,6 @@ of \code{filename}).
 Create a \code{\link{big.matrix}} by reading from a
 suitably-formatted ASCII file, or
 write the contents of a \code{\link{big.matrix}} to a file.
-
-@importFrom stats na.omit
 }
 \details{
 Files must contain only one atomic type

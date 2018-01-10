@@ -16,6 +16,6 @@ a \code{big.matrix} object.
 }
 \note{
 By default, this will only return the \code{head} of a big.matrix
-to prevent console overflow.  If you trun off the bigmemory.print.warning
+to prevent console overflow.  If you turn off the bigmemory.print.warning
 option then it will convert to a base R matrix and print all elements.
 }
