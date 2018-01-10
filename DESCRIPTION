@@ -1,5 +1,5 @@
 Package: bigmemory
-Version: 4.5.32
+Version: 4.5.33
 Date: 2017-12-20
 Title: Manage Massive Matrices with Shared Memory and Memory-Mapped Files
 Author: Michael J. Kane <kaneplusplus@gmail.com>, John W. Emerson
