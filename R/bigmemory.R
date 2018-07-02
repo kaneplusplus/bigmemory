@@ -677,18 +677,12 @@ SetElements.bm <- function(x, i, j, value) {
       stop("number of items to replace is not a multiple of replacement length")
     }
   }
-  if (typeof(x) != 'double') {
-    integerVals <- na.omit(as.integer(value))
-    if ( sum(integerVals == na.omit(as.integer(value))) != length(integerVals) || is.factor(value)) {
-        warning("non-integer (possibly Inf or -Inf) typecast to integer")
-    }
-  }
   switch(typeof(x),
          'double' = {SetMatrixElements(x@address, as.double(j), as.double(i), as.double(value))},
          'float' = {SetMatrixElements(x@address, as.double(j), as.double(i), as.double(value))},
          #Don't convert raw before assigning them
          'raw' = {SetMatrixElements(x@address, as.double(j), as.double(i), value)},
-         SetMatrixElements(x@address, as.double(j), as.double(i), as.integer(value))
+         SetMatrixElements(x@address, as.double(j), as.double(i), to_int_checked(value))
   )
   x
 }
