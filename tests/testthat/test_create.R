@@ -6,7 +6,7 @@ z <- filebacked.big.matrix(3, 3, type='integer', init=123,
                            descriptorfile="example.desc",
                            dimnames=list(c('a','b','c'), c('d', 'e', 'f')))
 
-mat <- matrix(1:9, ncol = 3, nrow = 3, dimnames = list(letters[1:3], 
+mat <- matrix(1:9, ncol = 3, nrow = 3, dimnames = list(letters[1:3],
                                                        LETTERS[1:3]))
 
 bm <- as.big.matrix(mat)
@@ -31,14 +31,20 @@ test_that("attach methods successful",{
     bmdescription <- describe(bm)
     expect_is(zdescription, "big.matrix.descriptor")
     expect_is(bmdescription, "big.matrix.descriptor")
-    
+
     y <- attach.big.matrix(zdescription)
     expect_false(identical(z@address, y@address))
     expect_identical(z[,], y[,])
-    
+
     x <- attach.big.matrix(bmdescription)
     expect_false(identical(z@address, y@address))
     expect_identical(bm[,], x[,])
+})
+
+test_that("We can prepare for writing a bigmatrix", {
+    expect_warning(bigmemory:::to_int_checked(1.1))
+    expect_silent(bigmemory:::to_int_checked(1.0))
+    expect_equal(bigmemory:::to_int_checked(c(1.0,3.0)), c(1L,3L))
 })
 
 rm(z)
