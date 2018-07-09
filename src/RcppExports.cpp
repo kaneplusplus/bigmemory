@@ -5,6 +5,17 @@
 
 using namespace Rcpp;
 
+// to_int_checked
+SEXP to_int_checked(SEXP x);
+RcppExport SEXP _bigmemory_to_int_checked(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(to_int_checked(x));
+    return rcpp_result_gen;
+END_RCPP
+}
 // GetIndivMatrixElements
 SEXP GetIndivMatrixElements(SEXP bigMatAddr, SEXP col, SEXP row);
 RcppExport SEXP _bigmemory_GetIndivMatrixElements(SEXP bigMatAddrSEXP, SEXP colSEXP, SEXP rowSEXP) {
@@ -866,6 +877,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_bigmemory_to_int_checked", (DL_FUNC) &_bigmemory_to_int_checked, 1},
     {"_bigmemory_GetIndivMatrixElements", (DL_FUNC) &_bigmemory_GetIndivMatrixElements, 3},
     {"_bigmemory_GetIndivVectorMatrixElements", (DL_FUNC) &_bigmemory_GetIndivVectorMatrixElements, 2},
     {"_bigmemory_ReorderRIntMatrix", (DL_FUNC) &_bigmemory_ReorderRIntMatrix, 4},
