@@ -1083,7 +1083,7 @@ SEXP get_order( MatrixAccessorType m, SEXP columns, SEXP naLast,
   index_type col;
   OrderVecs ov;
   ov.reserve(m.nrow());
-  typename OrderVecs::iterator begin, end, it, naIt;
+  typename OrderVecs::iterator it;
   ValueType val;
   for (k=Rf_length(columns)-1; k >= 0; --k)
   {
@@ -1172,7 +1172,7 @@ SEXP get_order2( MatrixAccessorType m, SEXP rows, SEXP naLast,
   index_type row;
   OrderVecs ov;
   ov.reserve(m.ncol());
-  typename OrderVecs::iterator begin, end, it, naIt;
+  typename OrderVecs::iterator it;
   ValueType val;
   for (k=Rf_length(rows)-1; k >= 0; --k)
   {
