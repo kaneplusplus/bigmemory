@@ -18,13 +18,13 @@ flush(con)
 }
 \description{
 For a file-backed \code{big.matrix} object, \code{flush()} forces
-   any modified information to be written to the file-backing.
+any modified information to be written to the file-backing.
 }
 \details{
 This function flushes any modified data (in \acronym{RAM}) of a file-backed
-   \code{big.matrix} to disk.  This may be useful for
-   improving performance in cases where allowing the operating system to decide
-   on flushing creates a bottleneck (likely near the threshold of available \acronym{RAM}).
+\code{big.matrix} to disk.  This may be useful for
+improving performance in cases where allowing the operating system to decide
+on flushing creates a bottleneck (likely near the threshold of available \acronym{RAM}).
 }
 \examples{
 temp_dir = tempdir()

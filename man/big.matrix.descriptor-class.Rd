@@ -9,8 +9,14 @@
 \alias{attach.resource,big.matrix.descriptor-method}
 \title{Class "big.matrix.descriptor"}
 \usage{
-\S4method{sub.big.matrix}{big.matrix.descriptor}(x, firstRow = 1,
-  lastRow = NULL, firstCol = 1, lastCol = NULL, backingpath = NULL)
+\S4method{sub.big.matrix}{big.matrix.descriptor}(
+  x,
+  firstRow = 1,
+  lastRow = NULL,
+  firstCol = 1,
+  lastCol = NULL,
+  backingpath = NULL
+)
 
 \S4method{attach.resource}{character}(obj, ...)
 
@@ -51,9 +57,9 @@ but should use the \code{\link{describe}} function.
 
 \section{Slots}{
 
-  \describe{
-     \item{\code{description}:}{Object of class \code{"list"}; details omitted.}
-  }
+\describe{
+\item{\code{description}:}{Object of class \code{"list"}; details omitted.}
+}
 }
 
 \section{Extends}{
@@ -64,9 +70,9 @@ Class \code{"\linkS4class{descriptor}"}, directly.
 \section{Methods}{
 
 \describe{
-     \item{attach.resource}{\code{signature(obj = "big.matrix.descriptor")}: ... }
-     \item{sub.big.matrix}{\code{signature(x = "big.matrix.descriptor")}: ... }
- }
+\item{attach.resource}{\code{signature(obj = "big.matrix.descriptor")}: ... }
+\item{sub.big.matrix}{\code{signature(x = "big.matrix.descriptor")}: ... }
+}
 }
 
 \examples{

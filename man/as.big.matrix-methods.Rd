@@ -18,9 +18,9 @@ values will be lost.
 \section{Methods}{
 
 \describe{
- \item{\code{signature(x = "matrix")}}{ ... }
- \item{\code{signature(x = "vector")}}{ ... }
- \item{\code{signature(x = "data.frame")}}{ ... }
+\item{\code{signature(x = "matrix")}}{ ... }
+\item{\code{signature(x = "vector")}}{ ... }
+\item{\code{signature(x = "data.frame")}}{ ... }
 }
 }
 

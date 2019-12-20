@@ -4,6 +4,7 @@
 \name{Extract,big.matrix}
 \alias{Extract,big.matrix}
 \alias{[,big.matrix,ANY,ANY,missing-method}
+\alias{[<-,big.matrix,ANY,ANY,ANY-method}
 \alias{[,big.matrix,ANY,ANY,logical-method}
 \alias{[,big.matrix,missing,ANY,missing-method}
 \alias{[,big.matrix,missing,ANY,logical-method}

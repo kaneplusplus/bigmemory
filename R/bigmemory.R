@@ -1941,7 +1941,7 @@ morder <- function(x, cols, na.last=TRUE, decreasing = FALSE) {
     stop("Bad column indices.")
   }
 
-  switch(class(x),
+  switch(class(x)[1],
     "big.matrix"=OrderBigMatrix(x@address, as.double(cols),
                                   as.integer(na.last), as.logical(decreasing) ),
     "matrix" = switch(typeof(x),
@@ -1965,7 +1965,7 @@ morderCols <- function(x, rows, na.last=TRUE, decreasing = FALSE) {
     stop("Bad row indices.")
   }
 
-  switch(class(x),
+  switch(class(x)[1],
     "big.matrix"=OrderBigMatrixCols(x@address, as.double(rows),
                                     as.integer(na.last),
                                     as.logical(decreasing) ),
@@ -2012,7 +2012,7 @@ mpermute <- function(x, order=NULL, cols=NULL, allow.duplicates=FALSE, ...)
     order <- morder(x, cols, ...)
   }
 
-  switch(class(x),
+  switch(class(x)[1],
          "big.matrix" = ReorderBigMatrix(x@address, order),
          "matrix" = switch(typeof(x),
             'integer' = ReorderRIntMatrix(x, nrow(x), ncol(x), order),
@@ -2053,7 +2053,7 @@ mpermuteCols <- function(x, order=NULL, rows=NULL,
     order <- morderCols(x, rows, ...)
   }
 
-  switch(class(x),
+  switch(class(x)[1],
     "big.matrix" = {
       ReorderBigMatrixCols(x@address, order)
       SetColumnNames(x@address, colnames(x)[order])

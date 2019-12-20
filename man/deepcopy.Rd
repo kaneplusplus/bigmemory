@@ -4,10 +4,19 @@
 \alias{deepcopy}
 \title{Produces a physical copy of a ``big.matrix''}
 \usage{
-deepcopy(x, cols = NULL, rows = NULL, y = NULL, type = NULL,
-  separated = NULL, backingfile = NULL, backingpath = NULL,
-  descriptorfile = NULL, binarydescriptor = FALSE,
-  shared = options()$bigmemory.default.shared)
+deepcopy(
+  x,
+  cols = NULL,
+  rows = NULL,
+  y = NULL,
+  type = NULL,
+  separated = NULL,
+  backingfile = NULL,
+  backingpath = NULL,
+  descriptorfile = NULL,
+  binarydescriptor = FALSE,
+  shared = options()$bigmemory.default.shared
+)
 }
 \arguments{
 \item{x}{a \code{\link{big.matrix}}.}
@@ -42,7 +51,7 @@ be used for the backingfile description, for subsequent use with
 \item{shared}{\code{TRUE} by default, and always \code{TRUE} if the
 \code{big.matrix} is file-backed.  For a non-filebacked \code{big.matrix},
 \code{shared=FALSE} uses non-shared memory, which can be more stable for
-large (say, >50\% of RAM) objects.  Shared memory allocation can sometimes
+large (say, >50\\% of RAM) objects.  Shared memory allocation can sometimes
 fail in such cases due to exhausted shared-memory resources in the system.}
 }
 \value{

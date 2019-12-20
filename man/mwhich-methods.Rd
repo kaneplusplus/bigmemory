@@ -16,17 +16,17 @@ the memory overhead.
 test
 }
 \section{Methods}{
- 
-\describe{ 
- \item{signature(x = "big.matrix=", cols
- = "ANY", vals = "ANY",", " comps = "ANY", op = "character")}{
- ... } 
- \item{signature(x = "big.matrix", cols = "ANY", vals =
- "ANY",", " comps = "ANY", op = "missing")}{ ... }
- \item{signature(x = "matrix", cols = "ANY", vals = "ANY",", "
- comps = "ANY", op = "character")}{ ... } 
- \item{signature(x = "matrix", cols = "ANY", vals = "ANY",", 
- " comps = "ANY", op = "missing")}{ ... } }
+
+\describe{
+\item{signature(x = "big.matrix=", cols
+= "ANY", vals = "ANY",", " comps = "ANY", op = "character")}{
+... }
+\item{signature(x = "big.matrix", cols = "ANY", vals =
+"ANY",", " comps = "ANY", op = "missing")}{ ... }
+\item{signature(x = "matrix", cols = "ANY", vals = "ANY",", "
+comps = "ANY", op = "character")}{ ... }
+\item{signature(x = "matrix", cols = "ANY", vals = "ANY",",
+" comps = "ANY", op = "missing")}{ ... } }
 }
 
 \seealso{
