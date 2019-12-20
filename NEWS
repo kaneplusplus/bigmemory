@@ -9,6 +9,9 @@
 # Mike Kane <michael.kane@yale.edu>
 # Charles Determan <cdetermanjr@gmail.com>
 
+2019-12-20 Michael Kane
+* Updated type checking to accomodate new `matrix` inheritance.
+
 2017-11-19 Michael Kane
 * Re-added functions to assign based on column and row names.
 
