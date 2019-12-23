@@ -35,8 +35,8 @@ test_that("Making sure the 'char' matrix behaves like signed byte", {
 
 test_that("Testing for as.big.matrix for raw", {
   x <- matrix(as.raw(seq(0,255, length.out = 16)), 4, 4)
-  expect_equal(typeof(x),'raw')
-  expect_equal(class(x),'matrix')
+  expect_equal(typeof(x), 'raw')
+  expect_equal(class(x)[1], 'matrix')
   m<-as.big.matrix(x, type = "raw")
   expect_equal(x[1,], as.raw(c(0,68,136,204)))
 })
