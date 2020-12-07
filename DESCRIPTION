@@ -12,14 +12,14 @@ Imports:
   methods,
   Rcpp,
   utils,
-  bigmemory.sri,
-  uuid
+  bigmemory.sri
 Enhances: 
   biganalytics, 
   bigtabulate
 LinkingTo: 
   BH, 
-  Rcpp
+  Rcpp,
+  uuid
 Description: Create, store, access, and manipulate massive matrices.
     Matrices are allocated to shared memory and may use memory-mapped
     files.  Packages 'biganalytics', 'bigtabulate', 'synchronicity', and
