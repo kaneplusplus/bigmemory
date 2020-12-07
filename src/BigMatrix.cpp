@@ -19,7 +19,7 @@
 #include <boost/interprocess/sync/named_mutex.hpp>
 
 #include "bigmemory/BigMatrix.h"
-//#include "uuid/uuid.h"
+#include "uuid/uuid.h"
 
 #define COND_EXCEPTION_PRINT(bYes)                \
   if (bYes)                                       \
@@ -190,20 +190,6 @@ bool LocalBigMatrix::destroy()
 
 bool SharedBigMatrix::create_uuid()
 {
-    size_t string_len = 24;
-    std::string letters("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
-    Rcpp::NumericVector inds=
-      Rcpp::runif(string_len, -0.49, letters.size()-0.51);
-    _uuid.clear();
-    for (unsigned int i=0; i < string_len; ++i) {
-      _uuid.push_back(letters[round(inds[i])]);
-    }
-
-    #ifdef DARWIN
-    // Darwin has a limit on the size of share memory names.
-    _uuid.resize(5);
-    #endif
-/*
   uuid_t u;
   char c[40];
   uuid_generate_time(u);
@@ -212,7 +198,6 @@ bool SharedBigMatrix::create_uuid()
   #ifdef DARWIN
     _uuid.resize(5);
   #endif
-*/
   return true;
 }
 

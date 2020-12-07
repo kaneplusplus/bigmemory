@@ -7,14 +7,19 @@ Author: Michael J. Kane <kaneplusplus@gmail.com>, John W. Emerson
 Maintainer: Michael J. Kane <bigmemoryauthors@gmail.com>
 Contact: Mike, Jay, and Charles <bigmemoryauthors@gmail.com>
 Depends:
-    R (>= 3.2.0),
+  R (>= 3.2.0),
 Imports:
-    methods,
-    Rcpp,
-    utils,
-    bigmemory.sri
-Enhances: biganalytics, bigtabulate
-LinkingTo: BH, Rcpp
+  methods,
+  Rcpp,
+  utils,
+  bigmemory.sri,
+  uuid
+Enhances: 
+  biganalytics, 
+  bigtabulate
+LinkingTo: 
+  BH, 
+  Rcpp
 Description: Create, store, access, and manipulate massive matrices.
     Matrices are allocated to shared memory and may use memory-mapped
     files.  Packages 'biganalytics', 'bigtabulate', 'synchronicity', and
@@ -26,5 +31,5 @@ LazyLoad: yes
 Biarch: yes
 Suggests:
     testthat
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.1
 Roxygen: list(markdown = TRUE)
