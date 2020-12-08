@@ -57,7 +57,6 @@ setMethod('describe', signature(x='big.matrix'),
 
 
 #' @template core_template
-#' @useDynLib uuid
 #' @export
 big.matrix <- function(nrow, ncol, type=options()$bigmemory.default.type,
                        init=NULL, dimnames=NULL, separated=FALSE,
