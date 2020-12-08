@@ -18,8 +18,9 @@
 
 #include <boost/interprocess/sync/named_mutex.hpp>
 
-#include "bigmemory/BigMatrix.h"
 #include "uuid.h"
+#include "bigmemory/BigMatrix.h"
+
 
 #define COND_EXCEPTION_PRINT(bYes)                \
   if (bYes)                                       \

@@ -9,10 +9,10 @@ Contact: Mike, Jay, and Charles <bigmemoryauthors@gmail.com>
 Depends:
   R (>= 3.2.0),
 Imports:
+  bigmemory.sri,
   methods,
   Rcpp,
   utils,
-  bigmemory.sri
 Enhances: 
   biganalytics, 
   bigtabulate
