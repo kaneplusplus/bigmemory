@@ -22,6 +22,8 @@ environment:
 
 build_script:
   - travis-tool.sh install_deps
+  - R -e "install.packages('devtools')"
+  - R -e "devtools::install_github('kaneplusplus/uuid')"
 
 test_script:
   - travis-tool.sh run_tests
