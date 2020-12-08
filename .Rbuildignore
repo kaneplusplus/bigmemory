@@ -10,3 +10,5 @@ examples
 cran-comments.md
 revdep
 ^revdep$
+^\.travis\.yml$
+^appveyor\.yml$
