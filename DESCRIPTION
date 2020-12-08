@@ -16,8 +16,6 @@ Imports:
 Enhances: 
   biganalytics, 
   bigtabulate
-Remotes:
-  kaneplusplus/uuid
 LinkingTo: 
   BH, 
   Rcpp,

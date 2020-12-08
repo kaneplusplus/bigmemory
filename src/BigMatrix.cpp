@@ -18,7 +18,7 @@
 
 #include <boost/interprocess/sync/named_mutex.hpp>
 
-#include "uuid.h"
+#include "uuid/uuid.h"
 #include "bigmemory/BigMatrix.h"
 
 
