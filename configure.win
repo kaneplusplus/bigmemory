@@ -6,5 +6,7 @@
 FLAGS="PKG_CPPFLAGS=-I../inst/include"
 echo "Windows"
 FLAGS="${FLAGS} -DWINDOWS -DLENGTH_HACK"
+LIBS="PKG_LIBS=-lrt -lm -luuid"
 echo "${FLAGS}" > src/Makevars
+echo "${LIBS}" >> src/Makevars
 
