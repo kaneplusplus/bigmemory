@@ -6,7 +6,11 @@
 FLAGS="PKG_CPPFLAGS=-I../inst/include"
 echo "Windows"
 FLAGS="${FLAGS} -DWINDOWS -DLENGTH_HACK"
-LIBS="PKG_LIBS=-luuid"
+PKGUUID_PATH=`echo 'library(uuid);
+  cat(system.file("libs", package="uuid", mustWork=TRUE))' \
+    | rterm --vanilla --no-echo`
+PKG_LIBS= -L"$(PKGB_PATH)$(R_ARCH) -luuid"
+LIBS="PKG_LIBS=-L\"$(PKGB_PATH)$(R_ARCH) -luuid\""
 echo "${FLAGS}" > src/Makevars.win
 echo "${LIBS}" >> src/Makevars.win
 
