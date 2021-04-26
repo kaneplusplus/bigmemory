@@ -2,6 +2,7 @@
 #ifndef BIGMEMORY_DEFINES_H
 #define BIGMEMORY_DEFINES_H
 
+#include <float.h>             // for FLT_{MIN,MAX}, or use <cfloat> if C++ idioms are preferred
 #include <limits.h>
 #include <stdint.h>
 

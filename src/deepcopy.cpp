@@ -4,6 +4,7 @@
 #include <algorithm>
 
 #include <boost/lexical_cast.hpp>
+#define STRICT_R_HEADERS
 #include <Rcpp.h>
 
 #include "bigmemory/BigMatrix.h"
