@@ -2,6 +2,7 @@
 #include <fstream>
 //#include <typeinfo>
 
+#define STRICT_R_HEADERS
 #include <Rcpp.h>
 #include "bigmemory/BigMatrix.h"
 #include "bigmemory/MatrixAccessor.hpp"

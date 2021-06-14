@@ -1,5 +1,6 @@
 //#include <limits.h>
 //#include <math.h>
+#define STRICT_R_HEADERS
 #include <Rcpp.h>
 #include "bigmemory/util.h"
 
