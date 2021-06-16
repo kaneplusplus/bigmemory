@@ -9,7 +9,7 @@ FLAGS="${FLAGS} -DWINDOWS -DLENGTH_HACK"
 PKGUUID_PATH=`echo 'library(uuid);
   cat(system.file("libs", package="uuid", mustWork=TRUE))' \
     | rterm --vanilla --no-echo`
-PKG_LIBS= -L"$(PKGB_PATH)$(R_ARCH) -luuid"
+PKG_LIBS= -L"$(PKGB_PATH) $(R_ARCH) $(PKGUUID_PATH) -luuid"
 LIBS="PKG_LIBS=-L\"$(PKGB_PATH)$(R_ARCH) -luuid\""
 echo "${FLAGS}" > src/Makevars.win
 echo "${LIBS}" >> src/Makevars.win
