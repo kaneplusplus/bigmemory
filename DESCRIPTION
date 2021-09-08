@@ -29,7 +29,6 @@ License: LGPL-3 | Apache License 2.0
 URL: https://github.com/kaneplusplus/bigmemory
 BugReports: https://github.com/kaneplusplus/bigmemory/issues
 LazyLoad: yes
-OS_type: unix
 Suggests:
     testthat
 RoxygenNote: 7.1.2
