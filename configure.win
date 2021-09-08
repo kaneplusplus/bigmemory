@@ -11,7 +11,7 @@ FLAGS="${FLAGS} -DWINDOWS -DLENGTH_HACK"
 #    | rterm --vanilla --no-echo`
 #PKG_LIBS= -L"$(PKGB_PATH) $(R_ARCH) $(PKGUUID_PATH) -luuid"
 #LIBS="PKG_LIBS=-L\"$(PKGB_PATH)$(R_ARCH) -luuid\""
-LIBS="PKG_LIBS=-lrt -luuid"
+LIBS="PKG_LIBS=-luuid"
 echo "${FLAGS}" > src/Makevars.win
 echo "${LIBS}" >> src/Makevars.win
 
