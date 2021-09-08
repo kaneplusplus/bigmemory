@@ -1,0 +1,14 @@
+####################################################################
+# configure for package bigmemory
+# John W. Emerson and Michael Kane
+#
+# Sun Studio toolchain not completely BOOST-compatible (the
+# fault of BOOST, not R-Project).  There will be no locking
+# of the shared counters, but the chance of a problem is very
+# small.  Hopefully BOOST will catch up, soon.
+
+FLAGS="PKG_CPPFLAGS=-I../inst/include"
+LIBS="PKG_LIBS=-luuid""
+
+echo "${FLAGS}" > src/Makevars
+echo "${LIBS}" >> src/Makevars
