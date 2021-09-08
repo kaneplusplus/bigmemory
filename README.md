@@ -1,6 +1,5 @@
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/bigmemory)](http://cran.r-project.org/package=bigmemory)
 [![Build Status](https://travis-ci.org/kaneplusplus/bigmemory.png)](https://travis-ci.org/kaneplusplus/bigmemory)
-[![Build status](https://ci.appveyor.com/api/projects/status/hi6e9afqhp4k15pt/branch/master?svg=true)](https://ci.appveyor.com/project/kaneplusplus/bigmemory/branch/master)
 [![Coverage Status](https://coveralls.io/repos/kaneplusplus/bigmemory/badge.svg)](https://coveralls.io/r/kaneplusplus/bigmemory)
 [![rstudio mirror downloads](http://cranlogs.r-pkg.org/badges/bigmemory?color=blue)](https://github.com/metacran/cranlogs.app)
 [![rstudio mirror downloads](http://cranlogs.r-pkg.org/badges/grand-total/bigmemory?color=blue)](https://github.com/metacran/cranlogs.app)
