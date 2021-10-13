@@ -30,7 +30,7 @@ test_that("mwhich works for regular 'matrix'",{
 })
 
 test_that("mwhich recognizes NA", {
-    expect_warning(x[1,1] <- NA)
+    x[1,1] <- NA
     expect_identical(mwhich(x, 1:2, NA, 'eq', 'OR'), 1)
     expect_identical(mwhich(x, 1:2, NA, 'neq', 'AND'), as.numeric(2:10))
 })
