@@ -19,9 +19,7 @@
 
 #include <boost/interprocess/sync/named_mutex.hpp>
 
-#include "uuid/uuid.h"
 #include "bigmemory/BigMatrix.h"
-
 
 #define COND_EXCEPTION_PRINT(bYes)                \
   if (bYes)                                       \
@@ -34,6 +32,8 @@
   if (bYes) Rprintf(str, format);
     
 #define DEBUG false
+
+#include "Ruuid.h"
 
 using namespace std;
 using namespace boost;
@@ -192,6 +192,19 @@ bool LocalBigMatrix::destroy()
 
 bool SharedBigMatrix::create_uuid()
 {
+  RU_generate_t generate_fn = (RU_generate_t) R_GetCCallable("uuid", "generate");
+  RU_unparse_t unparse_fn = (RU_unparse_t) R_GetCCallable("uuid", "unparse");
+
+  uuid_t u;
+  char c[40];
+  generate_fn(u, 1);
+  unparse_fn(u, c, 1);
+  _uuid = c;
+  #ifdef DARWIN
+    _uuid.resize(5);
+  #endif
+  return true;
+/*
   uuid_t u;
   char c[40];
   uuid_generate_time(u);
@@ -201,6 +214,7 @@ bool SharedBigMatrix::create_uuid()
     _uuid.resize(5);
   #endif
   return true;
+*/
 }
 
 template<typename T>
