@@ -10,3 +10,4 @@ tests/testthat/*bin
 tests/testthat/*desc
 *.bin
 *.desc
+revdep
