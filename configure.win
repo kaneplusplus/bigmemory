@@ -7,6 +7,6 @@
 # of the shared counters, but the chance of a problem is very
 # small.  Hopefully BOOST will catch up, soon.
 
-FLAGS="PKG_CPPFLAGS=-I../inst/include $R_HOME/library/uuid/include"
+FLAGS="PKG_CPPFLAGS=-I../inst/include"
 
 echo "${FLAGS}" > src/Makevars
