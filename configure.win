@@ -8,7 +8,6 @@
 # small.  Hopefully BOOST will catch up, soon.
 
 FLAGS="PKG_CPPFLAGS=-I../inst/include"
-LIBS="PKG_LIBS=-luuid"
 
 echo "${FLAGS}" > src/Makevars
 echo "${LIBS}" >> src/Makevars

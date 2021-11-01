@@ -10,12 +10,12 @@ citEntry(entry = "Article",
   volume       = "55",
   number       = "14",
   pages        = "1--19",
-  url          = "http://www.jstatsoft.org/v55/i14/",
+  url          = "https://www.jstatsoft.org/article/view/v055i14",
 
   textVersion  =
   paste("Michael J. Kane, John Emerson, Stephen Weston (2013).",
         "Scalable Strategies for Computing with Massive Data.",
         "Journal of Statistical Software, 55(14), 1-19.",
-        "URL http://www.jstatsoft.org/v55/i14/.")
+        "URL https://www.jstatsoft.org/article/view/v055i14")
 )
 

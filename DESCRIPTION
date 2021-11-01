@@ -1,5 +1,5 @@
 Package: bigmemory
-Version: 4.5.38
+Version: 4.5.40
 Title: Manage Massive Matrices with Shared Memory and Memory-Mapped Files
 Author: Michael J. Kane <kaneplusplus@gmail.com>, John W. Emerson
     <jayemerson@gmail.com>, Peter Haverty <haverty.peter@gene.com>, and Charles
@@ -8,20 +8,20 @@ Maintainer: Michael J. Kane <bigmemoryauthors@gmail.com>
 Contact: Mike, Jay, and Charles <bigmemoryauthors@gmail.com>
 Depends:
   R (>= 3.2.0),
+  uuid (>= 1.0-2)
 Imports:
   bigmemory.sri,
   methods,
   utils,
+  Rcpp
 Enhances: 
   biganalytics, 
   bigtabulate
 LinkingTo: 
   BH, 
-  Rcpp,
-  uuid (>= 1.0-1)
+  uuid (>= 1.0-2),
+  Rcpp
 Encoding: UTF-8
-Remotes:
-  git::https://github.com/s-u/uuid@feature/linking
 Description: Create, store, access, and manipulate massive matrices.
     Matrices are allocated to shared memory and may use memory-mapped
     files.  Packages 'biganalytics', 'bigtabulate', 'synchronicity', and
@@ -31,6 +31,7 @@ URL: https://github.com/kaneplusplus/bigmemory
 BugReports: https://github.com/kaneplusplus/bigmemory/issues
 LazyLoad: yes
 Suggests:
-  testthat
+  testthat,
+  remotes
 RoxygenNote: 7.1.2
 Roxygen: list(markdown = TRUE)

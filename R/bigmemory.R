@@ -37,7 +37,7 @@ setClass('big.matrix', representation(address='externalptr'))
 setClass('descriptor', representation(description='list'))
 
 #' @template big.matrix.descriptor_class_template
-#' @rdname big.matrix.descriptor-class
+#' @rdname big-matrix-descriptor-class
 #' @export
 setClass('big.matrix.descriptor', contains='descriptor')
 
