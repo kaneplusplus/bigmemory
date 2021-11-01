@@ -9,5 +9,4 @@
 
 FLAGS="PKG_CPPFLAGS=-I../inst/include"
 
-echo "${FLAGS}" > src/Makevars
-echo "${LIBS}" >> src/Makevars
+echo "${FLAGS}" >> src/Makevars
