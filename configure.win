@@ -9,4 +9,4 @@
 
 FLAGS="PKG_CPPFLAGS=-I../inst/include $R_HOME/library/uuid/include"
 
-echo "${FLAGS}" >> src/Makevars
+echo "${FLAGS}" > src/Makevars
