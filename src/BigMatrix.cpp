@@ -33,7 +33,10 @@
     
 #define DEBUG false
 
-#include <Ruuid.h>
+// This isn't working on Windows.
+// #include <Ruuid.h>
+// The following is done instead. It is a hack.
+#include "uuid/Ruuid.h"
 
 using namespace std;
 using namespace boost;
