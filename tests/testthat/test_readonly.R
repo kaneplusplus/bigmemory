@@ -1,4 +1,3 @@
-library("bigmemory")
 context("read_only")
 
 rownames = letters[1:3]

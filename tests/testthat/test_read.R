@@ -1,4 +1,3 @@
-library("bigmemory")
 context("read")
 
 test_that("test_read", {

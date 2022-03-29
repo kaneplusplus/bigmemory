@@ -1,4 +1,3 @@
-library("bigmemory")
 context("raw data")
 
 m<-big.matrix(10,1,type='raw')

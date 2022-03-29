@@ -1,4 +1,3 @@
-library("bigmemory")
 context("shared option")
 
 X1 <- big.matrix(10, 10)

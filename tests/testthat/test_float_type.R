@@ -1,4 +1,3 @@
-library("bigmemory")
 context("big.matrix float type")
 
 options(bigmemory.typecast.warning=FALSE)

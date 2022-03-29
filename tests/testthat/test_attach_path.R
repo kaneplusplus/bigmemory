@@ -1,4 +1,3 @@
-library("bigmemory")
 context("backingpath option when attaching")
 
 tmp <- tempfile()

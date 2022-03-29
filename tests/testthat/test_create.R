@@ -1,4 +1,3 @@
-library("bigmemory")
 context("big.matrix creation")
 
 z <- filebacked.big.matrix(3, 3, type='integer', init=123,

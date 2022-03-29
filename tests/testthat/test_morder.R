@@ -1,4 +1,3 @@
-library("bigmemory")
 context("morder/mpermute")
 data(iris,package='datasets')
 

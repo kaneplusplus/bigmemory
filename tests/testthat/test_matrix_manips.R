@@ -1,4 +1,3 @@
-library("bigmemory")
 context("Matrix Manipulations")
 
 test_that("assignment across columns", {

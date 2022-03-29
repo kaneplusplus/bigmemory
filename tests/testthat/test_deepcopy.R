@@ -1,4 +1,3 @@
-library("bigmemory")
 context("deepcopy")
 
 mat <- matrix(1:9, ncol = 3, nrow = 3, dimnames = list(letters[1:3], 

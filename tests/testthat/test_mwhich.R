@@ -1,4 +1,3 @@
-library("bigmemory")
 context("mwhich")
 
 # global objects

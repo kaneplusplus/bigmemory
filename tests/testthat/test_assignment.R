@@ -1,4 +1,3 @@
-library("bigmemory")
 context("big.matrix assignment")
 
 set.seed(123)
