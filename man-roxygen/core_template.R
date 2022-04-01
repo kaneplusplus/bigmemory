@@ -119,7 +119,6 @@
 #' \code{\link{describe}}.  Sister packages \pkg{biganalytics}, \pkg{bigtabulate},
 #' \pkg{synchronicity}, and \pkg{bigalgebra} provide advanced functionality.
 #' @examples 
-#' library(bigmemory)
 #' x <- big.matrix(10, 2, type='integer', init=-5)
 #' options(bigmemory.allow.dimnames=TRUE)
 #' colnames(x) <- c("alpha", "beta")

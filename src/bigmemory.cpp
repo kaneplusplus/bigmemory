@@ -992,7 +992,7 @@ struct NAMaker<double>
 // Note: naLast should be passed as an integer.
 
 template<typename PairType>
-struct SecondLess : public std::binary_function<PairType, PairType, bool>
+struct SecondLess 
 {
   SecondLess( const bool naLast ) : _naLast(naLast) {}
 
@@ -1016,7 +1016,7 @@ struct SecondLess : public std::binary_function<PairType, PairType, bool>
 };
 
 template<typename PairType>
-struct SecondGreater : public std::binary_function<PairType, PairType, bool>
+struct SecondGreater 
 {
   SecondGreater(const bool naLast ) : _naLast(naLast) {}
 
@@ -1040,7 +1040,7 @@ struct SecondGreater : public std::binary_function<PairType, PairType, bool>
 };
 
 template<typename PairType>
-struct SecondIsNA : public std::unary_function<PairType, bool>
+struct SecondIsNA 
 {
   bool operator()( const PairType &val ) const
   {
