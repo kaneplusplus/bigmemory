@@ -1,5 +1,5 @@
 Package: bigmemory
-Version: 4.5.46
+Version: 4.5.47
 Title: Manage Massive Matrices with Shared Memory and Memory-Mapped Files
 Author: Michael J. Kane <kaneplusplus@gmail.com>, John W. Emerson
     <jayemerson@gmail.com>, Peter Haverty <haverty.peter@gene.com>, and Charles
@@ -8,12 +8,12 @@ Maintainer: Michael J. Kane <bigmemoryauthors@gmail.com>
 Contact: Mike, Jay, and Charles <bigmemoryauthors@gmail.com>
 Depends:
   R (>= 3.2.0),
-  uuid (>= 1.0-2)
 Imports:
   bigmemory.sri,
   methods,
   utils,
-  Rcpp
+  Rcpp,
+  uuid (>= 1.0-2)
 Enhances: 
   biganalytics, 
   bigtabulate

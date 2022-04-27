@@ -104,8 +104,6 @@
 #' @seealso For example, \code{\link{big.matrix}}, \code{\link{mwhich}},
 #' \code{\link{read.big.matrix}}
 #'
-#' @references \url{http://www.bigmemory.org}
-#' 
 #' @keywords package
 #' @examples
 #' 

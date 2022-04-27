@@ -124,9 +124,6 @@ x[,]
 
 
 }
-\references{
-\url{http://www.bigmemory.org}
-}
 \seealso{
 For example, \code{\link{big.matrix}}, \code{\link{mwhich}},
 \code{\link{read.big.matrix}}
