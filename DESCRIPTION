@@ -1,11 +1,25 @@
 Package: bigmemory
-Version: 4.5.47
+Version: 4.5.50
 Title: Manage Massive Matrices with Shared Memory and Memory-Mapped Files
-Author: Michael J. Kane <kaneplusplus@gmail.com>, John W. Emerson
-    <jayemerson@gmail.com>, Peter Haverty <haverty.peter@gene.com>, and Charles
-    Determan Jr. <cdetermanjr@gmail.com>
-Maintainer: Michael J. Kane <bigmemoryauthors@gmail.com>
-Contact: Mike, Jay, and Charles <bigmemoryauthors@gmail.com>
+Authors@R: 
+  c(person(given = "Michael J.",
+          family = "Kane",
+          role = c("aut", "cre"),
+          email = "bigmemoryauthors@gmail.com",
+          comment = c(ORCID = "0000-0003-1899-6662")),
+    person(given = "John W.",
+          family = "Emerson",
+          role = "aut",
+          email = "jayemerson@gmail.com"),
+    person(given = "Peter",
+          family = "Haverty",
+          role = "aut",
+          email = "haverty.peter@gene.com"),
+    person(given = "Charles",
+          family = "Determan",
+          role = "aut",
+          email = "cdetermanjr@gmail.com")
+  )
 Depends:
   R (>= 3.2.0),
 Imports:

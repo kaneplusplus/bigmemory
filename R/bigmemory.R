@@ -55,7 +55,7 @@ setMethod('describe', signature(x='big.matrix'),
     return(new('big.matrix.descriptor', description=DescribeBigMatrix(x)))
   })
 
-
+#' @importFrom uuid UUIDgenerate
 #' @template core_template
 #' @export
 big.matrix <- function(nrow, ncol, type=options()$bigmemory.default.type,
@@ -94,6 +94,7 @@ big.matrix <- function(nrow, ncol, type=options()$bigmemory.default.type,
   }
   if (is.null(init)) init <- NA
   if (shared) {
+      bunk <- UUIDgenerate()
       address <- CreateSharedMatrix(as.double(nrow),
                   as.double(ncol),as.character(colnames),as.character(rownames),
                   as.integer(typeVal), as.double(init), as.logical(separated))
