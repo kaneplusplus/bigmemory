@@ -112,7 +112,7 @@
 #' and \code{TRUE} or \code{FALSE} for \code{is.big.matrix} and the 
 #' other functions.
 #' @author John W. Emerson and Michael J. Kane 
-#' \email{<bigmemoryauthors@@gmail.com>}
+#' \email{bigmemoryauthors@gmail.com}
 #' @references The Bigmemory Project: \url{http://www.bigmemory.org/}.
 #' @seealso \code{\link{bigmemory}}, and perhaps the class documentation of
 #' \code{\linkS4class{big.matrix}}; \code{\link{attach.big.matrix}} and

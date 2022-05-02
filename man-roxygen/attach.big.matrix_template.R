@@ -27,7 +27,7 @@
 #' \code{attach.big.matrix} return a new instance of type \code{big.matrix}
 #' corresponding to a shared-memory or file-backed \code{big.matrix}.
 #' @author Michael J. Kane and John W. Emerson 
-#' \email{<bigmemoryauthors@@gmail.com>}
+#' \email{bigmemoryauthors@gmail.com}
 #' @seealso \code{\link{bigmemory}}, \code{\link{big.matrix}}, or the class 
 #' documentation \code{\linkS4class{big.matrix}}.
 #' @examples 

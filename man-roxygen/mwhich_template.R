@@ -36,7 +36,7 @@
 #'  developers might want to look at our code for this case, which uses a handy 
 #'  pointer trick (accessor) in \acronym{C++}.
 #' @return a vector of row indices satisfying the criteria.
-#' @author John W. Emerson \email{<bigmemoryauthors@@gmail.com>}
+#' @author John W. Emerson \email{bigmemoryauthors@gmail.com}
 #' @seealso \code{\link{big.matrix}}, \code{\link{which}}
 #' @examples
 #' x <- as.big.matrix(matrix(1:30, 10, 3))

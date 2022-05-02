@@ -176,6 +176,6 @@ if (FALSE) y <- read.big.matrix(file.path(temp_dir, "IrisData.txt"),
 }
 \author{
 John W. Emerson and Michael J. Kane
-\email{<bigmemoryauthors@gmail.com>}
+\email{bigmemoryauthors@gmail.com}
 }
 \keyword{methods}

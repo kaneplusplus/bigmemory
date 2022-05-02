@@ -41,7 +41,7 @@
 #' This type of a side-effect is generally frowned upon in \R, but we ``break''
 #' the rules here to avoid memory overhead and improve performance.
 #' 
-#' @author Michael J. Kane \email{<bigmemoryauthors@@gmail.com>}
+#' @author Michael J. Kane \email{bigmemoryauthors@gmail.com}
 #' @seealso \code{\link{order}}
 #' @examples 
 #' m = matrix(as.double(as.matrix(iris)), nrow=nrow(iris))

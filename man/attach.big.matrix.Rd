@@ -71,7 +71,7 @@ documentation \code{\linkS4class{big.matrix}}.
 }
 \author{
 Michael J. Kane and John W. Emerson
-\email{<bigmemoryauthors@gmail.com>}
+\email{bigmemoryauthors@gmail.com}
 }
 \keyword{classes}
 \keyword{methods}

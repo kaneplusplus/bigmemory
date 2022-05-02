@@ -101,7 +101,7 @@ SEXP CDeepCopy(SEXP inAddr, SEXP outAddr, SEXP rowInds, SEXP colInds,
     BigMatrix *pOutMat = reinterpret_cast<BigMatrix*>(
       R_ExternalPtrAddr(outAddr));
     
-    if ((pOutMat->matrix_type() < pInMat->matrix_type()) & 
+    if ((pOutMat->matrix_type() < pInMat->matrix_type()) &&
       (Rf_asLogical(typecast_warning) == (Rboolean)TRUE))
     {
       string type_names[9] = {

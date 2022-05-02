@@ -62,7 +62,7 @@
 #' while \code{write.big.matrix} creates an output file (a path could be part 
 #' of \code{filename}).
 #' @author John W. Emerson and Michael J. Kane 
-#' \email{<bigmemoryauthors@@gmail.com>}
+#' \email{bigmemoryauthors@gmail.com}
 #' @seealso \code{\link{big.matrix}}
 #' @examples
 #' # Without specifying the type, this big.matrix x will hold integers.

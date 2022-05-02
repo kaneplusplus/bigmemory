@@ -81,7 +81,7 @@
 #' would expect from \code{apply()}.}
 #' }
 #' @author Michael J. Kane and John W. Emerson 
-#' \email{<bigmemoryauthors@@gmail.com>}
+#' \email{bigmemoryauthors@gmail.com}
 #' @seealso \code{\link{big.matrix}}
 #' @examples
 #' showClass("big.matrix")

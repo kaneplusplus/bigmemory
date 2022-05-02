@@ -81,5 +81,5 @@ m[,2]
 \code{\link{order}}
 }
 \author{
-Michael J. Kane \email{<bigmemoryauthors@gmail.com>}
+Michael J. Kane \email{bigmemoryauthors@gmail.com}
 }

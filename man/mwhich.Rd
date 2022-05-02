@@ -96,6 +96,6 @@ mwhich(x, 1, 1, 'le')
 \code{\link{big.matrix}}, \code{\link{which}}
 }
 \author{
-John W. Emerson \email{<bigmemoryauthors@gmail.com>}
+John W. Emerson \email{bigmemoryauthors@gmail.com}
 }
 \keyword{methods}

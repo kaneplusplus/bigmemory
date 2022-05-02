@@ -101,6 +101,6 @@ showClass("big.matrix")
 }
 \author{
 Michael J. Kane and John W. Emerson
-\email{<bigmemoryauthors@gmail.com>}
+\email{bigmemoryauthors@gmail.com}
 }
 \keyword{classes}

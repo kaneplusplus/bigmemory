@@ -275,7 +275,7 @@ The Bigmemory Project: \url{http://www.bigmemory.org/}.
 }
 \author{
 John W. Emerson and Michael J. Kane
-\email{<bigmemoryauthors@gmail.com>}
+\email{bigmemoryauthors@gmail.com}
 }
 \keyword{classes}
 \keyword{methods}
