@@ -25,7 +25,8 @@ echo "  checking for OS..."
 if test `uname` = "Linux" ; then
   echo "Linux"
   FLAGS="${FLAGS} -DLINUX"
-  LIBS="PKG_LIBS=-lrt -lm -luuid"
+  LIBS="PKG_LIBS=-lrt -lm"
+#  LIBS="PKG_LIBS=-lrt -lm -luuid"
 elif test `uname` = "SunOS" ; then
   echo "Solaris"
   LIBS="PKG_LIBS=-lrt -lm -luuid"
