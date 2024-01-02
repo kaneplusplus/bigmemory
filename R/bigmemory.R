@@ -33,18 +33,12 @@ checkReadOnly <- function(x)
 #' @export
 setClass('big.matrix', representation(address='externalptr'))
 
-#' @rdname big.matrix.descriptor-class
 setClass('descriptor', representation(description='list'))
 
 #' @template big.matrix.descriptor_class_template
-#' @rdname big-matrix-descriptor-class
 #' @export
 setClass('big.matrix.descriptor', contains='descriptor')
 
-# Here, x is a big.matrix, and the result is a descriptor.
-
-# Here, x is a descriptor, and the result is the description which is
-# the relevant data needed for the attach.
 setGeneric('description', function(x) standardGeneric('description'))
 
 #' @rdname attach.big.matrix
