@@ -1,10 +1,11 @@
 citHeader("To cite bigmemory in publications use:")
 
-citEntry(entry = "Article",
+bibentry(
+  bibtype      = "Article",
   title        = "Scalable Strategies for Computing with Massive Data",
-  author       = personList(as.person("Michael J. Kane"),
-                   as.person("John Emerson"),
-                   as.person("Stephen Weston")),
+  author       = c(person(given = "Michael J.", family = "Kane"),
+                   person(given = "John W.", family = "Emerson"),
+                   person(given = "Stephen", family = "Weston")),
   journal      = "Journal of Statistical Software",
   year         = "2013",
   volume       = "55",

@@ -2084,7 +2084,7 @@ setMethod('is.readonly', signature(x='big.matrix'),
 #' @rdname big.matrix
 #' @export
 is.nil <- function(address) {
-  if (class(address)!="externalptr") {
+  if (!inherits(address, "externalptr")) {
     stop("address is not an externalptr.")
   }
   isnil(address)

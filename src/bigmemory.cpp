@@ -894,8 +894,8 @@ SEXP ReadMatrix(SEXP fileName, BigMatrix *pMat,
         }
         else
         {
-          Rf_warning(
-            (string("Incorrect number of entries in row ")+ttos(j)).c_str());
+          string ws = string("Incorrect number of entries in row ") + ttos(j);
+          Rf_warning(ws.c_str());
         }
       }
       first = last+1;
