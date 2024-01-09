@@ -5,6 +5,7 @@
 \alias{is.sub.big.matrix,big.matrix-method}
 \alias{sub.big.matrix}
 \alias{sub.big.matrix,big.matrix-method}
+\alias{sub.big.matrix,big.matrix.descriptor-method}
 \title{Submatrix support}
 \usage{
 is.sub.big.matrix(x)
@@ -28,19 +29,28 @@ sub.big.matrix(
   lastCol = NULL,
   backingpath = NULL
 )
+
+\S4method{sub.big.matrix}{big.matrix.descriptor}(
+  x,
+  firstRow = 1,
+  lastRow = NULL,
+  firstCol = 1,
+  lastCol = NULL,
+  backingpath = NULL
+)
 }
 \arguments{
-\item{x}{either a \code{\link{big.matrix}} or a descriptor.}
+\item{x}{A descriptor object}
 
-\item{firstRow}{the first row of the submatrix.}
+\item{firstRow}{the first row of the submatrix}
 
-\item{lastRow}{the last row of the submatrix if not \code{NULL}.}
+\item{lastRow}{the last row of the submatrix if not NULL}
 
-\item{firstCol}{the first column of the submatrix.}
+\item{firstCol}{the first column of the submatrix}
 
-\item{lastCol}{the last column of the submatrix if not \code{NULL}.}
+\item{lastCol}{of the submatrix if not NULL}
 
-\item{backingpath}{required path to the filebacked object, if applicable.}
+\item{backingpath}{required path to the filebacked object, if applicable}
 }
 \value{
 A \code{\link{big.matrix}} which is actually a submatrix of a larger \code{big.matrix}.

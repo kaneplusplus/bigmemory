@@ -12,7 +12,7 @@
 #'      \item{\code{description}:}{Object of class \code{"list"}; details omitted.}
 #'   }
 #' @section Extends:
-#' Class \code{"\linkS4class{descriptor}"}, directly.
+#' Class \code{"descriptor"}, directly.
 #' @section Methods:
 #' \describe{
 #'      \item{attach.resource}{\code{signature(obj = "big.matrix.descriptor")}: ... }

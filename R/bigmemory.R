@@ -1667,7 +1667,8 @@ setMethod('sub.big.matrix', signature(x='big.matrix'),
            backingpath))
   })
 
-#' @rdname big.matrix.descriptor-class
+#' @title Retrieve a big.matrix "view"
+#' @rdname sub.big.matrix
 #' @param x A descriptor object
 #' @param firstRow the first row of the submatrix
 #' @param lastRow the last row of the submatrix if not NULL

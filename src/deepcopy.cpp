@@ -112,7 +112,7 @@ SEXP CDeepCopy(SEXP inAddr, SEXP outAddr, SEXP rowInds, SEXP colInds,
         type_names[pOutMat->matrix_type()] + string("\n") + 
         string("Hint: To remove this warning type: ") + 
         string("options(bigmemory.typecast.warning=FALSE)");
-      Rf_warning(warnMsg.c_str());
+      Rf_warning("%s", warnMsg.c_str());
     }
     
     // Not sure if there is a better way to do these function calls

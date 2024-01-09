@@ -3,37 +3,15 @@
 \docType{class}
 \name{big.matrix.descriptor-class}
 \alias{big.matrix.descriptor-class}
-\alias{sub.big.matrix,big.matrix.descriptor-method}
 \alias{attach.resource,character-method}
 \alias{attach.resource,big.matrix.descriptor-method}
 \title{Class "big.matrix.descriptor"}
 \usage{
-\S4method{sub.big.matrix}{big.matrix.descriptor}(
-  x,
-  firstRow = 1,
-  lastRow = NULL,
-  firstCol = 1,
-  lastCol = NULL,
-  backingpath = NULL
-)
-
 \S4method{attach.resource}{character}(obj, ...)
 
 \S4method{attach.resource}{big.matrix.descriptor}(obj, ...)
 }
 \arguments{
-\item{x}{A descriptor object}
-
-\item{firstRow}{the first row of the submatrix}
-
-\item{lastRow}{the last row of the submatrix if not NULL}
-
-\item{firstCol}{the first column of the submatrix}
-
-\item{lastCol}{of the submatrix if not NULL}
-
-\item{backingpath}{required path to the filebacked object, if applicable}
-
 \item{obj}{The filename of the descriptor for a filebacked matrix,
 assumed to be in the directory specified}
 
@@ -63,7 +41,7 @@ but should use the \code{\link{describe}} function.
 
 \section{Extends}{
 
-Class \code{"\linkS4class{descriptor}"}, directly.
+Class \code{"descriptor"}, directly.
 }
 
 \section{Methods}{
