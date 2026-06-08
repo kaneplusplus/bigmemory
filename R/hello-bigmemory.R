@@ -54,7 +54,6 @@
 #' 
 #' @name bigmemory-package
 #' @aliases bigmemory-package bigmemory
-#' @docType package
 #' @note Various options are available.
 #' \code{options(bigmemory.typecast.warning)} can be set to avoid annoying
 #' warnings that might occur if, for example, you assign objects (typically
@@ -121,6 +120,6 @@
 #' options(bigmemory.allow.dimnames=TRUE)
 #' colnames(x) <- NULL
 #' x[,]
-#' 
-#' 
-NULL
+#'
+#'
+"_PACKAGE"

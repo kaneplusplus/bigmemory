@@ -17,3 +17,4 @@ revdep
 ^CRAN-RELEASE$
 ^\.github$
 ^CRAN-SUBMISSION$
+^\.claude$
