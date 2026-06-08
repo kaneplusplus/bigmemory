@@ -1,5 +1,5 @@
 Package: bigmemory
-Version: 4.6.4
+Version: 4.6.5
 Title: Manage Massive Matrices with Shared Memory and Memory-Mapped Files
 Authors@R: c(
     person(given = "Michael J.",
