@@ -9,6 +9,11 @@
 # Mike Kane <michael.kane@yale.edu>
 # Charles Determan <cdetermanjr@gmail.com>
 
+2026-06-07 Michael Kane
+* Compile with a signed `char` type to address compiler diagnostics (#121).
+* Migrated package-level documentation to the "_PACKAGE" sentinel; the
+  deprecated `@docType package` roxygen tag has been removed.
+
 2019-12-20 Michael Kane
 * Updated type checking to accomodate new `matrix` inheritance.
 
