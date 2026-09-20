@@ -204,7 +204,7 @@ class SharedBigMatrix : public BigMatrix
 
   protected:
     // According to the documentation, shared memory has kernel or 
-    // filesystem presistence (mechanism exists until the system reboots
+    // filesystem persistence (mechanism exists until the system reboots
     // or is deleted (kernel) or until the mechanism is explicitly deleted
     // (filesystem)).  As a result, we are going to need a usage counter
     // so that when the last object is done with the shared resource, it
