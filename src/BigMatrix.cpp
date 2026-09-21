@@ -112,7 +112,7 @@ bool LocalBigMatrix::create(const index_type numRow, const index_type numCol,
       switch(_matType)
       {
         case 1:
-          CreateLocalSepMatrix<char>(_nrow, _ncol, _pdata, _allocationSize);
+          CreateLocalSepMatrix<signed char>(_nrow, _ncol, _pdata, _allocationSize);
           break;
         case 2:
           CreateLocalSepMatrix<short>(_nrow, _ncol, _pdata, _allocationSize);
@@ -135,7 +135,7 @@ bool LocalBigMatrix::create(const index_type numRow, const index_type numCol,
       switch(_matType)
       {
         case 1:
-          CreateLocalMatrix<char>(_nrow, _ncol, _pdata, _allocationSize);
+          CreateLocalMatrix<signed char>(_nrow, _ncol, _pdata, _allocationSize);
           break;
         case 2:
           CreateLocalMatrix<short>(_nrow, _ncol, _pdata, _allocationSize);
@@ -319,7 +319,7 @@ bool SharedMemoryBigMatrix::create(const index_type numRow,
           switch(_matType)
           {
             case 1:
-              CreateSharedSepMatrix<char>(_sharedName, _dataRegionPtrs, _nrow, 
+              CreateSharedSepMatrix<signed char>(_sharedName, _dataRegionPtrs, _nrow, 
                                           _ncol, _pdata, _allocationSize);
               break;
             case 2:
@@ -348,7 +348,7 @@ bool SharedMemoryBigMatrix::create(const index_type numRow,
           switch(_matType)
           {
             case 1:
-              CreateSharedMatrix<char>(_sharedName, _dataRegionPtrs,  _nrow,
+              CreateSharedMatrix<signed char>(_sharedName, _dataRegionPtrs,  _nrow,
                                            _ncol, _pdata, _allocationSize);
               break;
             case 2:
@@ -491,16 +491,16 @@ bool SharedMemoryBigMatrix::connect( const std::string &uuid,
         case 1:
           try
           {
-            _pdata = ConnectSharedSepMatrix<char>(_sharedName, _dataRegionPtrs, 
+            _pdata = ConnectSharedSepMatrix<signed char>(_sharedName, _dataRegionPtrs, 
               _ncol, _readOnly);
-            _allocationSize = _ncol*_nrow*sizeof(char);
+            _allocationSize = _ncol*_nrow*sizeof(signed char);
           }
           catch(boost::interprocess::interprocess_exception &e)
           {
             if (!_readOnly)
             {
               _readOnly=true;
-              _pdata = ConnectSharedSepMatrix<char>(_sharedName, 
+              _pdata = ConnectSharedSepMatrix<signed char>(_sharedName, 
                 _dataRegionPtrs, _ncol, _readOnly);
             } 
           }
@@ -599,16 +599,16 @@ bool SharedMemoryBigMatrix::connect( const std::string &uuid,
         case 1:
           try
           {
-            _pdata = ConnectSharedMatrix<char>(_sharedName, _dataRegionPtrs, 
+            _pdata = ConnectSharedMatrix<signed char>(_sharedName, _dataRegionPtrs, 
               _counter, _readOnly);
-            _allocationSize = _ncol*_nrow*sizeof(char);
+            _allocationSize = _ncol*_nrow*sizeof(signed char);
           }
           catch(boost::interprocess::interprocess_exception &e)
           {
             if (!_readOnly)
             {
               _readOnly=true;
-              _pdata = ConnectSharedMatrix<char>(_sharedName, _dataRegionPtrs,
+              _pdata = ConnectSharedMatrix<signed char>(_sharedName, _dataRegionPtrs,
                 _counter, _readOnly);
             }
           }
@@ -952,7 +952,7 @@ bool FileBackedBigMatrix::create(const std::string &fileName,
       switch(_matType)
       {
         case 1:
-          _pdata = CreateFileBackedSepMatrix<char>(_fileName, filePath,
+          _pdata = CreateFileBackedSepMatrix<signed char>(_fileName, filePath,
             _dataRegionPtrs, _nrow, _ncol);
           break;
         case 2:
@@ -981,7 +981,7 @@ bool FileBackedBigMatrix::create(const std::string &fileName,
       switch(_matType)
       {
         case 1:
-          _pdata = CreateFileBackedMatrix<char>(_fileName, filePath,
+          _pdata = CreateFileBackedMatrix<signed char>(_fileName, filePath,
             _dataRegionPtrs, _nrow, _ncol);
           break;
         case 2:
@@ -1041,7 +1041,7 @@ bool FileBackedBigMatrix::connect( const std::string &fileName,
         case 1:
           try
           {
-            _pdata = ConnectFileBackedSepMatrix<char>(_fileName, filePath,
+            _pdata = ConnectFileBackedSepMatrix<signed char>(_fileName, filePath,
               _dataRegionPtrs, _ncol, _readOnly);
           }
           catch(boost::interprocess::interprocess_exception &e)
@@ -1049,7 +1049,7 @@ bool FileBackedBigMatrix::connect( const std::string &fileName,
             if (!_readOnly)
             {
               _readOnly=true;
-              _pdata = ConnectFileBackedSepMatrix<char>(_fileName, filePath,
+              _pdata = ConnectFileBackedSepMatrix<signed char>(_fileName, filePath,
                 _dataRegionPtrs, _ncol, _readOnly);
             }
           }
@@ -1142,7 +1142,7 @@ bool FileBackedBigMatrix::connect( const std::string &fileName,
         case 1:
           try
           {
-            _pdata = ConnectFileBackedMatrix<char>(_fileName, filePath, 
+            _pdata = ConnectFileBackedMatrix<signed char>(_fileName, filePath, 
               _dataRegionPtrs, _readOnly);
           }
           catch(boost::interprocess::interprocess_exception &e)
@@ -1150,7 +1150,7 @@ bool FileBackedBigMatrix::connect( const std::string &fileName,
             if (!_readOnly)
             {
               _readOnly=true;
-              _pdata = ConnectFileBackedMatrix<char>(_fileName, filePath,
+              _pdata = ConnectFileBackedMatrix<signed char>(_fileName, filePath,
                 _dataRegionPtrs, _readOnly);
             }
           }
@@ -1279,7 +1279,7 @@ bool FileBackedBigMatrix::destroy()
         switch(_matType)
         {
           case 1:
-            delete [] reinterpret_cast<char**>(_pdata);
+            delete [] reinterpret_cast<signed char**>(_pdata);
             break;
           case 2:
             delete [] reinterpret_cast<short**>(_pdata);

@@ -21,14 +21,14 @@
   typedef long index_type;
 #endif
 
-#define NA_CHAR CHAR_MIN
+#define NA_CHAR SCHAR_MIN
 #define NA_SHORT SHRT_MIN
 #define R_INT_MIN (1+INT_MIN)
 #define R_INT_MAX INT_MAX
 #define R_SHORT_MIN (1+SHRT_MIN)
 #define R_SHORT_MAX SHRT_MAX
-#define R_CHAR_MIN (1+CHAR_MIN)
-#define R_CHAR_MAX CHAR_MAX
+#define R_CHAR_MIN (1+SCHAR_MIN)
+#define R_CHAR_MAX SCHAR_MAX
 #define R_DOUBLE_MIN R_NegInf
 #define R_DOUBLE_MAX R_PosInf
 

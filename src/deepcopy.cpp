@@ -55,7 +55,7 @@ SEXP CDeepCopy(SEXP inAddr, SEXP outAddr, SEXP rowInds, SEXP colInds,
     switch(pOutMat->matrix_type()) \
     { \
       case 1: \
-        DeepCopy<IN_CTYPE, IN_ACCESSOR<IN_CTYPE>, char, OUT_ACCESSOR<char> >( \
+        DeepCopy<IN_CTYPE, IN_ACCESSOR<IN_CTYPE>, signed char, OUT_ACCESSOR<signed char> >( \
           pInMat, pOutMat, rowInds, colInds); \
         break; \
       case 2: \
@@ -80,7 +80,7 @@ SEXP CDeepCopy(SEXP inAddr, SEXP outAddr, SEXP rowInds, SEXP colInds,
     switch(pInMat->matrix_type()) \
     { \
       case 1: \
-        CALL_DEEP_COPY_2(char, IN_ACCESSOR, OUT_ACCESSOR) \
+        CALL_DEEP_COPY_2(signed char, IN_ACCESSOR, OUT_ACCESSOR) \
         break; \
       case 2: \
         CALL_DEEP_COPY_2(short, IN_ACCESSOR, OUT_ACCESSOR) \

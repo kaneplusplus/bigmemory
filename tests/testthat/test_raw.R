@@ -29,7 +29,12 @@ test_that("Making sure the 'char' matrix behaves like signed byte", {
   mchar[2,1]<- -123
   mchar[3,1]<-  190
   expect_equal(mchar[1:3,1],c(40,-123,NA))
-  
+
+  tf <- tempfile()
+  on.exit(unlink(tf), add = TRUE)
+  write.big.matrix(mchar, tf)
+  mchar_read <- read.big.matrix(tf, type = 'char')
+  expect_equal(mchar_read[1:3, 1], c(40, -123, NA))
 })
 
 test_that("Testing for as.big.matrix for raw", {
