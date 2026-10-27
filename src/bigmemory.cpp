@@ -3171,9 +3171,6 @@ SEXP CreateFileBackedBigMatrix(SEXP fileName, SEXP filePath, SEXP row,
   {
     FileBackedBigMatrix *pMat = new FileBackedBigMatrix();
     string fn;
-    string path = ((filePath == R_NilValue) ?
-      "" :
-      RChar2String(filePath));
     if (Rf_isNull(fileName))
     {
       fn=pMat->uuid()+".bin";

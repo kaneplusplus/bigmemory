@@ -895,9 +895,9 @@ void* CreateFileBackedMatrix(const std::string &fileName,
   const index_type nrow, const index_type ncol)
 {
   // Create the file.
+#ifdef LINUX
   std::string fullFileName = filePath+fileName;
   //COND_PRINT(DEBUG, "Writing %s\n", fullFileName.c_str())
-#ifdef LINUX
   FILE *fp = fopen( fullFileName.c_str(), "wb");
   if (!fp)
   {
